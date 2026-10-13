@@ -28,17 +28,15 @@ export default function Events({ onToast }: { onToast: (msg: string) => void }) 
       dateLabel: p.createdAt,
       location: p.author,
       excerpt: p.summary,
-      desc: p.content || p.summary,
-      cost: "Miễn phí",
-      scale: "Toàn thể thành viên & TNV",
-      lead: p.author,
       cover: p.imageUrl || "https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=1200&q=80",
       gallery: [
         p.imageUrl || "https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=800&q=80",
       ],
-      schedule: [{ time: "Thông báo", activity: p.summary }],
-      packing: ["Tinh thần nhiệt huyết 36"],
-      contact: "Ban Chủ nhiệm BLLSV TMU",
+      schedule: [{ time: "Thông báo", title: p.title, note: p.summary }],
+      fact: [
+        { label: "Người đăng", value: p.author },
+        { label: "Chuyên mục", value: p.category },
+      ],
     }));
     return [...adminPrograms, ...PROGRAMS];
   }, [adminPosts]);

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { cn } from "@/utils/cn";
-import { Button, Icon } from "@/components/ui";
+import { Button } from "@/components/ui";
 import { getStoredNotes, saveStoredNotes, type TnvNote } from "@/components/TnvNoteBoard";
 
 export type AdminPost = {
