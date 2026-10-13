@@ -63,15 +63,44 @@ export default function App() {
     };
   }, []);
 
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [postsVersion, setPostsVersion] = useState(0);
+
   return (
     <div className="min-h-dvh overflow-x-hidden bg-sky-paper">
+      {/* Banner thông báo chế độ Quản trị viên */}
+      {isAdmin && (
+        <div className="sticky top-0 z-[120] flex items-center justify-between gap-3 bg-red-600 px-4 py-2 text-xs font-bold text-white shadow-lift">
+          <div className="flex items-center gap-2">
+            <span className="animate-pulse text-base">⚙️</span>
+            <span>BẢN QUẢN TRỊ VIÊN (ADMIN MODE): Bạn có quyền đăng bài viết mới, duyệt/xóa ghi chú TNV và cập nhật website.</span>
+          </div>
+          <button
+            onClick={() => {
+              setIsAdmin(false);
+              pushToast("Đã thoát chế độ Quản trị viên");
+            }}
+            className="rounded-lg bg-white/20 px-2.5 py-1 text-[11px] font-bold text-white transition hover:bg-white/30 shrink-0"
+          >
+            Thoát Admin
+          </button>
+        </div>
+      )}
+
       <a
         href="#home"
         className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[300] focus:rounded-xl focus:bg-cobalt-900 focus:px-4 focus:py-3 focus:text-sm focus:font-semibold focus:text-white"
       >
         Bỏ qua tới nội dung chính
       </a>
-      <Nav active={active} />
+      <Nav
+        active={active}
+        isAdmin={isAdmin}
+        onLoginAdmin={() => setIsAdmin(true)}
+        onLogoutAdmin={() => setIsAdmin(false)}
+        onToast={pushToast}
+        onPostCreated={() => setPostsVersion((v) => v + 1)}
+      />
 
       <main>
         <Hero />
@@ -80,10 +109,10 @@ export default function App() {
         <Divider />
 
         <About />
-        <Events onToast={pushToast} />
+        <Events key={postsVersion} onToast={pushToast} />
         <DanceLab onToast={pushToast} />
         <Gallery onToast={pushToast} />
-        <Contact onToast={pushToast} />
+        <Contact isAdmin={isAdmin} onToast={pushToast} />
       </main>
 
       <Footer />

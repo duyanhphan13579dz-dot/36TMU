@@ -1,179 +1,34 @@
-import { useState } from "react";
-import { BANS, ORG } from "@/data/content";
+import TnvNoteBoard from "@/components/TnvNoteBoard";
+import { ORG } from "@/data/content";
 import { Button, Icon, Kicker, SectionHeading } from "@/components/ui";
-import { LogoBadge } from "@/components/Logo";
 import { cn } from "@/utils/cn";
 
-const HOMETOWNS = [
-  "TP. Thanh Hóa", "Sầm Sơn", "Bỉm Sơn", "Nghi Sơn", "Quảng Xương", "Hậu Lộc", "Hoằng Hóa",
-  "Nga Sơn", "Hà Trung", "Thiệu Hóa", "Đông Sơn", "Triệu Sơn", "Yên Định", "Thọ Xuân",
-  "Quan Sơn", "Bá Thước", "Cẩm Thủy", "Ngọc Lặc", "Thạch Thành", "Lang Chánh", "Mường Lát",
-  "Nông Cống", "Như Thanh", "Như Xuân", "Tĩnh Gia", "Giảng Sơn", "Vĩnh Lộc", "Hướng dẫn khác",
-];
-
-const inputBase =
-  "min-h-12 w-full rounded-2xl border border-cobalt-200 bg-white px-4 text-[15px] text-cobalt-900 outline-none transition placeholder:text-cobalt-400 focus:border-tmu-400 focus:ring-4 focus:ring-tmu-100";
-
-export default function Contact({ onToast }: { onToast: (msg: string) => void }) {
-  const [intent, setIntent] = useState<"join" | "message">("join");
-  const [sent, setSent] = useState(false);
-
-  const submit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSent(true);
-    onToast(
-      intent === "join"
-        ? "Đã nhận đơn! Anh chị Ban Nhân sự sẽ nhắn tin cho bạn trong 24h 💙"
-        : "Cảm ơn lời nhắn của bạn, nhà chung đã đọc rồi nhé! 💙",
-    );
-  };
-
+export default function Contact({
+  isAdmin = false,
+  onToast,
+}: {
+  isAdmin?: boolean;
+  onToast: (msg: string) => void;
+}) {
   return (
     <section id="contact" className="relative overflow-hidden py-16 sm:py-20 lg:py-28">
       <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-tmu-50/70 to-white" />
 
       <div className="mx-auto w-full max-w-[1400px] px-4 sm:px-6">
         <SectionHeading
-          kicker="Liên hệ & gia nhập"
+          kicker="Góc TNV &amp; Liên hệ"
           title={
             <>
-              Còn chần chừ gì nữa, <span className="text-flame-600">về nhà chung</span> thôi!
+              Gắn kết nhà chung, <span className="text-flame-600">kết nối tình nguyện</span>
             </>
           }
-          desc="Điền vài dòng thông tin, anh chị Ban Nhân sự sẽ liên lạc với bạn. Không cần chỉnh sửa gì, cứ viết tự nhiên như đang nhắn tin cho một người bạn cùng quê."
+          desc="Nơi lưu giữ những lời dặn dò, lưu ý hoạt động và tình cảm của các thế hệ thành viên BLLSV Thanh Hóa TMU. Bạn có thể để lại lời nhắn hoặc liên hệ trực tiếp với nhà chung qua các kênh chính thức bên dưới."
         />
 
         <div className="mt-10 grid gap-6 lg:mt-14 lg:grid-cols-[1.15fr_1fr] lg:gap-8">
-          {/* ============ FORM ============ */}
-          <div className="rounded-3xl border border-cobalt-100 bg-white/90 p-5 shadow-soft backdrop-blur sm:p-7" data-reveal>
-            {sent ? (
-              <div className="flex flex-col items-center justify-center gap-4 py-10 text-center">
-                <span className="flex h-20 w-20 items-center justify-center rounded-3xl bg-flame-100 text-4xl">🎉</span>
-                <h3 className="font-display text-xl font-extrabold text-cobalt-900 sm:text-2xl">Đã gửi thành công!</h3>
-                <p className="max-w-md text-[14px] leading-relaxed text-cobalt-700/85">
-                  Cảm ơn bạn đã tin tưởng nhà chung. Trong lúc chờ, bạn cứ ghé trang <strong>Kho bài nhảy</strong> học
-                  trước bài <em>Tinh Thần 36</em> – tối thứ Ba gặp nhau ở sân 79 Hồ Tùng Mậu nhé!
-                </p>
-                <div className="mt-2 flex flex-col gap-3 sm:flex-row">
-                  <Button variant="flame" onClick={() => setSent(false)}>
-                    Gửi thêm thông tin khác
-                  </Button>
-                  <Button as="a" href="#dance" variant="outline">
-                    Đi tới kho bài nhảy
-                  </Button>
-                </div>
-              </div>
-            ) : (
-              <form onSubmit={submit} className="space-y-5">
-                {/* Chọn mục đích */}
-                <div className="grid grid-cols-2 gap-2 rounded-2xl bg-cobalt-800/5 p-1.5">
-                  {(
-                    [
-                      { k: "join", label: "Đăng ký thành viên", icon: "🙋" },
-                      { k: "message", label: "Gửi lời nhắn", icon: "💬" },
-                    ] as const
-                  ).map((opt) => (
-                    <button
-                      key={opt.k}
-                      type="button"
-                      onClick={() => setIntent(opt.k)}
-                      className={cn(
-                        "flex min-h-11 items-center justify-center gap-2 rounded-xl px-3 text-[13px] font-bold transition-all",
-                        intent === opt.k ? "bg-white text-cobalt-900 shadow-sm" : "text-cobalt-600 hover:text-cobalt-800",
-                      )}
-                    >
-                      <span>{opt.icon}</span>
-                      {opt.label}
-                    </button>
-                  ))}
-                </div>
-
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <label className="block">
-                    <span className="mb-1.5 block text-[12.5px] font-bold text-cobalt-800">Họ và tên *</span>
-                    <input required name="name" placeholder="Nguyễn Văn Trưởng" className={inputBase} autoComplete="name" />
-                  </label>
-                  <label className="block">
-                    <span className="mb-1.5 block text-[12.5px] font-bold text-cobalt-800">Số điện thoại / Zalo *</span>
-                    <input
-                      required
-                      name="phone"
-                      type="tel"
-                      inputMode="tel"
-                      pattern="[0-9+\s]{9,15}"
-                      placeholder="09xx xxx xxx"
-                      className={inputBase}
-                      autoComplete="tel"
-                    />
-                  </label>
-                  <label className="block">
-                    <span className="mb-1.5 block text-[12.5px] font-bold text-cobalt-800">Email</span>
-                    <input
-                      name="email"
-                      type="email"
-                      inputMode="email"
-                      placeholder="ban@email.com"
-                      className={inputBase}
-                      autoComplete="email"
-                    />
-                  </label>
-                  <label className="block">
-                    <span className="mb-1.5 block text-[12.5px] font-bold text-cobalt-800">Quê quán (Thanh Hóa)</span>
-                    <select name="hometown" defaultValue="" className={cn(inputBase, "appearance-none bg-white pr-10")}>
-                      <option value="" disabled>
-                        Chọn huyện / thị xã
-                      </option>
-                      {HOMETOWNS.map((h) => (
-                        <option key={h} value={h}>
-                          {h}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                </div>
-
-                <div>
-                  <span className="mb-2 block text-[12.5px] font-bold text-cobalt-800">
-                    {intent === "join" ? "Bạn muốn vào Ban nào?" : "Ban bạn muốn nhắn gửi tới"}
-                  </span>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                    {BANS.map((b, idx) => (
-                      <label
-                        key={b.id}
-                        className="group flex min-h-12 cursor-pointer items-center gap-2.5 rounded-2xl border border-cobalt-200 px-3 transition hover:border-tmu-300 hover:bg-tmu-50/60 has-checked:border-flame-400 has-checked:bg-flame-50"
-                      >
-                        <input type="radio" name="ban" value={b.id} defaultChecked={idx === 0} className="sr-only" />
-                        <span className="text-lg">{b.emoji}</span>
-                        <span className="text-[12.5px] leading-tight font-semibold text-cobalt-800">{b.name.replace("Ban ", "")}</span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-
-                <label className="block">
-                  <span className="mb-1.5 block text-[12.5px] font-bold text-cobalt-800">
-                    {intent === "join" ? "Vì sao bạn muốn gia nhập nhà chung?" : "Lời nhắn của bạn"}
-                  </span>
-                  <textarea
-                    name="message"
-                    rows={4}
-                    placeholder="Mình là K17, quê Quảng Xương. Mình muốn tham gia Mùa Hè Xanh và học flashmob…"
-                    className={cn(inputBase, "resize-none py-3 leading-relaxed")}
-                  />
-                </label>
-
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-                  <Button variant="flame" size="lg" className="w-full sm:w-auto">
-                    {intent === "join" ? "Gửi đơn đăng ký" : "Gửi lời nhắn"}
-                    <Icon.arrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
-                  </Button>
-                  <p className="text-[12px] leading-snug text-cobalt-600/70">
-                    Bằng việc gửi form, bạn đồng ý để BLLSV Thanh Hóa TMU liên lạc qua điện thoại/Zalo. Thông tin chỉ dùng
-                    cho hoạt động của nhà chung.
-                  </p>
-                </div>
-              </form>
-            )}
+          {/* ============ BẢNG GHI CHÚ & LỜI NHẮN TNV (THAY THẾ FORM ĐĂNG KÝ) ============ */}
+          <div>
+            <TnvNoteBoard isAdmin={isAdmin} onToast={onToast} />
           </div>
 
           {/* ============ THÔNG TIN LIÊN HỆ ============ */}

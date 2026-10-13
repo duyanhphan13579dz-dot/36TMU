@@ -50,7 +50,23 @@ const MOBILE_TABS = [
   { id: "memories", label: "Kỷ niệm", icon: Icon.camera },
 ] as const;
 
-export default function Nav({ active }: { active: NavId }) {
+import AdminPanel from "@/components/AdminPanel";
+
+export default function Nav({
+  active,
+  isAdmin,
+  onLoginAdmin,
+  onLogoutAdmin,
+  onToast,
+  onPostCreated,
+}: {
+  active: NavId;
+  isAdmin: boolean;
+  onLoginAdmin: () => void;
+  onLogoutAdmin: () => void;
+  onToast: (msg: string) => void;
+  onPostCreated?: () => void;
+}) {
   const [open, setOpen] = useState(false);
   const { progress, scrolled } = useScrollProgress();
   useLockScroll(open);
@@ -127,13 +143,21 @@ export default function Nav({ active }: { active: NavId }) {
             </ul>
 
             <div className="flex items-center gap-2">
+              <AdminPanel
+                isAdmin={isAdmin}
+                onLogin={onLoginAdmin}
+                onLogout={onLogoutAdmin}
+                onToast={onToast}
+                onPostCreated={onPostCreated}
+              />
+
               <Button
                 as="a"
                 href="#contact"
                 variant="flame"
                 className="hidden lg:inline-flex"
               >
-                Gia nhập nhà chung
+                Góc TNV
                 <Icon.arrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
               </Button>
 

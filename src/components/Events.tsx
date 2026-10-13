@@ -1,9 +1,11 @@
 import { useMemo, useState } from "react";
 import { EVENT_FILTERS, PROGRAMS, YEARLY_TIMELINE, type Program } from "@/data/content";
 import { Button, Icon, Kicker, SectionHeading, Sheet } from "@/components/ui";
+import { getStoredAdminPosts } from "@/components/AdminPanel";
 import { cn } from "@/utils/cn";
 
-const STATUS_STYLE: Record<Program["status"], string> = {
+const STATUS_STYLE: Record<string, string> = {
+  "Mới đăng": "bg-red-600 text-white animate-pulse",
   "Đang mở đăng ký": "bg-flame-500 text-white",
   "Sắp diễn ra": "bg-tmu-500 text-white",
   "Đã kết thúc": "bg-cobalt-200 text-cobalt-700",
@@ -13,9 +15,37 @@ export default function Events({ onToast }: { onToast: (msg: string) => void }) 
   const [filter, setFilter] = useState<string>("Tất cả");
   const [current, setCurrent] = useState<Program | null>(null);
 
+  const adminPosts = useMemo(() => getStoredAdminPosts(), []);
+
+  const allPrograms = useMemo(() => {
+    const adminPrograms: Program[] = adminPosts.map((p) => ({
+      id: p.id,
+      title: p.title,
+      category: p.category as any,
+      status: "Mới đăng" as any,
+      month: "MỚI",
+      day: "HOT",
+      dateLabel: p.createdAt,
+      location: p.author,
+      excerpt: p.summary,
+      desc: p.content || p.summary,
+      cost: "Miễn phí",
+      scale: "Toàn thể thành viên & TNV",
+      lead: p.author,
+      cover: p.imageUrl || "https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=1200&q=80",
+      gallery: [
+        p.imageUrl || "https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=800&q=80",
+      ],
+      schedule: [{ time: "Thông báo", activity: p.summary }],
+      packing: ["Tinh thần nhiệt huyết 36"],
+      contact: "Ban Chủ nhiệm BLLSV TMU",
+    }));
+    return [...adminPrograms, ...PROGRAMS];
+  }, [adminPosts]);
+
   const list = useMemo(
-    () => (filter === "Tất cả" ? PROGRAMS : PROGRAMS.filter((p) => p.category === filter)),
-    [filter],
+    () => (filter === "Tất cả" ? allPrograms : allPrograms.filter((p) => p.category === filter)),
+    [filter, allPrograms],
   );
 
   return (
