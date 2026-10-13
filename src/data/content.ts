@@ -288,11 +288,45 @@ export const LEADERSHIP_HISTORY: LeaderRecord[] = [
 /* ------------------------------------------------------------------ *
  *  DANH SÁCH BÀI HÁT & BÀI NHẢY TRUYỀN THỐNG CHUẨN XÁC
  * ------------------------------------------------------------------ */
-export const TRADITIONAL_SONGS = [
-  { id: "s1", title: "Một Nhà Một Tình Yêu", note: "Bài hát biểu tượng của tình cảm gia đình và sự sẻ chia trong Ban liên lạc" },
-  { id: "s2", title: "Đồng đội", note: "Khúc ca người lính tình nguyện, sát cánh trên từng cung đường xứ Thanh" },
-  { id: "s3", title: "Chỉ thế thôi", note: "Giai điệu mộc mạc, chan chứa tình yêu thương của tuổi trẻ TMU" },
-  { id: "s4", title: "Sát cánh bên nhau", note: "Bài ca đoàn kết triệu con tim con em 36 cùng chung một nhịp đập" },
+export type TraditionalSong = {
+  id: string;
+  title: string;
+  note: string;
+  youtubeId?: string;
+  url: string;
+  type: "youtube" | "zing";
+};
+
+export const TRADITIONAL_SONGS: TraditionalSong[] = [
+  {
+    id: "s1",
+    title: "Một Nhà Một Tình Yêu",
+    note: "Bài hát biểu tượng của tình cảm gia đình và sự sẻ chia trong Ban liên lạc",
+    youtubeId: "4r30sl3Qpi4",
+    url: "https://www.youtube.com/watch?v=4r30sl3Qpi4",
+    type: "youtube",
+  },
+  {
+    id: "s2",
+    title: "Đồng đội (Lạc Việt)",
+    note: "Khúc ca người lính tình nguyện, sát cánh trên từng cung đường xứ Thanh",
+    url: "https://mp3.zing.vn/bai-hat/Dong-Doi-Lac-Viet/ZW7UOIOF.html",
+    type: "zing",
+  },
+  {
+    id: "s3",
+    title: "Chỉ thế thôi (Minh Chuyên)",
+    note: "Giai điệu mộc mạc, chan chứa tình yêu thương của tuổi trẻ TMU",
+    url: "https://mp3.zing.vn/bai-hat/Chi-The-Thoi-Minh-Chuyen/ZW608AC0.html",
+    type: "zing",
+  },
+  {
+    id: "s4",
+    title: "Sát cánh bên nhau (Sỹ Luân)",
+    note: "Bài ca đoàn kết triệu con tim con em 36 cùng chung một nhịp đập",
+    url: "https://mp3.zing.vn/bai-hat/Sat-Canh-Ben-Nhau-Sy-Luan/ZWZACU9A.html",
+    type: "zing",
+  },
 ];
 
 export type Dance = {
@@ -305,9 +339,93 @@ export type Dance = {
   since: string;
   thumbnail: string;
   vibe: string;
+  youtubeId: string;
+  youtubeUrl: string;
   steps: { count: string; name: string; how: string; tip: string }[];
   music: { title: string; size: string };
 };
+
+export const DANCES: Dance[] = [
+  {
+    id: "chung-song",
+    title: "Chung Sống",
+    style: "Dân vũ truyền thống",
+    bpm: 110,
+    duration: "3:30",
+    taughtBy: "Ban Văn hóa – Sự kiện BLLSV TMU",
+    since: "4 bài nhảy truyền thống chính thức của Ban Liên Lạc",
+    thumbnail: "https://img.youtube.com/vi/IaVyFKUeWG4/hqdefault.jpg",
+    vibe: "Một trong 4 bài nhảy truyền thống của nhà chung. Biểu tượng của tinh thần hòa hợp, chung sống và gắn bó như ruột thịt của những người con xa quê.",
+    youtubeId: "IaVyFKUeWG4",
+    youtubeUrl: "https://www.youtube.com/watch?v=IaVyFKUeWG4",
+    steps: [
+      { count: "1", name: "Bật chéo chân phải", how: "Nhảy nhẹ bằng bàn chân, tay phải đưa chéo lên cao 45°.", tip: "Đầu gối mềm, chuyển động tự nhiên theo nhịp." },
+      { count: "2", name: "Vỗ tay ngang ngực", how: "Vỗ tay dứt khoát ngang ngực, mắt nhìn thẳng đồng đội.", tip: "Vỗ to để cả đội cùng hòa nhịp." },
+      { count: "3", name: "Xoay người 180°", how: "Xoay người nhịp nhàng bằng mũi bàn chân trái.", tip: "Giữ thăng bằng và nụ cười rạng rỡ." },
+      { count: "4", name: "Chụm tay mở rộng", how: "Hai tay bung rộng đón ánh sáng, bước chân mở rộng.", tip: "Thể hiện trọn vẹn tinh thần chung một mái nhà." },
+    ],
+    music: { title: "Chung Song - Truyen Thong BLLSV TMU.mp3", size: "4.5 MB" },
+  },
+  {
+    id: "con-chim-non",
+    title: "Con Chim Non (Khăn Quàng Thắp Sáng Bình Minh)",
+    style: "Dân vũ truyền thống",
+    bpm: 118,
+    duration: "3:45",
+    taughtBy: "Ban Văn hóa – Sự kiện BLLSV TMU",
+    since: "4 bài nhảy truyền thống chính thức của Ban Liên Lạc",
+    thumbnail: "https://img.youtube.com/vi/UkDFewLThN8/hqdefault.jpg",
+    vibe: "Điệu dân vũ trong trẻo, rộn ràng, mang lại năng lượng thanh xuân bất tận trước mỗi buổi chào tân sinh viên và hội quân.",
+    youtubeId: "UkDFewLThN8",
+    youtubeUrl: "https://www.youtube.com/watch?v=UkDFewLThN8",
+    steps: [
+      { count: "1", name: "Tay vỗ cánh chim", how: "Hai tay nâng ngang vai vẫy nhẹ như cánh chim non đón nắng.", tip: "Động tác thanh thoát, uyển chuyển." },
+      { count: "2", name: "Nhún chân nhịp nhàng", how: "Chân phải nhún 2 nhịp nhỏ, đổi sang chân trái.", tip: "Nhún đều theo tiếng trống nhạc." },
+      { count: "3", name: "Vòng tay khăn quàng", how: "Tay vuốt nhẹ chéo ngực mô phỏng dải khăn quàng bình minh.", tip: "Ánh mắt tự hào hướng về phía trước." },
+      { count: "4", name: "Bung tay chào mặt trời", how: "Hai tay vươn cao đón chào ngày mới, miệng cười tươi.", tip: "Khoảnh khắc bừng sáng của tuổi trẻ." },
+    ],
+    music: { title: "Con Chim Non - Khan Quang Thap Sang Binh Minh.mp3", size: "4.8 MB" },
+  },
+  {
+    id: "12-buoc",
+    title: "12 Bước (Vào Đời)",
+    style: "Flashmob",
+    bpm: 124,
+    duration: "4:00",
+    taughtBy: "Ban Văn hóa – Sự kiện BLLSV TMU",
+    since: "4 bài nhảy truyền thống chính thức của Ban Liên Lạc",
+    thumbnail: "https://img.youtube.com/vi/42eTQnZMA-o/hqdefault.jpg",
+    vibe: "Bài nhảy sôi động với 12 bước chân kiên định biểu trưng cho hành trình trưởng thành, tự tin bước vào đời của sinh viên Thương Mại.",
+    youtubeId: "42eTQnZMA-o",
+    youtubeUrl: "https://www.youtube.com/watch?v=42eTQnZMA-o",
+    steps: [
+      { count: "1 - 3", name: "3 bước tiến thẳng", how: "Bước chân dứt khoát về phía trước, hai tay đánh hông mạnh mẽ.", tip: "Giữ lưng thẳng, mắt nhìn thẳng." },
+      { count: "4 - 6", name: "3 bước quay ngang", how: "Chuyển hướng 90 độ, vỗ tay kết hợp xoay hông.", tip: "Động tác khỏe khoắn, dứt khoát." },
+      { count: "7 - 9", name: "3 bước lùi phòng thủ", how: "Lùi chân nhịp nhàng giữ cự ly đội hình chuẩn xác.", tip: "Không nhìn xuống chân, cảm nhận khoảng cách." },
+      { count: "10 - 12", name: "3 bước bứt phá", how: "Bật nhảy cao, giơ hai tay chữ V tự hào đón nhận tương lai.", tip: "Cả đội đồng thanh hô vang nhịp 12!" },
+    ],
+    music: { title: "12 Buoc Vao Doi - Flashmob BLLSV.mp3", size: "5.2 MB" },
+  },
+  {
+    id: "9-buoc",
+    title: "9 Bước (Đến Với Con Người Việt Nam Tôi)",
+    style: "Flashmob",
+    bpm: 120,
+    duration: "3:50",
+    taughtBy: "Ban Văn hóa – Sự kiện BLLSV TMU",
+    since: "4 bài nhảy truyền thống chính thức của Ban Liên Lạc",
+    thumbnail: "https://img.youtube.com/vi/wqAD_SoIKsM/hqdefault.jpg",
+    vibe: "Khúc ca tự hào quê hương xứ Thanh và đất nước Việt Nam. Bài nhảy luôn được chọn biểu diễn trong các sự kiện giao lưu cấp trường và cấp thành phố.",
+    youtubeId: "wqAD_SoIKsM",
+    youtubeUrl: "https://www.youtube.com/watch?v=wqAD_SoIKsM",
+    steps: [
+      { count: "1 - 3", name: "3 nhịp mở cánh sen", how: "Hai bàn tay tạo hình búp sen rồi bung nở trước ngực.", tip: "Mềm mại, trang trọng và giàu cảm xúc." },
+      { count: "4 - 6", name: "3 nhịp sóng Mã giang", how: "Uốn lượn hai tay tượng trưng cho dòng sông Mã anh hùng.", tip: "Chuyển động nhịp nhàng từ vai đến cổ tay." },
+      { count: "7 - 9", name: "3 nhịp đón bạn bè", how: "Bước rộng hai chân, vòng tay rộng ôm trọn bạn bè phương xa.", tip: "Nụ cười mến khách đậm chất con người xứ Thanh." },
+    ],
+    music: { title: "9 Buoc - Den Voi Con Nguoi Viet Nam Toi.mp3", size: "5.0 MB" },
+  },
+];
 
 const IMG = {
   volunteers: "https://images.pexels.com/photos/13418669/pexels-photo-13418669.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
@@ -331,80 +449,6 @@ const IMG = {
   beach2: "https://images.pexels.com/photos/38251939/pexels-photo-38251939.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
   community: "https://images.pexels.com/photos/33368443/pexels-photo-33368443.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
 };
-
-export const DANCES: Dance[] = [
-  {
-    id: "chung-song",
-    title: "Chung Sống",
-    style: "Dân vũ truyền thống",
-    bpm: 110,
-    duration: "3:30",
-    taughtBy: "Ban Văn hóa – Sự kiện BLLSV TMU",
-    since: "4 bài nhảy truyền thống chính thức của Ban Liên Lạc",
-    thumbnail: IMG.dance,
-    vibe: "Một trong 4 bài nhảy truyền thống của nhà chung. Biểu tượng của tinh thần hòa hợp, chung sống và gắn bó như ruột thịt của những người con xa quê.",
-    steps: [
-      { count: "1", name: "Bật chéo chân phải", how: "Nhảy nhẹ bằng bàn chân, tay phải đưa chéo lên cao 45°.", tip: "Đầu gối mềm, chuyển động tự nhiên theo nhịp." },
-      { count: "2", name: "Vỗ tay ngang ngực", how: "Vỗ tay dứt khoát ngang ngực, mắt nhìn thẳng đồng đội.", tip: "Vỗ to để cả đội cùng hòa nhịp." },
-      { count: "3", name: "Xoay người 180°", how: "Xoay người nhịp nhàng bằng mũi bàn chân trái.", tip: "Giữ thăng bằng và nụ cười rạng rỡ." },
-      { count: "4", name: "Chụm tay mở rộng", how: "Hai tay bung rộng đón ánh sáng, bước chân mở rộng.", tip: "Thể hiện trọn vẹn tinh thần chung một mái nhà." },
-    ],
-    music: { title: "Chung Song - Truyen Thong BLLSV TMU.mp3", size: "4.5 MB" },
-  },
-  {
-    id: "con-chim-non",
-    title: "Con Chim Non (Khăn Quàng Thắp Sáng Bình Minh)",
-    style: "Dân vũ truyền thống",
-    bpm: 118,
-    duration: "3:45",
-    taughtBy: "Ban Văn hóa – Sự kiện BLLSV TMU",
-    since: "4 bài nhảy truyền thống chính thức của Ban Liên Lạc",
-    thumbnail: IMG.dance2,
-    vibe: "Điệu dân vũ trong trẻo, rộn ràng, mang lại năng lượng thanh xuân bất tận trước mỗi buổi chào tân sinh viên và hội quân.",
-    steps: [
-      { count: "1", name: "Tay vỗ cánh chim", how: "Hai tay nâng ngang vai vẫy nhẹ như cánh chim non đón nắng.", tip: "Động tác thanh thoát, uyển chuyển." },
-      { count: "2", name: "Nhún chân nhịp nhàng", how: "Chân phải nhún 2 nhịp nhỏ, đổi sang chân trái.", tip: "Nhún đều theo tiếng trống nhạc." },
-      { count: "3", name: "Vòng tay khăn quàng", how: "Tay vuốt nhẹ chéo ngực mô phỏng dải khăn quàng bình minh.", tip: "Ánh mắt tự hào hướng về phía trước." },
-      { count: "4", name: "Bung tay chào mặt trời", how: "Hai tay vươn cao đón chào ngày mới, miệng cười tươi.", tip: "Khoảnh khắc bừng sáng của tuổi trẻ." },
-    ],
-    music: { title: "Con Chim Non - Khan Quang Thap Sang Binh Minh.mp3", size: "4.8 MB" },
-  },
-  {
-    id: "12-buoc",
-    title: "12 Bước (Vào Đời)",
-    style: "Flashmob",
-    bpm: 124,
-    duration: "4:00",
-    taughtBy: "Ban Văn hóa – Sự kiện BLLSV TMU",
-    since: "4 bài nhảy truyền thống chính thức của Ban Liên Lạc",
-    thumbnail: IMG.dance3,
-    vibe: "Bài nhảy sôi động với 12 bước chân kiên định biểu trưng cho hành trình trưởng thành, tự tin bước vào đời của sinh viên Thương Mại.",
-    steps: [
-      { count: "1 - 3", name: "3 bước tiến thẳng", how: "Bước chân dứt khoát về phía trước, hai tay đánh hông mạnh mẽ.", tip: "Giữ lưng thẳng, mắt nhìn thẳng." },
-      { count: "4 - 6", name: "3 bước quay ngang", how: "Chuyển hướng 90 độ, vỗ tay kết hợp xoay hông.", tip: "Động tác khỏe khoắn, dứt khoát." },
-      { count: "7 - 9", name: "3 bước lùi phòng thủ", how: "Lùi chân nhịp nhàng giữ cự ly đội hình chuẩn xác.", tip: "Không nhìn xuống chân, cảm nhận khoảng cách." },
-      { count: "10 - 12", name: "3 bước bứt phá", how: "Bật nhảy cao, giơ hai tay chữ V tự hào đón nhận tương lai.", tip: "Cả đội đồng thanh hô vang nhịp 12!" },
-    ],
-    music: { title: "12 Buoc Vao Doi - Flashmob BLLSV.mp3", size: "5.2 MB" },
-  },
-  {
-    id: "9-buoc",
-    title: "9 Bước (Đến Với Con Người Việt Nam Tôi)",
-    style: "Flashmob",
-    bpm: 120,
-    duration: "3:50",
-    taughtBy: "Ban Văn hóa – Sự kiện BLLSV TMU",
-    since: "4 bài nhảy truyền thống chính thức của Ban Liên Lạc",
-    thumbnail: IMG.dance4,
-    vibe: "Khúc ca tự hào quê hương xứ Thanh và đất nước Việt Nam. Bài nhảy luôn được chọn biểu diễn trong các sự kiện giao lưu cấp trường và cấp thành phố.",
-    steps: [
-      { count: "1 - 3", name: "3 nhịp mở cánh sen", how: "Hai bàn tay tạo hình búp sen rồi bung nở trước ngực.", tip: "Mềm mại, trang trọng và giàu cảm xúc." },
-      { count: "4 - 6", name: "3 nhịp sóng Mã giang", how: "Uốn lượn hai tay tượng trưng cho dòng sông Mã anh hùng.", tip: "Chuyển động nhịp nhàng từ vai đến cổ tay." },
-      { count: "7 - 9", name: "3 nhịp đón bạn bè", how: "Bước rộng hai chân, vòng tay rộng ôm trọn bạn bè phương xa.", tip: "Nụ cười mến khách đậm chất con người xứ Thanh." },
-    ],
-    music: { title: "9 Buoc - Den Voi Con Nguoi Viet Nam Toi.mp3", size: "5.0 MB" },
-  },
-];
 
 export type EventCategory = "Tình nguyện" | "Hội đồng hương" | "Chào tân sinh viên";
 export const EVENT_FILTERS = ["Tất cả", "Tình nguyện", "Hội đồng hương", "Chào tân sinh viên"] as const;
