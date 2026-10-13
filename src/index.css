@@ -1,0 +1,200 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Be Vietnam Pro", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Baloo 2", "Be Vietnam Pro", ui-sans-serif, sans-serif;
+
+  /* Cobalt TMU - xanh đậm nhận diện */
+  --color-cobalt-50: #eef5ff;
+  --color-cobalt-100: #d8e7ff;
+  --color-cobalt-200: #b6d1ff;
+  --color-cobalt-300: #84b3ff;
+  --color-cobalt-400: #4b8bf7;
+  --color-cobalt-500: #1f66e0;
+  --color-cobalt-600: #14499f;
+  --color-cobalt-700: #0f3a80;
+  --color-cobalt-800: #0a2a66;
+  --color-cobalt-900: #071d47;
+  --color-cobalt-950: #04122c;
+
+  /* Xanh biển logo */
+  --color-tmu-50: #eff9ff;
+  --color-tmu-100: #dcf0fe;
+  --color-tmu-200: #c0e4fd;
+  --color-tmu-300: #94d3fb;
+  --color-tmu-400: #5fbcf7;
+  --color-tmu-500: #2e97dd;
+  --color-tmu-600: #1a7ac0;
+  --color-tmu-700: #16619b;
+
+  /* Lửa nhiệt huyết - cam/Vàng */
+  --color-flame-50: #fff6ed;
+  --color-flame-100: #ffe9d3;
+  --color-flame-200: #ffd0a6;
+  --color-flame-300: #ffb26f;
+  --color-flame-400: #ff8c36;
+  --color-flame-500: #f58220;
+  --color-flame-600: #e2670c;
+  --color-flame-700: #b94d0a;
+
+  --color-glow-300: #f2f77a;
+  --color-glow-400: #e6ee3f;
+  --color-glow-500: #d9e021;
+
+  --color-sky-paper: #f4f8fc;
+
+  --shadow-soft: 0 10px 30px -12px rgb(10 42 102 / 0.25);
+  --shadow-lift: 0 24px 50px -20px rgb(10 42 102 / 0.45);
+
+  --animate-marquee: marquee 28s linear infinite;
+  --animate-float-slow: float-slow 6s ease-in-out infinite;
+  --animate-pulse-ring: pulse-ring 2.4s ease-out infinite;
+  --animate-beat: beat 0.4s ease-out;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+@keyframes beat {
+  0% {
+    transform: scale(1.35);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-sky-paper font-sans text-cobalt-900 antialiased;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    @apply bg-flame-500/25 text-cobalt-900;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display;
+  }
+}
+
+@utility scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility fade-x {
+  -webkit-mask-image: linear-gradient(to right, transparent, black 3%, black 97%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 3%, black 97%, transparent);
+}
+
+@utility text-balance-vn {
+  text-wrap: balance;
+}
+
+/* Nền chấm bi + lưới nhẹ cho các section */
+@utility bg-dots {
+  background-image: radial-gradient(rgb(46 151 221 / 0.22) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+
+@utility card-glass {
+  background: color-mix(in srgb, white 78%, transparent);
+  backdrop-filter: blur(14px) saturate(140%);
+}
+
+.masonry {
+  column-count: 2;
+  column-gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .masonry {
+    column-count: 3;
+  }
+}
+
+@media (min-width: 1280px) {
+  .masonry {
+    column-count: 4;
+  }
+}
+
+.masonry > * {
+  break-inside: avoid;
+  margin-bottom: 1rem;
+}
+
+/* Hiệu ứng xuất hiện khi cuộn (dùng thuộc tính `translate` riêng biệt
+   để không xung đột với các utility transform của Tailwind khi hover) */
+[data-reveal] {
+  opacity: 0;
+  translate: 0 26px;
+  transition:
+    opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+    translate 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, translate;
+}
+
+[data-reveal].is-visible {
+  opacity: 1;
+  translate: 0 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1;
+    translate: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
