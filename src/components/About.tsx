@@ -179,42 +179,50 @@ export default function About() {
           </div>
         </div>
 
-        {/* Dải lời nhắn của nhà chung */}
-        <div className="mt-14 overflow-hidden rounded-3xl bg-gradient-to-br from-cobalt-800 via-cobalt-700 to-tmu-600 p-6 text-white shadow-lift sm:p-10 lg:mt-20">
+        {/* Dải thông tin truyền thống & Văn hóa nhà chung */}
+        <div className="mt-14 overflow-hidden rounded-3xl bg-gradient-to-br from-cobalt-900 via-cobalt-800 to-tmu-700 p-6 text-white shadow-lift sm:p-10 lg:mt-20">
           <div className="grid gap-8 lg:grid-cols-[1.2fr_1fr] lg:items-center">
             <div>
               <Kicker className="bg-white/10 text-glow-300 ring-white/20">Tinh thần 36</Kicker>
               <h3 className="mt-4 text-balance-vn font-display text-2xl leading-tight font-extrabold sm:text-3xl lg:text-4xl">
-                Vì sao lại là con số 36?
+                Slogan & Nghi thức thiêng liêng
               </h3>
-              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/85 sm:text-base">
-                Ngày <strong>3 tháng 6</strong> – ngày thành lập nhà chung, nên tụi mình gọi nhau là “người 36”.
-                Con số ấy nhắc mỗi thành viên rằng: máu chảy trong tim là máu của người xứ Thanh, sống để yêu thương
-                và sống để cống hiến. Ai thuộc bảng số đếm nhịp 1-2-3-4 của flashmob, người đó là người nhà. 💙
+              <blockquote className="mt-4 border-l-4 border-flame-500 pl-4 text-base font-bold italic text-glow-300 sm:text-lg">
+                “{ORG.slogan}”
+              </blockquote>
+              <p className="mt-3 text-[13.5px] leading-relaxed text-white/85 sm:text-sm">
+                ⭕ <strong>Nghi thức hô slogan:</strong> {ORG.sloganRitual}
+              </p>
+              <p className="mt-2 text-[13.5px] leading-relaxed text-white/85 sm:text-sm">
+                🍚 <strong>Khẩu hiệu mời cơm truyền thống:</strong> “{ORG.mealCheer}”
+              </p>
+              <p className="mt-3 text-[13px] leading-relaxed text-white/75">
+                🏛️ <strong>Tổ chức trực thuộc:</strong> {ORG.parentOrg} ({ORG.parentOrgMembersCount} đơn vị, Chủ tịch: {ORG.parentOrgPresident}).
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
                 <Button as="a" href="#contact" variant="flame">
-                  Đăng ký vào ban
+                  Gia nhập gia đình 36
                   <Icon.arrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                 </Button>
                 <Button as="a" href="#dance" variant="ghost" className="bg-white/10 text-white hover:bg-white/20">
                   <Icon.mirror className="h-4 w-4" />
-                  Xem breakdown bài nhảy
+                  4 Bài nhảy truyền thống
                 </Button>
               </div>
             </div>
-            <div className="grid grid-cols-3 gap-3 sm:gap-4">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4">
               {[
-                { n: "36", l: "Ngày thành lập (3/6)" },
-                { n: "4", l: "Ban chuyên môn" },
-                { n: "1", l: "Mái nhà chung" },
+                { n: "12/04/2008", l: "Ngày thành lập Ban liên lạc" },
+                { n: "16 Khóa", l: "Thế hệ BCH (K44 – K60)" },
+                { n: "20 Đơn vị", l: "Thuộc Hội ĐH Thanh Hóa" },
+                { n: "4 Năm", l: "Vô địch Âm Vang Xứ Thanh" },
               ].map((x) => (
                 <div
                   key={x.l}
-                  className="rounded-2xl border border-white/15 bg-white/10 p-3 text-center backdrop-blur transition hover:-translate-y-1 hover:bg-white/20 sm:p-4"
+                  className="rounded-2xl border border-white/15 bg-white/10 p-3.5 text-center backdrop-blur transition hover:-translate-y-1 hover:bg-white/20 sm:p-4"
                 >
-                  <p className="font-display text-3xl font-extrabold text-glow-300 sm:text-4xl">{x.n}</p>
-                  <p className="mt-1 text-[11px] leading-snug font-medium text-white/80 sm:text-xs">{x.l}</p>
+                  <p className="font-display text-2xl font-black text-glow-300 sm:text-3xl">{x.n}</p>
+                  <p className="mt-1 text-[11.5px] leading-snug font-medium text-white/85 sm:text-xs">{x.l}</p>
                 </div>
               ))}
             </div>

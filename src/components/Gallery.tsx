@@ -1,5 +1,5 @@
-import { useRef, useState } from "react";
-import { CONFESSIONS, MEMORIES, type Confession } from "@/data/content";
+import { useMemo, useRef, useState } from "react";
+import { CONFESSIONS, LEADERSHIP_HISTORY, MEMORIES, type Confession } from "@/data/content";
 import { Button, Icon, Kicker, SectionHeading, Sheet } from "@/components/ui";
 import { cn } from "@/utils/cn";
 
@@ -18,6 +18,30 @@ export default function Gallery({ onToast }: { onToast: (msg: string) => void })
   const [notes, setNotes] = useState<Confession[]>(CONFESSIONS);
   const [draft, setDraft] = useState("");
   const [author, setAuthor] = useState("");
+
+  const [leaderSearch, setLeaderSearch] = useState("");
+  const [selectedKhoa, setSelectedKhoa] = useState<string>("all");
+
+  const khoasList = useMemo(() => {
+    const list: string[] = [];
+    LEADERSHIP_HISTORY.forEach((l) => {
+      if (!list.includes(l.khoa)) list.push(l.khoa);
+    });
+    return list;
+  }, []);
+
+  const filteredLeaders = useMemo(() => {
+    return LEADERSHIP_HISTORY.filter((l) => {
+      const matchKhoa = selectedKhoa === "all" || l.khoa === selectedKhoa;
+      const matchSearch =
+        !leaderSearch ||
+        l.name.toLowerCase().includes(leaderSearch.toLowerCase()) ||
+        l.hometown.toLowerCase().includes(leaderSearch.toLowerCase()) ||
+        l.role.toLowerCase().includes(leaderSearch.toLowerCase()) ||
+        l.term.includes(leaderSearch);
+      return matchKhoa && matchSearch;
+    });
+  }, [selectedKhoa, leaderSearch]);
 
   const onTrackScroll = () => {
     const el = trackRef.current;
@@ -134,6 +158,95 @@ export default function Gallery({ onToast }: { onToast: (msg: string) => void })
               </span>
             </button>
           ))}
+        </div>
+
+        {/* ============ BAN CHẤP HÀNH CÁC THẾ HỆ (CHUẨN TỪ K44 ĐẾN K60) ============ */}
+        <div className="mt-16 rounded-3xl border border-cobalt-100 bg-white p-6 shadow-soft sm:p-8 lg:mt-24 lg:p-10" data-reveal>
+          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div className="max-w-2xl space-y-2.5">
+              <span className="inline-flex items-center gap-2 rounded-full bg-tmu-50 px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-tmu-700 ring-1 ring-tmu-200">
+                ⭐ Thế hệ giữ lửa
+              </span>
+              <h3 className="font-display text-2xl font-black text-cobalt-950 sm:text-3xl">
+                Ban Chấp Hành Các Khóa (K44 – K60)
+              </h3>
+              <p className="text-sm leading-relaxed text-cobalt-700">
+                16 thế hệ anh chị Ban Chấp Hành đã cống hiến, giữ lửa và xây đắp nên mái nhà chung vững mạnh của con em Thanh Hóa tại ĐH Thương Mại từ 2008 đến nay.
+              </p>
+            </div>
+            <div className="text-right">
+              <span className="inline-block rounded-2xl bg-cobalt-50 px-4 py-2 text-[12px] font-bold text-cobalt-800">
+                Tổng cộng {LEADERSHIP_HISTORY.length} anh chị BCH
+              </span>
+            </div>
+          </div>
+
+          {/* Công cụ tìm kiếm & lọc khóa */}
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="scrollbar-none -mx-2 flex snap-x gap-1.5 overflow-x-auto px-2 pb-1 sm:mx-0 sm:px-0">
+              <button
+                onClick={() => setSelectedKhoa("all")}
+                className={cn(
+                  "shrink-0 snap-start rounded-xl px-3 py-1.5 text-xs font-bold transition",
+                  selectedKhoa === "all"
+                    ? "bg-cobalt-800 text-white shadow-xs"
+                    : "bg-cobalt-50 text-cobalt-700 hover:bg-cobalt-100",
+                )}
+              >
+                Tất cả các khóa
+              </button>
+              {khoasList.map((k) => (
+                <button
+                  key={k}
+                  onClick={() => setSelectedKhoa(k)}
+                  className={cn(
+                    "shrink-0 snap-start rounded-xl px-3 py-1.5 text-xs font-bold transition",
+                    selectedKhoa === k
+                      ? "bg-flame-500 text-white shadow-xs"
+                      : "bg-cobalt-50 text-cobalt-700 hover:bg-cobalt-100",
+                  )}
+                >
+                  {k}
+                </button>
+              ))}
+            </div>
+
+            <div className="w-full sm:w-64">
+              <input
+                type="text"
+                value={leaderSearch}
+                onChange={(e) => setLeaderSearch(e.target.value)}
+                placeholder="Tìm tên, quê quán, chức vụ..."
+                className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs text-cobalt-900 outline-none placeholder:text-cobalt-400 focus:border-tmu-400 focus:ring-2 focus:ring-tmu-100"
+              />
+            </div>
+          </div>
+
+          {/* Danh sách thẻ anh chị BCH */}
+          <div className="mt-6 grid max-h-[460px] gap-3 overflow-y-auto pr-1 sm:grid-cols-2 lg:grid-cols-3">
+            {filteredLeaders.map((lead, idx) => (
+              <div
+                key={idx}
+                className="flex items-start justify-between gap-3 rounded-2xl border border-cobalt-100 bg-cobalt-50/50 p-3.5 transition hover:border-tmu-300 hover:bg-white hover:shadow-xs"
+              >
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-display text-[14px] font-black text-cobalt-950">{lead.name}</span>
+                    <span className="rounded-md bg-flame-100 px-1.5 py-0.5 text-[10px] font-bold text-flame-700">
+                      {lead.khoa}
+                    </span>
+                  </div>
+                  <p className="mt-1 text-[12px] font-semibold text-tmu-700">{lead.role}</p>
+                  <p className="mt-1 text-[11.5px] text-cobalt-600">
+                    📍 {lead.hometown} {lead.dob ? `· Sinh: ${lead.dob}` : ""}
+                  </p>
+                </div>
+                <span className="shrink-0 rounded-lg bg-white px-2 py-1 text-[10px] font-bold text-cobalt-500 shadow-2xs">
+                  {lead.term}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* ============ CONFESSIONS ============ */}

@@ -270,8 +270,7 @@ export function Footer() {
             </div>
             <p className="mt-4 max-w-md text-[13.5px] leading-relaxed text-white/90 italic">“{ORG.slogan}”</p>
             <p className="mt-4 max-w-md text-[13px] leading-relaxed text-white/80">
-              Nhà chung của sinh viên Thanh Hóa đang học tập tại Hà Nội, hoạt động dưới sự hỗ trợ của Hội Sinh viên
-              Trường Đại học Thương Mại. Thành lập năm {ORG.founded} – 15 năm một chuyến đi.
+              Mái nhà chung của sinh viên Thanh Hóa tại Trường Đại học Thương Mại, trực thuộc {ORG.parentOrg}. Thành lập ngày {ORG.foundedDate} – hơn 18 năm giữ lửa và cống hiến.
             </p>
           </div>
 

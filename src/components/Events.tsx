@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { EVENT_FILTERS, PROGRAMS, type Program } from "@/data/content";
+import { EVENT_FILTERS, PROGRAMS, YEARLY_TIMELINE, type Program } from "@/data/content";
 import { Button, Icon, Kicker, SectionHeading, Sheet } from "@/components/ui";
 import { cn } from "@/utils/cn";
 
@@ -140,6 +140,43 @@ export default function Events({ onToast }: { onToast: (msg: string) => void }) 
           ))}
         </div>
         <p className="md:hidden text-center text-xs text-cobalt-500">👆 Vuốt ngang để xem thêm chương trình</p>
+
+        {/* ===== VÒNG QUAY 12 THÁNG: HOẠT ĐỘNG THƯỜNG NIÊN CHUẨN XÁC ===== */}
+        <div className="mt-16 rounded-3xl border border-cobalt-100 bg-gradient-to-br from-white via-tmu-50/40 to-white p-6 shadow-soft sm:p-8 lg:p-10" data-reveal>
+          <div className="max-w-2xl">
+            <span className="inline-flex items-center gap-2 rounded-full bg-flame-50 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-flame-600 ring-1 ring-flame-200">
+              📅 Vòng quay 12 tháng
+            </span>
+            <h3 className="mt-3 font-display text-xl font-black text-cobalt-950 sm:text-2xl lg:text-3xl">
+              Chuỗi Hoạt Động Thường Niên Của Ban Liên Lạc
+            </h3>
+            <p className="mt-2 text-sm text-cobalt-700">
+              Toàn bộ các chiến dịch và chương trình lớn diễn ra đều đặn qua từng tháng trong năm, gắn kết triệu trái tim sinh viên xứ Thanh tại TMU.
+            </p>
+          </div>
+
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {YEARLY_TIMELINE.map((item, idx) => (
+              <div
+                key={idx}
+                className="group relative flex flex-col justify-between rounded-2xl border border-cobalt-100 bg-white p-5 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-tmu-300 hover:shadow-soft"
+              >
+                <div>
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="font-display text-base font-black text-flame-600">{item.month}</span>
+                    <span className="rounded-full bg-tmu-50 px-2.5 py-0.5 text-[10.5px] font-bold text-tmu-700">
+                      {item.badge}
+                    </span>
+                  </div>
+                  <h4 className="mt-2.5 text-base font-bold text-cobalt-950 transition-colors group-hover:text-tmu-700">
+                    {item.title}
+                  </h4>
+                  <p className="mt-2 text-[13px] leading-relaxed text-cobalt-700/90">{item.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* ===== Modal chi tiết (full-screen sheet trên mobile) ===== */}

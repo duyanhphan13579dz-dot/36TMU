@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { DANCES, type Dance } from "@/data/content";
+import { DANCES, TRADITIONAL_SONGS, type Dance } from "@/data/content";
 import { Button, Icon, useLockScroll } from "@/components/ui";
 import { buildClickTrackWav, downloadBlob, startMetronome, type MetronomeHandle } from "@/lib/audio";
 import { cn } from "@/utils/cn";
@@ -156,6 +156,18 @@ export default function DanceLab({ onToast }: { onToast: (msg: string) => void }
                 </li>
               ))}
             </ul>
+
+            <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-4">
+              <p className="text-[11px] font-bold tracking-[0.16em] text-glow-300 uppercase">4 Bài hát truyền thống</p>
+              <ul className="mt-2.5 space-y-2 text-[12.5px] text-white/80">
+                {TRADITIONAL_SONGS.map((song) => (
+                  <li key={song.id} className="rounded-xl border border-white/5 bg-white/5 p-2 transition hover:bg-white/10">
+                    <p className="font-semibold text-white">🎵 {song.title}</p>
+                    <p className="mt-0.5 text-[11px] text-white/60">{song.note}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
             <div className="mt-4 hidden rounded-2xl border border-white/10 bg-white/5 p-4 lg:block">
               <p className="text-[11px] font-bold tracking-[0.16em] text-glow-300 uppercase">Lịch tập tuần này</p>

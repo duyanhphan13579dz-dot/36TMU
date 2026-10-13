@@ -24,7 +24,7 @@ export default function Hero() {
         <div className="order-2 lg:order-1" data-reveal>
           <Kicker className="border border-cobalt-200/80 bg-white/95 font-bold text-cobalt-950 shadow-xs">
             <span className="flex h-2 w-2 rounded-full bg-flame-500" />
-            BLLSV Thanh Hóa · Đại học Thương Mại · từ 2011
+            BLLSV Thanh Hóa · Đại học Thương Mại · Thành lập 12/04/2008
           </Kicker>
 
           <h1 className="mt-4 text-balance-vn font-display text-[2.1rem] leading-[1.08] font-black tracking-tight text-cobalt-950 sm:text-5xl lg:text-[3.65rem]">
@@ -41,8 +41,8 @@ export default function Hero() {
           </h1>
 
           <p className="mt-5 max-w-xl text-[15px] leading-relaxed font-medium text-cobalt-800 sm:text-lg">
-            Chào bạn! Chúng mình là <strong className="font-semibold text-cobalt-900">Ban Liên Lạc Sinh Viên Thanh Hóa – TMU</strong>.
-            Nơi những người con sông Mã gặp nhau tại 79 Hồ Tùng Mậu, cùng đi tình nguyện, cùng tập flashmob
+            Chào bạn! Chúng mình là <strong className="font-semibold text-cobalt-900">Ban Liên Lạc Sinh Viên Thanh Hóa Đại Học Thương Mại</strong> (trực thuộc Hội đồng hương Sinh viên Thanh Hóa tại Hà Nội).
+            Nơi những người con sông Mã gặp nhau tại 79 Hồ Tùng Mậu, cùng đi tình nguyện, cùng tập các bài nhảy truyền thống
             và cùng gọi nhau bằng hai chữ thân thương: <em className="text-flame-600 not-italic font-semibold">người nhà</em>.
           </p>
 
@@ -54,7 +54,7 @@ export default function Hero() {
             </Button>
             <Button as="a" href="#dance" variant="outline" size="lg" className="w-full sm:w-auto">
               <Icon.music className="h-5 w-5 text-tmu-600" />
-              Học ngay bài nhảy 36
+              Học bài nhảy truyền thống
             </Button>
           </div>
 
