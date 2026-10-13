@@ -40,13 +40,27 @@ export default function App() {
           }
         });
       },
-      { threshold: 0.1, rootMargin: "0px 0px -6% 0px" },
+      { threshold: 0.01, rootMargin: "60px 0px 60px 0px" },
     );
     els.forEach((el, i) => {
-      el.style.transitionDelay = `${Math.min(i % 4, 3) * 70}ms`;
+      el.style.transitionDelay = `${Math.min(i % 4, 3) * 60}ms`;
       io.observe(el);
     });
-    return () => io.disconnect();
+
+    // Fallback: đảm bảo các element hiển thị sau khi load trang
+    const timerId = window.setTimeout(() => {
+      els.forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight + 100) {
+          el.classList.add("is-visible");
+        }
+      });
+    }, 600);
+
+    return () => {
+      io.disconnect();
+      window.clearTimeout(timerId);
+    };
   }, []);
 
   return (

@@ -113,13 +113,17 @@ export default function DanceLab({ onToast }: { onToast: (msg: string) => void }
           </p>
         </div>
 
-        <div className="mt-8 grid gap-5 lg:mt-12 lg:grid-cols-[320px_1fr] lg:gap-7" data-reveal>
+        {/* ===== BỐ CỤC CHÍNH (KHÔNG DÙNG data-reveal ĐỂ TRÁNH BỊ ẨN TRẮNG TRANG) ===== */}
+        <div className="mt-8 grid gap-5 lg:mt-10 lg:grid-cols-[330px_1fr] lg:gap-7" id="dance-workspace">
           {/* ===== Cột trái: 4 Bài Nhảy & 4 Bài Hát ===== */}
           <div>
             <div className="flex items-center justify-between mb-3">
               <p className="text-[11px] font-bold tracking-[0.18em] text-cobalt-800 uppercase">
                 4 Bài nhảy truyền thống ({DANCES.length})
               </p>
+              <span className="rounded-full bg-flame-100 px-2 py-0.5 text-[10px] font-bold text-flame-700">
+                Chính thức
+              </span>
             </div>
 
             {/* Mobile: snap chips */}
@@ -178,9 +182,12 @@ export default function DanceLab({ onToast }: { onToast: (msg: string) => void }
 
             {/* 4 Bài hát truyền thống */}
             <div className="mt-4 rounded-2xl border border-cobalt-100 bg-white p-4 shadow-sm">
-              <p className="text-[11px] font-bold tracking-[0.16em] text-flame-700 uppercase">
-                4 Bài hát truyền thống
-              </p>
+              <div className="flex items-center justify-between">
+                <p className="text-[11px] font-bold tracking-[0.16em] text-flame-700 uppercase">
+                  4 Bài hát truyền thống
+                </p>
+                <span className="text-[10px] font-semibold text-cobalt-500">BLLSV TMU</span>
+              </div>
               <ul className="mt-2.5 space-y-2 text-[12.5px]">
                 {TRADITIONAL_SONGS.map((song) => (
                   <li
@@ -468,6 +475,228 @@ export default function DanceLab({ onToast }: { onToast: (msg: string) => void }
                   ))}
                 </ol>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ===== BỘ SƯU TẬP VIDEO & BÀI HÁT SHOWCASE (HIỂN THỊ ĐẦY ĐỦ TRỰC QUAN) ===== */}
+        <div className="mt-12 rounded-3xl border border-cobalt-200 bg-white/90 p-6 shadow-sm backdrop-blur sm:p-8 lg:mt-16">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-cobalt-200 bg-cobalt-50 px-3 py-1 text-[11px] font-bold text-cobalt-800 uppercase tracking-wider">
+                🎬 Danh mục video &amp; bài hát chính thức
+              </span>
+              <h3 className="mt-2 font-display text-xl font-black text-cobalt-950 sm:text-2xl">
+                Tất Cả Video Hướng Dẫn &amp; Giai Điệu BLLSV TMU
+              </h3>
+              <p className="mt-1 text-sm font-medium text-cobalt-700">
+                Nhấp vào bài bất kỳ để phát video ngay trên màn hình chính hoặc mở trực tiếp trên YouTube / ZingMP3
+              </p>
+            </div>
+            <a
+              href="https://docs.google.com/document/d/1n3E4mfn5q0loAcOcMYZjQsRttcaRwLpu/mobilebasic"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex shrink-0 items-center gap-2 rounded-2xl border border-cobalt-200 bg-white px-4 py-2.5 text-xs font-bold text-cobalt-900 shadow-xs transition hover:border-flame-400 hover:text-flame-600"
+            >
+              <span>📄</span>
+              Xem văn bản tài liệu chính thống
+              <svg viewBox="0 0 20 20" fill="currentColor" className="h-3.5 w-3.5">
+                <path fillRule="evenodd" d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z" clipRule="evenodd" />
+              </svg>
+            </a>
+          </div>
+
+          {/* Grid 4 bài nhảy */}
+          <div className="mt-6">
+            <div className="mb-3 flex items-center justify-between">
+              <h4 className="text-xs font-bold tracking-widest text-cobalt-800 uppercase">
+                🕺 4 Bài nhảy truyền thống (Video YouTube chính thức)
+              </h4>
+              <span className="text-xs font-medium text-cobalt-500">4 video</span>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {DANCES.map((d) => {
+                const isSelected = activeId === d.id && !activeSongVideo;
+                return (
+                  <div
+                    key={d.id}
+                    className={cn(
+                      "group flex flex-col justify-between overflow-hidden rounded-2xl border bg-white p-3 transition-all duration-300 hover:shadow-lift",
+                      isSelected
+                        ? "border-flame-500 ring-2 ring-flame-400/80 shadow-soft"
+                        : "border-cobalt-200 hover:border-cobalt-300",
+                    )}
+                  >
+                    <div>
+                      {/* Thumbnail 16:9 */}
+                      <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-cobalt-950">
+                        <img
+                          src={d.thumbnail}
+                          alt={d.title}
+                          loading="lazy"
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 flex items-center justify-center bg-cobalt-950/30 transition-colors group-hover:bg-cobalt-950/15">
+                          <button
+                            onClick={() => {
+                              changeDance(d.id);
+                              document.getElementById("dance-workspace")?.scrollIntoView({ behavior: "smooth" });
+                            }}
+                            aria-label={`Phát video ${d.title}`}
+                            className="flex h-11 w-11 items-center justify-center rounded-full bg-flame-500 text-white shadow-lift transition-transform duration-300 group-hover:scale-110 active:scale-95"
+                          >
+                            <Icon.play className="ml-0.5 h-5 w-5" />
+                          </button>
+                        </div>
+                        <span className="absolute bottom-2 right-2 rounded-md bg-cobalt-950/80 px-2 py-0.5 text-[10.5px] font-bold text-white backdrop-blur">
+                          {d.duration}
+                        </span>
+                        <span className="absolute top-2 left-2 rounded-md bg-flame-500/90 px-2 py-0.5 text-[10px] font-bold text-white shadow-xs">
+                          {d.style}
+                        </span>
+                      </div>
+
+                      {/* Info */}
+                      <div className="mt-3">
+                        <p className="font-display text-sm font-bold text-cobalt-950 group-hover:text-flame-600">
+                          {d.title}
+                        </p>
+                        <p className="mt-1 line-clamp-2 text-xs text-cobalt-700 leading-relaxed font-normal">
+                          {d.vibe}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="mt-3 pt-3 border-t border-cobalt-100 flex items-center justify-between gap-1">
+                      <button
+                        onClick={() => {
+                          changeDance(d.id);
+                          document.getElementById("dance-workspace")?.scrollIntoView({ behavior: "smooth" });
+                        }}
+                        className={cn(
+                          "inline-flex items-center gap-1 rounded-xl px-2.5 py-1.5 text-xs font-bold transition",
+                          isSelected
+                            ? "bg-flame-500 text-white"
+                            : "bg-cobalt-50 text-cobalt-900 hover:bg-flame-50 hover:text-flame-600",
+                        )}
+                      >
+                        <Icon.play className="h-3.5 w-3.5" />
+                        {isSelected ? "Đang phát" : "Phát trên web"}
+                      </button>
+
+                      <a
+                        href={d.youtubeUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        title="Xem trên YouTube"
+                        className="inline-flex items-center gap-1 rounded-xl border border-cobalt-200 px-2 py-1.5 text-xs font-semibold text-red-600 transition hover:border-red-300 hover:bg-red-50"
+                      >
+                        <span>▶</span>
+                        YouTube
+                      </a>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Grid 4 bài hát */}
+          <div className="mt-8">
+            <div className="mb-3 flex items-center justify-between">
+              <h4 className="text-xs font-bold tracking-widest text-flame-800 uppercase">
+                🎵 4 Bài hát truyền thống Ban Liên Lạc
+              </h4>
+              <span className="text-xs font-medium text-cobalt-500">Video &amp; Audio ZingMP3</span>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {TRADITIONAL_SONGS.map((song) => {
+                const isSelected = activeSongVideo?.id === song.id;
+                return (
+                  <div
+                    key={song.id}
+                    className={cn(
+                      "flex flex-col justify-between overflow-hidden rounded-2xl border bg-white p-3.5 transition-all duration-300 hover:shadow-lift",
+                      isSelected
+                        ? "border-flame-500 ring-2 ring-flame-400/80 shadow-soft"
+                        : "border-cobalt-200 hover:border-cobalt-300",
+                    )}
+                  >
+                    <div>
+                      <div className="flex items-start justify-between gap-2">
+                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-flame-50 text-base">
+                          {song.type === "youtube" ? "🎬" : "🎧"}
+                        </span>
+                        <span className={cn(
+                          "rounded-full px-2 py-0.5 text-[10px] font-bold",
+                          song.type === "youtube"
+                            ? "bg-red-50 text-red-700 border border-red-200"
+                            : "bg-emerald-50 text-emerald-700 border border-emerald-200",
+                        )}>
+                          {song.type === "youtube" ? "Video Clip" : "Audio MP3"}
+                        </span>
+                      </div>
+
+                      <div className="mt-3">
+                        <p className="font-display text-sm font-bold text-cobalt-950">
+                          {song.title}
+                        </p>
+                        <p className="mt-1 text-xs text-cobalt-700 leading-relaxed font-normal">
+                          {song.note}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 pt-3 border-t border-cobalt-100 flex items-center justify-between gap-1">
+                      {song.type === "youtube" ? (
+                        <>
+                          <button
+                            onClick={() => {
+                              playSongVideo(song);
+                              document.getElementById("dance-workspace")?.scrollIntoView({ behavior: "smooth" });
+                            }}
+                            className={cn(
+                              "inline-flex items-center gap-1 rounded-xl px-2.5 py-1.5 text-xs font-bold transition",
+                              isSelected
+                                ? "bg-flame-500 text-white"
+                                : "bg-red-600 text-white hover:bg-red-700",
+                            )}
+                          >
+                            <Icon.play className="h-3.5 w-3.5" />
+                            {isSelected ? "Đang phát" : "Xem Video"}
+                          </button>
+                          <a
+                            href={song.url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1 rounded-xl border border-cobalt-200 px-2 py-1.5 text-xs font-semibold text-red-600 transition hover:bg-red-50"
+                          >
+                            <span>▶</span>
+                            YouTube
+                          </a>
+                        </>
+                      ) : (
+                        <a
+                          href={song.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-emerald-600 px-3 py-1.5 text-xs font-bold text-white transition hover:bg-emerald-700"
+                        >
+                          <span>🎧</span>
+                          Nghe MP3 Zing
+                          <svg viewBox="0 0 20 20" fill="currentColor" className="h-3 w-3">
+                            <path fillRule="evenodd" d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z" clipRule="evenodd" />
+                          </svg>
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
