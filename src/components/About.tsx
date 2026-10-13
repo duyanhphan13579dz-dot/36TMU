@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BANS, ORG } from "@/data/content";
+import { BANS, ORG, VOLUNTEER_TEAM } from "@/data/content";
 import { Button, Icon, Kicker, SectionHeading } from "@/components/ui";
 import { cn } from "@/utils/cn";
 
@@ -20,7 +20,7 @@ export default function About() {
               <span className="text-tmu-600">tại 79 Hồ Tùng Mậu</span>
             </>
           }
-          desc="Từ một nhóm nhỏ sinh viên Thanh Hóa năm 2011, nhà chung hôm nay đã là nơi liên lạc, kết nối và đồng hành cùng hàng nghìn bạn trẻ TMU. Mỗi năm chúng mình đi tình nguyện, tổ chức hội trại, đón tân sinh viên và giữ gìn những điệu dân vũ rất… “Quảng”."
+          desc="Từ ngày đầu thành lập 12/04/2008, nhà chung hôm nay là nơi liên lạc, gắn kết và đồng hành cùng hàng nghìn sinh viên Thanh Hóa tại TMU. Dưới sự điều phối của Đội Sinh viên tình nguyện cùng 3 ban chuyên môn, chúng mình thắp sáng ngọn lửa tình nguyện và văn hóa xứ Thanh qua từng thế hệ."
           action={
             <div className="hidden gap-3 lg:flex">
               <Button as="a" href="#events" variant="outline">
@@ -35,8 +35,8 @@ export default function About() {
         <div className="mt-8 grid grid-cols-2 gap-3 lg:mt-10 lg:grid-cols-4">
           {[
             { k: "Địa chỉ nhà chung", v: ORG.address, icon: "🏠" },
-            { k: "Mô hình", v: "4 ban chuyên môn + Ban chủ nhiệm", icon: "🧩" },
-            { k: "Tuyển thành viên", v: "Mỗi đầu năm học (tháng 9 – 10)", icon: "📝" },
+            { k: "Mô hình tổ chức", v: "Đội SVTN quản lý 3 ban chuyên môn", icon: "🛡️" },
+            { k: "Tuyển tình nguyện viên", v: "Mỗi đầu năm học (tháng 9 – 10)", icon: "📝" },
             { k: "Ngôn ngữ chính thức", v: "Tiếng Việt + tiếng Quảng 100%", icon: "😄" },
           ].map((item) => (
             <div
@@ -50,11 +50,67 @@ export default function About() {
           ))}
         </div>
 
-        {/* ================= 4 BAN CHUYÊN MÔN ================= */}
-        <div className="mt-14 lg:mt-20" data-reveal>
+        {/* ================= CƠ CẤU TỔ CHỨC: ĐỘI SVTN & 3 BAN ================= */}
+        <div className="mt-14 lg:mt-20">
+          {/* ĐỘI SINH VIÊN TÌNH NGUYỆN: CƠ QUAN QUẢN LÝ TRỰC TIẾP 3 BAN */}
+          <div className="mb-10 overflow-hidden rounded-3xl border-2 border-flame-300 bg-gradient-to-br from-flame-50/80 via-white to-sky-50/70 p-6 shadow-soft sm:p-8">
+            <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+              <div className="max-w-2xl">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-flame-500 text-2xl text-white shadow-soft">
+                    {VOLUNTEER_TEAM.emoji}
+                  </span>
+                  <div>
+                    <span className="inline-flex rounded-full bg-flame-100 px-3 py-0.5 text-[10.5px] font-bold tracking-wider text-flame-700 uppercase">
+                      Đơn vị quản lý &amp; điều phối trực tiếp
+                    </span>
+                    <h3 className="font-display text-xl font-black text-cobalt-950 sm:text-2xl">
+                      {VOLUNTEER_TEAM.name}
+                    </h3>
+                  </div>
+                </div>
+                <p className="mt-3 text-[14px] leading-relaxed font-medium text-cobalt-800">
+                  {VOLUNTEER_TEAM.desc}
+                </p>
+                <div className="mt-3 inline-flex items-center gap-2 rounded-xl border border-flame-200 bg-white/80 px-3 py-1.5 text-xs font-bold text-flame-800 shadow-xs">
+                  <span>🎯</span>
+                  <span>Chịu trách nhiệm quản lý toàn bộ tình nguyện viên thuộc: Ban Truyền thông, Ban Văn hóa – Sự kiện &amp; Ban Hậu cần</span>
+                </div>
+              </div>
+
+              {/* Nhiệm vụ của Đội SVTN */}
+              <div className="grid gap-2.5 sm:grid-cols-2 lg:max-w-lg">
+                {VOLUNTEER_TEAM.duties.map((duty, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-start gap-2.5 rounded-2xl border border-cobalt-100 bg-white/95 p-3 text-xs text-cobalt-800 shadow-xs transition hover:border-flame-300"
+                  >
+                    <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-flame-500 text-[10px] font-bold text-white">
+                      ✓
+                    </span>
+                    <span className="leading-snug font-medium text-cobalt-900">{duty}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="mb-4 flex items-center justify-between">
+            <div>
+              <p className="text-[11px] font-bold tracking-[0.2em] text-flame-700 uppercase">
+                3 Ban chuyên môn trực thuộc
+              </p>
+              <h4 className="font-display text-lg font-bold text-cobalt-950 sm:text-xl">
+                Ban Truyền thông · Ban Văn hóa – Sự kiện · Ban Hậu cần
+              </h4>
+            </div>
+            <span className="hidden rounded-full bg-cobalt-100 px-3 py-1 text-xs font-bold text-cobalt-800 sm:inline-block">
+              Quản lý bởi Đội SVTN
+            </span>
+          </div>
+
           {/* ----- MOBILE / TABLET: tab + carousel snap ----- */}
           <div className="lg:hidden">
-            <p className="mb-3 text-[11px] font-bold tracking-[0.2em] text-tmu-600 uppercase">Chọn ban để xem</p>
             <div className="scrollbar-none -mx-4 flex snap-x snap-mandatory gap-2 overflow-x-auto px-4 pb-2">
               {BANS.map((ban, i) => (
                 <button
@@ -104,8 +160,8 @@ export default function About() {
             <p className="text-center text-xs text-cobalt-500">👆 Vuốt ngang để xem tiếp các ban</p>
           </div>
 
-          {/* ----- DESKTOP: 4 card lật (flip) khi hover / click ----- */}
-          <div className="hidden gap-5 lg:grid lg:grid-cols-2 xl:grid-cols-4">
+          {/* ----- DESKTOP: 3 card lật (flip) cân đối tuyệt đẹp ----- */}
+          <div className="hidden gap-6 lg:grid lg:grid-cols-3">
             {BANS.map((ban) => {
               const isFlipped = flipped === ban.id;
               return (
@@ -141,7 +197,7 @@ export default function About() {
                             ))}
                           </div>
                           <Button variant="soft" className="w-full" onClick={() => setFlipped(ban.id)}>
-                            Xem Ban làm gì
+                            Xem nhiệm vụ ban
                             <Icon.arrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                           </Button>
                         </div>

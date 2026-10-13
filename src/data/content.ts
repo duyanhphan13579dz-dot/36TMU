@@ -68,35 +68,35 @@ export type Ban = {
   chip: string;
 };
 
+/* Đội Sinh Viên Tình Nguyện: Quản lý trực tiếp các tình nguyện viên thuộc 3 ban */
+export const VOLUNTEER_TEAM = {
+  name: "Đội Sinh Viên Tình Nguyện",
+  shortName: "Đội SVTN BLLSV TMU",
+  tagline: "Đơn vị quản lý và điều phối các tình nguyện viên thuộc 3 ban",
+  emoji: "🛡️",
+  desc: "Đội Sinh viên tình nguyện chịu trách nhiệm trực tiếp quản lý toàn bộ các tình nguyện viên (TNV) thuộc 3 ban: Ban Truyền thông, Ban Văn hóa – Sự kiện và Ban Hậu cần. Đội SVTN phụ trách rèn luyện kỹ năng, giữ vững kỷ luật, tổ chức các đợt tập huấn xa và điều phối nhân lực trong mọi chiến dịch lớn.",
+  duties: [
+    "Quản lý, theo dõi và đánh giá toàn bộ tình nguyện viên thuộc 3 ban chuyên môn",
+    "Tổ chức chương trình Tập huấn Tình nguyện thường niên (Ba Vì, Sóc Sơn, Ứng Hòa...)",
+    "Rèn luyện tính kỷ luật, kỹ năng sinh hoạt tập thể và bản lĩnh của người chiến sĩ áo xanh",
+    "Điều phối quân số, đảm bảo an toàn và gắn kết tinh thần TNV trong Mùa Hè Xanh & Đông Ấm",
+  ],
+};
+
+/* 3 Ban chuyên môn hiện tại của Ban liên lạc */
 export const BANS: Ban[] = [
   {
-    id: "doi-ngoai",
-    name: "Ban Đối ngoại",
-    tagline: "Cầu nối đưa nhà chung vươn xa",
-    emoji: "🤝",
-    short: "Tìm kiếm tài trợ, kết nối đối tác và 20 đơn vị BLLSV bạn.",
-    desc: "Là “cánh tay phải” của mọi chương trình lớn. Ban Đối ngoại đảm nhận kết nối nhà tài trợ, chăm sóc đối tác, thắt chặt tình đoàn kết với Hội đồng hương và 20 đơn vị trường bạn.",
-    duties: [
-      "Lập hồ sơ tài trợ và làm việc trực tiếp với các nhà hảo tâm, doanh nghiệp",
-      "Kết nối giao lưu với 20 đơn vị trực thuộc Hội đồng hương Sinh viên Thanh Hóa tại Hà Nội",
-      "Đón tiếp đại biểu, cựu thành viên các thế hệ trong các đêm hội lớn",
-      "Đàm phán quyền lợi hình ảnh và đối tác đồng hành các chiến dịch",
-    ],
-    accent: "from-tmu-500 to-cobalt-700",
-    chip: "bg-tmu-100 text-tmu-700",
-  },
-  {
     id: "truyen-thong",
-    name: "Ban Truyền thông – Kỹ thuật",
+    name: "Ban Truyền thông",
     tagline: "Kể câu chuyện màu cờ sắc áo 36",
     emoji: "🎬",
-    short: "Vận hành Fanpage, TikTok, thiết kế ấn phẩm & kỹ thuật số.",
-    desc: "Nơi ghi lại những thước phim xúc động từ Mùa Hè Xanh đến Đông Ấm. Ban phụ trách lan tỏa hình ảnh đẹp của con em xứ Thanh tại TMU tới cộng đồng qua mọi nền tảng truyền thông.",
+    short: "Vận hành Fanpage, TikTok, thiết kế ấn phẩm & hình ảnh sự kiện.",
+    desc: "Nơi ghi lại những thước phim xúc động từ Mùa Hè Xanh đến Đông Ấm. Ban phụ trách lan tỏa hình ảnh đẹp của con em xứ Thanh tại TMU tới cộng đồng qua mọi nền tảng truyền thông số.",
     duties: [
       "Quản trị các kênh truyền thông chính thức: Fanpage, TikTok, Group nhà chung",
-      "Sản xuất Aftermovie, phóng sự tình nguyện và bộ ảnh chuyên đề",
-      "Thiết kế toàn bộ ấn phẩm nhận diện: backdrop, áo đồng phục, kỷ yếu",
-      "Vận hành cổng thông tin, form đăng ký tân sinh viên và tuyển quân",
+      "Sản xuất Aftermovie, phóng sự tình nguyện và các bộ ảnh chuyên đề",
+      "Thiết kế toàn bộ ấn phẩm nhận diện: backdrop, áo đồng phục, kỷ yếu, avatar",
+      "Vận hành cổng thông tin, form đăng ký tân sinh viên và các đợt tuyển quân",
     ],
     accent: "from-flame-500 to-flame-700",
     chip: "bg-flame-100 text-flame-700",
@@ -107,11 +107,11 @@ export const BANS: Ban[] = [
     tagline: "Trái tim của những ngọn lửa nhiệt huyết",
     emoji: "🎤",
     short: "Biên đạo bài nhảy, dàn dựng sân khấu, thể thao & Âm Vang Xứ Thanh.",
-    desc: "Chủ nhân của 4 chức vô địch liên tiếp tại Âm Vang Xứ Thanh! Nơi lưu giữ và truyền dạy 4 bài nhảy truyền thống, sáng tạo các tiết mục nghệ thuật đặc sắc và tổ chức các giải thể thao nội bộ.",
+    desc: "Chủ nhân 4 chức vô địch liên tiếp tại Âm Vang Xứ Thanh! Nơi lưu giữ và truyền dạy 4 bài nhảy truyền thống, 4 bài hát truyền thống, sáng tạo tiết mục nghệ thuật đặc sắc và tổ chức các giải thể thao nội bộ.",
     duties: [
       "Tập luyện và gìn giữ 4 bài nhảy truyền thống: Chung sống, Con chim non, 12 bước, 9 bước",
       "Luyện tập 4 bài hát truyền thống: Một Nhà Một Tình Yêu, Đồng đội, Chỉ thế thôi, Sát cánh bên nhau",
-      "Dàn dựng các tiết mục dự thi Âm Vang Xứ Thanh (đạt kỷ lục 4 năm vô địch liên tiếp)",
+      "Dàn dựng các tiết mục dự thi Âm Vang Xứ Thanh (kỷ lục 4 năm vô địch liên tiếp)",
       "Tổ chức giải thể thao, hội trại sinh nhật 12/04 và các đêm lửa trại",
     ],
     accent: "from-glow-400 to-flame-500",
@@ -119,16 +119,16 @@ export const BANS: Ban[] = [
   },
   {
     id: "hau-can",
-    name: "Ban Hậu cần – Nhân sự",
+    name: "Ban Hậu cần",
     tagline: "Hậu phương vững chắc sau mọi chiến dịch",
     emoji: "🎒",
-    short: "Quản lý nhân sự, đào tạo tập huấn, tài chính và logistics.",
-    desc: "Nơi chăm sóc từng bữa ăn ấm nóng trên các bản làng xa xôi, quản lý kho đồ, y tế và là điểm tựa tinh thần vững chắc cho mỗi thành viên trong mọi chuyến đi.",
+    short: "Quản lý logistics, ẩm thực, y tế, mua sắm và hỗ trợ chiến dịch.",
+    desc: "Nơi chăm sóc từng bữa ăn ấm nóng trên các bản làng xa xôi, quản lý kho đồ, y tế, mua sắm vật dụng và là điểm tựa hậu cần vững vàng cho mọi hoạt động của nhà chung.",
     duties: [
-      "Tổ chức chương trình Tập huấn Tình nguyện thường niên vào tháng 5",
-      "Đảm bảo công tác hậu cần, ẩm thực, y tế cho Mùa Hè Xanh và Đông Ấm",
-      "Quản lý tài chính, quỹ thiện nguyện minh bạch và mua sắm trang thiết bị",
-      "Chăm lo đời sống, lắng nghe tâm tư và kết nối các thành viên trong nhà chung",
+      "Đảm bảo công tác hậu cần, ẩm thực, dinh dưỡng và y tế cho Mùa Hè Xanh, Đông Ấm",
+      "Quản lý kho đồ dùng, đạo cụ, trang thiết bị phục vụ các sự kiện",
+      "Lên thực đơn, quản lý chi tiêu và mua sắm vật tư minh bạch",
+      "Chăm lo chu đáo từng bữa ăn và sức khỏe cho đội ngũ tình nguyện viên",
     ],
     accent: "from-cobalt-600 to-cobalt-900",
     chip: "bg-cobalt-100 text-cobalt-700",

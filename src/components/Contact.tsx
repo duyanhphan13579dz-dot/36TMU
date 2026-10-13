@@ -136,13 +136,13 @@ export default function Contact({ onToast }: { onToast: (msg: string) => void })
                   <span className="mb-2 block text-[12.5px] font-bold text-cobalt-800">
                     {intent === "join" ? "Bạn muốn vào Ban nào?" : "Ban bạn muốn nhắn gửi tới"}
                   </span>
-                  <div className="grid grid-cols-2 gap-2">
-                    {BANS.map((b) => (
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    {BANS.map((b, idx) => (
                       <label
                         key={b.id}
                         className="group flex min-h-12 cursor-pointer items-center gap-2.5 rounded-2xl border border-cobalt-200 px-3 transition hover:border-tmu-300 hover:bg-tmu-50/60 has-checked:border-flame-400 has-checked:bg-flame-50"
                       >
-                        <input type="radio" name="ban" value={b.id} defaultChecked={b.id === "van-the-my"} className="sr-only" />
+                        <input type="radio" name="ban" value={b.id} defaultChecked={idx === 0} className="sr-only" />
                         <span className="text-lg">{b.emoji}</span>
                         <span className="text-[12.5px] leading-tight font-semibold text-cobalt-800">{b.name.replace("Ban ", "")}</span>
                       </label>
