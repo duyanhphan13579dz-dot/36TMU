@@ -596,7 +596,7 @@ export default function DanceLab({ onToast }: { onToast: (msg: string) => void }
 
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {DANCES.map((d) => {
-                const isSelected = activeId === d.id && !activeSongVideo;
+                const isSelected = activeId === d.id && !currentSong;
                 return (
                   <div
                     key={d.id}
