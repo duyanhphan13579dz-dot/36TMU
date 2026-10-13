@@ -30,21 +30,19 @@ export function LogoLockup({ compact = false }: { compact?: boolean }) {
     <a
       href="#home"
       className="group flex items-center gap-2.5 sm:gap-3"
-      aria-label="Về đầu trang – BLLSV Thanh Hóa TMU"
+      aria-label="Về đầu trang – Ban Liên Lạc Sinh Viên Thanh Hóa Đại Học Thương Mại"
     >
       <span className="relative flex items-center justify-center shrink-0">
         <span className="absolute inset-0 rounded-full bg-tmu-400/20 blur-md transition group-hover:bg-flame-400/40" />
         <LogoBadge className="relative h-11 w-11 drop-shadow-sm transition-transform duration-500 group-hover:rotate-[8deg] group-hover:scale-105 sm:h-12 sm:w-12" />
       </span>
-      <span className="flex flex-col leading-none">
-        <span className="font-display text-[15px] font-extrabold tracking-tight text-cobalt-900 sm:text-base">
-          BLLSV Thanh Hóa
+      <span className="flex flex-col leading-tight">
+        <span className="font-display text-[11px] font-black uppercase tracking-tight text-cobalt-900 sm:text-[13.5px] leading-tight">
+          BAN LIÊN LẠC SINH VIÊN THANH HÓA
         </span>
-        {!compact && (
-          <span className="mt-1 text-[10px] font-semibold tracking-[0.22em] text-flame-600 uppercase sm:text-[11px]">
-            TMU · 79 Hồ Tùng Mậu
-          </span>
-        )}
+        <span className="mt-0.5 text-[9.5px] font-bold tracking-[0.14em] text-flame-600 uppercase sm:text-[11px] leading-tight">
+          ĐẠI HỌC THƯƠNG MẠI
+        </span>
       </span>
     </a>
   );
