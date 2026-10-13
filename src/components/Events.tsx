@@ -321,11 +321,11 @@ function ProgramDetail({
           variant="flame"
           className="flex-1"
           onClick={() => {
-            onToast(`Đã ghi tên bạn vào danh sách quan tâm: ${p.title} 💙`);
+            onToast(`Đã lưu chương trình vào danh sách quan tâm: ${p.title} 💙`);
             onClose();
           }}
         >
-          Đăng ký tham gia
+          Quan tâm chương trình
           <Icon.arrowRight className="h-4 w-4" />
         </Button>
         <Button variant="outline" className="shrink-0" onClick={onClose}>

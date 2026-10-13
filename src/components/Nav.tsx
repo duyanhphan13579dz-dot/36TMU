@@ -259,7 +259,7 @@ export default function Nav({
 
           <div className="sticky bottom-0 space-y-3 border-t border-cobalt-100 bg-white/90 p-4 backdrop-blur">
             <Button as="a" href="#contact" onClick={() => setOpen(false)} variant="flame" size="lg" className="w-full">
-              Gia nhập nhà chung
+              Góc TNV & Lời nhắn
               <Icon.arrowRight className="h-4 w-4" />
             </Button>
             <div className="grid grid-cols-3 gap-2">
@@ -293,11 +293,11 @@ export default function Nav({
           <button
             onClick={() => go("contact")}
             className="relative -mt-7 flex h-16 w-16 shrink-0 flex-col items-center justify-center rounded-full bg-gradient-to-br from-flame-400 to-flame-600 text-white shadow-lift transition active:scale-95"
-            aria-label="Gia nhập nhà chung"
+            aria-label="Góc TNV & Lời nhắn"
           >
             <span className="absolute inset-0 animate-pulse-ring rounded-full bg-flame-400/60" />
             <Icon.heart className="relative h-6 w-6" />
-            <span className="relative mt-0.5 text-[9px] font-bold tracking-wide">GIA NHẬP</span>
+            <span className="relative mt-0.5 text-[9px] font-bold tracking-wide">GÓC TNV</span>
           </button>
 
           {MOBILE_TABS.slice(2).map((tab) => (

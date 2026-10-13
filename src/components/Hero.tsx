@@ -49,7 +49,7 @@ export default function Hero() {
           {/* Nút CTA – to bản cho mobile */}
           <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
             <Button as="a" href="#contact" variant="flame" size="lg" className="w-full sm:w-auto">
-              Gia nhập nhà chung
+              Góc TNV & Lời nhắn
               <Icon.arrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
             </Button>
             <Button as="a" href="#dance" variant="outline" size="lg" className="w-full sm:w-auto">
