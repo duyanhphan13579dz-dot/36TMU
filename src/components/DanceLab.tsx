@@ -18,11 +18,12 @@ export default function DanceLab({ onToast }: { onToast: (msg: string) => void }
   const [rate, setRate] = useState(1);
   const [fullscreen, setFullscreen] = useState(false);
   const [viewMode, setViewMode] = useState<"video" | "metronome">("video");
-  const [activeSongVideo, setActiveSongVideo] = useState<{ id: string; title: string; youtubeId: string } | null>(null);
+  const [activeSongId, setActiveSongId] = useState<string | null>(null);
 
   const metro = useRef<MetronomeHandle | null>(null);
 
   const dance = useMemo(() => DANCES.find((d) => d.id === activeId) ?? DANCES[0], [activeId]);
+  const currentSong = useMemo(() => TRADITIONAL_SONGS.find((s) => s.id === activeSongId) ?? null, [activeSongId]);
   const total = toSeconds(dance.duration);
 
   useLockScroll(fullscreen);
@@ -62,7 +63,7 @@ export default function DanceLab({ onToast }: { onToast: (msg: string) => void }
     setPlaying(false);
     setProgress(0);
     setActiveId(id);
-    setActiveSongVideo(null); // Trở về video bài nhảy
+    setActiveSongId(null); // Trở về video bài nhảy và hiển thị hướng dẫn động tác
   };
 
   const toggleMirror = () => {
@@ -73,13 +74,18 @@ export default function DanceLab({ onToast }: { onToast: (msg: string) => void }
     });
   };
 
-  const playSongVideo = (song: (typeof TRADITIONAL_SONGS)[0]) => {
-    if (song.youtubeId) {
-      setActiveSongVideo({ id: song.id, title: song.title, youtubeId: song.youtubeId });
-      setViewMode("video");
-      setPlaying(false);
-      onToast(`Đang phát video bài hát "${song.title}" 🎶`);
-    }
+  const playSong = (song: (typeof TRADITIONAL_SONGS)[0]) => {
+    setActiveSongId(song.id);
+    setViewMode("video");
+    setPlaying(false);
+    onToast(`Đang phát "${song.title}" kèm lời bài hát 🎶`);
+  };
+
+  const copyLyrics = (song: (typeof TRADITIONAL_SONGS)[0]) => {
+    const text = `${song.title}\n${song.author ? song.author + '\n' : ''}\n` +
+      song.lyrics.map((sec) => `[${sec.section}]\n${sec.lines.join('\n')}`).join('\n\n');
+    navigator.clipboard?.writeText(text);
+    onToast(`Đã sao chép lời bài hát "${song.title}" vào bộ nhớ tạm! 📋`);
   };
 
   const downloadMusic = (d: Dance) => {
@@ -92,8 +98,8 @@ export default function DanceLab({ onToast }: { onToast: (msg: string) => void }
     }
   };
 
-  const currentYoutubeId = activeSongVideo ? activeSongVideo.youtubeId : dance.youtubeId;
-  const currentTitle = activeSongVideo ? activeSongVideo.title : dance.title;
+  const currentYoutubeId = currentSong ? currentSong.youtubeId : dance.youtubeId;
+  const currentTitle = currentSong ? currentSong.title : dance.title;
 
   return (
     <section id="dance" className="relative overflow-hidden bg-gradient-to-b from-sky-paper via-white to-sky-paper py-16 sm:py-20 lg:py-28">
@@ -134,7 +140,7 @@ export default function DanceLab({ onToast }: { onToast: (msg: string) => void }
                   onClick={() => changeDance(d.id)}
                   className={cn(
                     "flex min-h-11 shrink-0 snap-start items-center gap-2 rounded-2xl border px-3.5 py-2.5 text-left text-[12.5px] font-bold transition active:scale-95 shadow-xs",
-                    d.id === activeId && !activeSongVideo
+                    d.id === activeId && !currentSong
                       ? "border-flame-500 bg-flame-500 text-white shadow-soft"
                       : "border-cobalt-200 bg-white text-cobalt-800 hover:border-tmu-300",
                   )}
@@ -153,7 +159,7 @@ export default function DanceLab({ onToast }: { onToast: (msg: string) => void }
                     onClick={() => changeDance(d.id)}
                     className={cn(
                       "group flex w-full items-center gap-3 rounded-2xl border p-2.5 text-left transition-all duration-300 shadow-xs",
-                      d.id === activeId && !activeSongVideo
+                      d.id === activeId && !currentSong
                         ? "border-flame-500 bg-flame-50/90 ring-2 ring-flame-400 text-cobalt-950 shadow-soft"
                         : "border-cobalt-100 bg-white hover:border-tmu-300 hover:bg-cobalt-50/50 text-cobalt-900",
                     )}
@@ -172,7 +178,7 @@ export default function DanceLab({ onToast }: { onToast: (msg: string) => void }
                         {d.style} · {d.bpm} BPM · {d.duration}
                       </span>
                     </span>
-                    {d.id === activeId && !activeSongVideo && (
+                    {d.id === activeId && !currentSong && (
                       <span className="h-2 w-2 shrink-0 rounded-full bg-flame-500" />
                     )}
                   </button>
@@ -196,7 +202,7 @@ export default function DanceLab({ onToast }: { onToast: (msg: string) => void }
                     key={song.id}
                     className={cn(
                       "rounded-xl border p-2.5 transition",
-                      activeSongVideo?.id === song.id
+                      activeSongId === song.id
                         ? "border-flame-400 bg-flame-50 text-cobalt-950 ring-1 ring-flame-400"
                         : "border-cobalt-100 bg-cobalt-50/60 text-cobalt-900 hover:bg-cobalt-50",
                     )}
@@ -209,16 +215,16 @@ export default function DanceLab({ onToast }: { onToast: (msg: string) => void }
                     </div>
                     <div className="mt-2.5 flex items-center justify-between gap-2 border-t border-cobalt-100/80 pt-2">
                       <button
-                        onClick={() => playSongVideo(song)}
+                        onClick={() => playSong(song)}
                         className={cn(
                           "inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-[11px] font-bold transition",
-                          activeSongVideo?.id === song.id
+                          activeSongId === song.id
                             ? "bg-flame-500 text-white shadow-xs"
                             : "bg-red-600 text-white hover:bg-red-700",
                         )}
                       >
                         <Icon.play className="h-3 w-3" />
-                        {activeSongVideo?.id === song.id ? "Đang phát" : "Phát trên web"}
+                        {activeSongId === song.id ? "Đang phát" : "Phát trên web"}
                       </button>
 
                       <div className="flex items-center gap-1.5">
@@ -277,7 +283,7 @@ export default function DanceLab({ onToast }: { onToast: (msg: string) => void }
                   >
                     🎬 Xem Video
                   </button>
-                  {!activeSongVideo && (
+                  {!currentSong && (
                     <button
                       onClick={() => setViewMode("metronome")}
                       className={cn(
@@ -291,7 +297,7 @@ export default function DanceLab({ onToast }: { onToast: (msg: string) => void }
                 </div>
 
                 <a
-                  href={activeSongVideo ? `https://www.youtube.com/watch?v=${activeSongVideo.youtubeId}` : dance.youtubeUrl}
+                  href={currentSong ? currentSong.url : dance.youtubeUrl}
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex items-center gap-1.5 rounded-xl border border-cobalt-200 bg-white px-3 py-1.5 text-xs font-bold text-red-600 shadow-xs transition hover:bg-red-50"
@@ -431,60 +437,122 @@ export default function DanceLab({ onToast }: { onToast: (msg: string) => void }
                 </Button>
               </div>
 
-              {/* Thông tin bài nhảy đang chọn */}
+              {/* Thông tin bài đang phát */}
               <div className="mt-4 grid gap-3 rounded-3xl border border-cobalt-100 bg-white p-4 sm:grid-cols-2 shadow-sm">
                 <div className="space-y-1.5 text-[12.5px] text-cobalt-700">
                   <p><span className="font-bold text-cobalt-950">Tác phẩm:</span> {currentTitle}</p>
-                  <p><span className="font-bold text-cobalt-950">Thể loại:</span> {activeSongVideo ? "Bài hát truyền thống" : dance.style}</p>
-                  <p><span className="font-bold text-cobalt-950">Đơn vị:</span> {dance.taughtBy}</p>
+                  <p><span className="font-bold text-cobalt-950">Thể loại:</span> {currentSong ? "Bài hát truyền thống" : dance.style}</p>
+                  <p><span className="font-bold text-cobalt-950">{currentSong ? "Tác giả:" : "Đơn vị:"}</span> {currentSong ? (currentSong.author || "BLLSV TMU") : dance.taughtBy}</p>
                   <p><span className="font-bold text-cobalt-950">Nguồn:</span> Kênh chính thức BLLSV Thanh Hóa TMU</p>
                 </div>
                 <p className="text-[13px] leading-relaxed text-cobalt-800 font-medium italic">
-                  “{activeSongVideo ? "Khúc ca tự hào của những người con xứ Thanh tại giảng đường Thương Mại." : dance.vibe}”
+                  “{currentSong ? currentSong.note : dance.vibe}”
                 </p>
               </div>
             </div>
 
-            {/* Cột phải: Breakdown các bước đếm nhịp */}
+            {/* Cột phải: Hướng dẫn động tác HOẶC Lời bài hát */}
             <div>
-              <div className="rounded-3xl border border-cobalt-100 bg-white p-5 shadow-sm">
-                <div className="flex items-center justify-between">
-                  <p className="text-[11px] font-bold tracking-[0.18em] text-cobalt-800 uppercase">
-                    Hướng dẫn động tác ({dance.steps.length} nhịp chính)
-                  </p>
-                  <span className="rounded-full bg-tmu-50 px-2.5 py-0.5 text-[10.5px] font-bold text-tmu-700">
-                    Bản chuẩn Ban Văn hóa
-                  </span>
-                </div>
-
-                <ol className="mt-4 space-y-3">
-                  {dance.steps.map((s, i) => (
-                    <li
-                      key={s.count}
-                      className={cn(
-                        "rounded-2xl border p-3.5 transition-all duration-200",
-                        playing && beat === i + 1
-                          ? "border-flame-400 bg-flame-50 shadow-soft ring-1 ring-flame-300"
-                          : "border-cobalt-100 bg-cobalt-50/50 hover:border-cobalt-200 hover:bg-white",
-                      )}
+              {currentSong ? (
+                /* ===== GIAO DIỆN LỜI BÀI HÁT (LYRICS) ===== */
+                <div className="rounded-3xl border border-cobalt-100 bg-white p-5 shadow-sm">
+                  <div className="flex items-center justify-between gap-2 border-b border-cobalt-100 pb-3">
+                    <div>
+                      <span className="inline-flex items-center gap-1.5 text-[11px] font-bold tracking-[0.16em] text-flame-700 uppercase">
+                        🎵 Lời bài hát truyền thống
+                      </span>
+                      <h3 className="mt-0.5 font-display text-base font-black text-cobalt-950 sm:text-lg">
+                        {currentSong.title}
+                      </h3>
+                    </div>
+                    <button
+                      onClick={() => copyLyrics(currentSong)}
+                      title="Sao chép toàn bộ lời bài hát"
+                      className="inline-flex shrink-0 items-center gap-1.5 rounded-xl border border-cobalt-200 bg-cobalt-50 px-3 py-1.5 text-xs font-bold text-cobalt-800 transition hover:bg-flame-50 hover:text-flame-600 hover:border-flame-300"
                     >
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="font-display text-sm font-bold text-cobalt-950">
-                          Nhịp {s.count}: {s.name}
-                        </span>
-                        {playing && beat === i + 1 && (
-                          <span className="animate-pulse text-[11px] font-bold text-flame-600">Đang chạy</span>
-                        )}
+                      <Icon.copy className="h-3.5 w-3.5" />
+                      Sao chép lời
+                    </button>
+                  </div>
+
+                  {currentSong.author && (
+                    <p className="mt-2.5 text-xs font-semibold text-cobalt-600 italic">
+                      ✍️ {currentSong.author}
+                    </p>
+                  )}
+
+                  {/* Vùng cuộn lời bài hát */}
+                  <div className="mt-3.5 max-h-[460px] space-y-4 overflow-y-auto pr-1 scrollbar-thin">
+                    {currentSong.lyrics.map((sec, idx) => (
+                      <div
+                        key={idx}
+                        className="rounded-2xl border border-cobalt-100/80 bg-gradient-to-b from-cobalt-50/40 to-white p-3.5 transition hover:border-cobalt-200"
+                      >
+                        <p className="text-[11px] font-bold tracking-wider text-flame-600 uppercase">
+                          {sec.section}
+                        </p>
+                        <div className="mt-2 space-y-1 text-[13px] leading-relaxed text-cobalt-900">
+                          {sec.lines.map((line, lIdx) => (
+                            <p key={lIdx} className="font-normal">
+                              {line}
+                            </p>
+                          ))}
+                        </div>
                       </div>
-                      <p className="mt-1 text-[12.5px] leading-relaxed text-cobalt-800">{s.how}</p>
-                      <p className="mt-2 flex items-start gap-1.5 rounded-xl border border-amber-200 bg-amber-50 p-2 text-[11.5px] text-amber-900">
-                        <span>💡</span>
-                        <span>{s.tip}</span>
-                      </p>
-                    </li>
-                  ))}
-                </ol>
-              </div>
+                    ))}
+                  </div>
+
+                  <div className="mt-4 border-t border-cobalt-100 pt-3 flex items-center justify-between text-xs">
+                    <span className="text-cobalt-600 font-medium">Bạn muốn tập nhảy?</span>
+                    <button
+                      onClick={() => changeDance(DANCES[0].id)}
+                      className="inline-flex items-center gap-1 font-bold text-flame-600 hover:text-flame-700"
+                    >
+                      Xem hướng dẫn động tác 4 bài nhảy →
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                /* ===== GIAO DIỆN HƯỚNG DẪN ĐỘNG TÁC (DANCE STEPS) ===== */
+                <div className="rounded-3xl border border-cobalt-100 bg-white p-5 shadow-sm">
+                  <div className="flex items-center justify-between">
+                    <p className="text-[11px] font-bold tracking-[0.18em] text-cobalt-800 uppercase">
+                      Hướng dẫn động tác ({dance.steps.length} nhịp chính)
+                    </p>
+                    <span className="rounded-full bg-tmu-50 px-2.5 py-0.5 text-[10.5px] font-bold text-tmu-700">
+                      Bản chuẩn Ban Văn hóa
+                    </span>
+                  </div>
+
+                  <ol className="mt-4 space-y-3">
+                    {dance.steps.map((s, i) => (
+                      <li
+                        key={s.count}
+                        className={cn(
+                          "rounded-2xl border p-3.5 transition-all duration-200",
+                          playing && beat === i + 1
+                            ? "border-flame-400 bg-flame-50 shadow-soft ring-1 ring-flame-300"
+                            : "border-cobalt-100 bg-cobalt-50/50 hover:border-cobalt-200 hover:bg-white",
+                        )}
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="font-display text-sm font-bold text-cobalt-950">
+                            Nhịp {s.count}: {s.name}
+                          </span>
+                          {playing && beat === i + 1 && (
+                            <span className="animate-pulse text-[11px] font-bold text-flame-600">Đang chạy</span>
+                          )}
+                        </div>
+                        <p className="mt-1 text-[12.5px] leading-relaxed text-cobalt-800">{s.how}</p>
+                        <p className="mt-2 flex items-start gap-1.5 rounded-xl border border-amber-200 bg-amber-50 p-2 text-[11.5px] text-amber-900">
+                          <span>💡</span>
+                          <span>{s.tip}</span>
+                        </p>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -625,7 +693,7 @@ export default function DanceLab({ onToast }: { onToast: (msg: string) => void }
 
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {TRADITIONAL_SONGS.map((song) => {
-                const isSelected = activeSongVideo?.id === song.id;
+                const isSelected = activeSongId === song.id;
                 return (
                   <div
                     key={song.id}
@@ -648,7 +716,7 @@ export default function DanceLab({ onToast }: { onToast: (msg: string) => void }
                         <div className="absolute inset-0 flex items-center justify-center bg-cobalt-950/30 transition-colors group-hover:bg-cobalt-950/15">
                           <button
                             onClick={() => {
-                              playSongVideo(song);
+                              playSong(song);
                               document.getElementById("dance-workspace")?.scrollIntoView({ behavior: "smooth" });
                             }}
                             aria-label={`Phát bài hát ${song.title}`}
@@ -676,7 +744,7 @@ export default function DanceLab({ onToast }: { onToast: (msg: string) => void }
                     <div className="mt-3 pt-3 border-t border-cobalt-100 flex items-center justify-between gap-1">
                       <button
                         onClick={() => {
-                          playSongVideo(song);
+                          playSong(song);
                           document.getElementById("dance-workspace")?.scrollIntoView({ behavior: "smooth" });
                         }}
                         className={cn(

@@ -291,53 +291,191 @@ export const LEADERSHIP_HISTORY: LeaderRecord[] = [
 export type TraditionalSong = {
   id: string;
   title: string;
+  author?: string;
   note: string;
   youtubeId: string;
   url: string;
   zingUrl?: string;
   thumbnail: string;
   type: "youtube";
+  lyrics: { section: string; lines: string[] }[];
 };
 
 export const TRADITIONAL_SONGS: TraditionalSong[] = [
   {
     id: "s1",
     title: "Một Nhà Một Tình Yêu",
+    author: "BLLSV Thanh Hóa ĐH Thương Mại (Mashup mừng sinh nhật nhà chung)",
     note: "Bài hát biểu tượng của tình cảm gia đình và sự sẻ chia trong Ban liên lạc",
     youtubeId: "4r30sl3Qpi4",
     url: "https://www.youtube.com/watch?v=4r30sl3Qpi4",
     thumbnail: "https://img.youtube.com/vi/4r30sl3Qpi4/hqdefault.jpg",
     type: "youtube",
+    lyrics: [
+      {
+        section: "Đoạn 1 – Về chung mái nhà",
+        lines: [
+          "Khi hai ta về một nhà",
+          "Khép đôi mi cùng một giường",
+          "Đôi khi mơ cùng một giấc",
+          "Thức giấc chung một giờ.",
+          "Khi hai ta chung một đường",
+          "Ta vui chung một nỗi vui",
+          "Nước mắt rơi một dòng",
+          "Sống chung nhau một đời...",
+        ],
+      },
+      {
+        section: "Đoạn 2 – Kỷ niệm giảng đường",
+        lines: [
+          "Vẫn ánh mắt ấy sáng long lanh",
+          "Như trời cao mây trắng trong lành",
+          "Đến hôm nay ta đã về đây bên nhau dưới mái nhà chung.",
+          "Nhớ những lúc đứng dưới mái trường xưa",
+          "Cùng sẻ chia dưới những cơn mưa",
+          "Đến hôm nay ta đã chung một lối, chung một màu áo xanh TMU.",
+        ],
+      },
+      {
+        section: "Điệp khúc – Một Nhà",
+        lines: [
+          "Ta giờ đây chung trời mây, ta cùng đón tương lai",
+          "Ta cầm tay, ta cùng vui say chân bước đường dài",
+          "Như lời hứa, ta đã nói ngay từ phút giây đầu:",
+          "Chúng ta mãi là một nhà!",
+        ],
+      },
+      {
+        section: "Đoạn 3 – Một Tình Yêu",
+        lines: [
+          "Một tình yêu, trọn con tim",
+          "Một tình yêu, một tình yêu hoài dâng hiến",
+          "Một tình yêu nhìn ngày mai với niềm tin mới",
+          "Một ngày mai huy hoàng trong nắng tươi...",
+          "Và chúng ta đã tìm thấy nhau nơi giảng đường Thương Mại!",
+        ],
+      },
+    ],
   },
   {
     id: "s2",
-    title: "Đồng Đội (Hoàng Hiệp)",
+    title: "Đồng Đội",
+    author: "Sáng tác: Nhạc sĩ Hoàng Hiệp",
     note: "Khúc ca người lính tình nguyện, sát cánh trên từng cung đường xứ Thanh",
     youtubeId: "KZECuxRE7Sc",
     url: "https://www.youtube.com/watch?v=KZECuxRE7Sc",
     zingUrl: "https://mp3.zing.vn/bai-hat/Dong-Doi-Lac-Viet/ZW7UOIOF.html",
     thumbnail: "https://img.youtube.com/vi/KZECuxRE7Sc/hqdefault.jpg",
     type: "youtube",
+    lyrics: [
+      {
+        section: "Đoạn 1 – Đêm rừng chiến dịch",
+        lines: [
+          "Chúng tôi ngồi kề vai bên nhau",
+          "Trăng soi đầu súng ánh ngời sao",
+          "Gió lạnh rừng khuya sương ướt áo",
+          "Lòng ấm tình đồng chí thiết tha.",
+        ],
+      },
+      {
+        section: "Điệp khúc – Nghĩa tình đồng đội",
+        lines: [
+          "Đồng đội ơi! Người bạn thân yêu nhất",
+          "Cùng chia sương sẻ nắng trên từng chặng đường xa",
+          "Bát cơm chan tình nghĩa, hạt muối cắn làm đôi",
+          "Sát cánh bên nhau giữ trọn lời thề son sắt.",
+        ],
+      },
+      {
+        section: "Đoạn kết – Ngọn lửa tình nguyện",
+        lines: [
+          "Mai này ta về lại quê hương",
+          "Nhớ mãi những ngày cùng nhau gian khó",
+          "Ngọn lửa tình nguyện bừng cháy trong tim",
+          "Đồng đội ơi, khúc ca còn vang mãi!",
+        ],
+      },
+    ],
   },
   {
     id: "s3",
-    title: "Chỉ Thế Thôi (Minh Chuyên)",
+    title: "Chỉ Thế Thôi",
+    author: "Sáng tác: Việt Đặng – Ca sĩ: Minh Chuyên",
     note: "Giai điệu mộc mạc, chan chứa tình yêu thương của tuổi trẻ TMU",
     youtubeId: "sNoYfUhOClw",
     url: "https://www.youtube.com/watch?v=sNoYfUhOClw",
     zingUrl: "https://mp3.zing.vn/bai-hat/Chi-The-Thoi-Minh-Chuyen/ZW608AC0.html",
     thumbnail: "https://img.youtube.com/vi/sNoYfUhOClw/hqdefault.jpg",
     type: "youtube",
+    lyrics: [
+      {
+        section: "Đoạn 1 – Sắc áo tình nguyện",
+        lines: [
+          "Màu áo xanh thân thương, mang bao niềm tin yêu",
+          "Đi qua từng nẻo đường, mang nụ cười khắp muôn phương",
+          "Bàn tay ấm chở che những mảnh đời bé nhỏ",
+          "Ngọn lửa nhiệt huyết thắp sáng trong tim mình.",
+        ],
+      },
+      {
+        section: "Điệp khúc – Ước mơ màu xanh",
+        lines: [
+          "Ước mơ màu xanh, mang màu áo xanh – chỉ thế thôi!",
+          "Ước mơ tuổi thanh xuân rạng rỡ giữa đất trời",
+          "Để nụ cười trẻ thơ thêm tươi trên môi hồng",
+          "Để tình người ấm áp chan hòa khắp non sông.",
+        ],
+      },
+      {
+        section: "Đoạn kết – Tuổi hai mươi",
+        lines: [
+          "Chỉ thế thôi, một tấm lòng son trẻ",
+          "Chỉ thế thôi, một ngọn lửa khát khao",
+          "Dẫu nắng mưa dặm dài đường xa xôi",
+          "Tuổi hai mươi cất cao khúc ca tình nguyện!",
+        ],
+      },
+    ],
   },
   {
     id: "s4",
-    title: "Sát Cánh Bên Nhau (Sỹ Luân)",
+    title: "Sát Cánh Bên Nhau",
+    author: "Sáng tác: Nhạc sĩ Sỹ Luân",
     note: "Bài ca đoàn kết triệu con tim con em 36 cùng chung một nhịp đập",
     youtubeId: "Szkko0wSa5c",
     url: "https://www.youtube.com/watch?v=Szkko0wSa5c",
     zingUrl: "https://mp3.zing.vn/bai-hat/Sat-Canh-Ben-Nhau-Sy-Luan/ZWZACU9A.html",
     thumbnail: "https://img.youtube.com/vi/Szkko0wSa5c/hqdefault.jpg",
     type: "youtube",
+    lyrics: [
+      {
+        section: "Đoạn 1 – Nắm chặt tay nhau",
+        lines: [
+          "Hãy cùng nhau ta cùng nắm tay nhau",
+          "Bước cùng nhau trên đường tương lai",
+          "Dù chông gai ta vẫn luôn vững bước",
+          "Vì bên ta luôn có những người bạn.",
+        ],
+      },
+      {
+        section: "Điệp khúc – Sát cánh bên nhau",
+        lines: [
+          "Sát cánh bên nhau ta cùng đi tới",
+          "Thắp sáng niềm tin hy vọng ngày mai",
+          "Hãy hát vang lên khúc ca đoàn kết",
+          "Cho yêu thương bay xa muôn trùng khơi.",
+        ],
+      },
+      {
+        section: "Đoạn kết – Mái nhà chung",
+        lines: [
+          "Bao khó khăn rồi cũng sẽ vượt qua",
+          "Khi chúng ta chung một niềm tin",
+          "Dưới mái nhà chung BLLSV Thanh Hóa Thương Mại",
+          "Tuổi thanh xuân rực rỡ ngát hương đời!",
+        ],
+      },
+    ],
   },
 ];
 
