@@ -292,9 +292,11 @@ export type TraditionalSong = {
   id: string;
   title: string;
   note: string;
-  youtubeId?: string;
+  youtubeId: string;
   url: string;
-  type: "youtube" | "zing";
+  zingUrl?: string;
+  thumbnail: string;
+  type: "youtube";
 };
 
 export const TRADITIONAL_SONGS: TraditionalSong[] = [
@@ -304,28 +306,38 @@ export const TRADITIONAL_SONGS: TraditionalSong[] = [
     note: "Bài hát biểu tượng của tình cảm gia đình và sự sẻ chia trong Ban liên lạc",
     youtubeId: "4r30sl3Qpi4",
     url: "https://www.youtube.com/watch?v=4r30sl3Qpi4",
+    thumbnail: "https://img.youtube.com/vi/4r30sl3Qpi4/hqdefault.jpg",
     type: "youtube",
   },
   {
     id: "s2",
-    title: "Đồng đội (Lạc Việt)",
+    title: "Đồng Đội (Hoàng Hiệp)",
     note: "Khúc ca người lính tình nguyện, sát cánh trên từng cung đường xứ Thanh",
-    url: "https://mp3.zing.vn/bai-hat/Dong-Doi-Lac-Viet/ZW7UOIOF.html",
-    type: "zing",
+    youtubeId: "KZECuxRE7Sc",
+    url: "https://www.youtube.com/watch?v=KZECuxRE7Sc",
+    zingUrl: "https://mp3.zing.vn/bai-hat/Dong-Doi-Lac-Viet/ZW7UOIOF.html",
+    thumbnail: "https://img.youtube.com/vi/KZECuxRE7Sc/hqdefault.jpg",
+    type: "youtube",
   },
   {
     id: "s3",
-    title: "Chỉ thế thôi (Minh Chuyên)",
+    title: "Chỉ Thế Thôi (Minh Chuyên)",
     note: "Giai điệu mộc mạc, chan chứa tình yêu thương của tuổi trẻ TMU",
-    url: "https://mp3.zing.vn/bai-hat/Chi-The-Thoi-Minh-Chuyen/ZW608AC0.html",
-    type: "zing",
+    youtubeId: "sNoYfUhOClw",
+    url: "https://www.youtube.com/watch?v=sNoYfUhOClw",
+    zingUrl: "https://mp3.zing.vn/bai-hat/Chi-The-Thoi-Minh-Chuyen/ZW608AC0.html",
+    thumbnail: "https://img.youtube.com/vi/sNoYfUhOClw/hqdefault.jpg",
+    type: "youtube",
   },
   {
     id: "s4",
-    title: "Sát cánh bên nhau (Sỹ Luân)",
+    title: "Sát Cánh Bên Nhau (Sỹ Luân)",
     note: "Bài ca đoàn kết triệu con tim con em 36 cùng chung một nhịp đập",
-    url: "https://mp3.zing.vn/bai-hat/Sat-Canh-Ben-Nhau-Sy-Luan/ZWZACU9A.html",
-    type: "zing",
+    youtubeId: "Szkko0wSa5c",
+    url: "https://www.youtube.com/watch?v=Szkko0wSa5c",
+    zingUrl: "https://mp3.zing.vn/bai-hat/Sat-Canh-Ben-Nhau-Sy-Luan/ZWZACU9A.html",
+    thumbnail: "https://img.youtube.com/vi/Szkko0wSa5c/hqdefault.jpg",
+    type: "youtube",
   },
 ];
 

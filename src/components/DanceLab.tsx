@@ -186,7 +186,9 @@ export default function DanceLab({ onToast }: { onToast: (msg: string) => void }
                 <p className="text-[11px] font-bold tracking-[0.16em] text-flame-700 uppercase">
                   4 Bài hát truyền thống
                 </p>
-                <span className="text-[10px] font-semibold text-cobalt-500">BLLSV TMU</span>
+                <span className="rounded-full bg-red-50 px-2 py-0.5 text-[10px] font-bold text-red-600">
+                  Phát trực tiếp
+                </span>
               </div>
               <ul className="mt-2.5 space-y-2 text-[12.5px]">
                 {TRADITIONAL_SONGS.map((song) => (
@@ -195,44 +197,52 @@ export default function DanceLab({ onToast }: { onToast: (msg: string) => void }
                     className={cn(
                       "rounded-xl border p-2.5 transition",
                       activeSongVideo?.id === song.id
-                        ? "border-flame-400 bg-flame-50 text-cobalt-950"
+                        ? "border-flame-400 bg-flame-50 text-cobalt-950 ring-1 ring-flame-400"
                         : "border-cobalt-100 bg-cobalt-50/60 text-cobalt-900 hover:bg-cobalt-50",
                     )}
                   >
                     <div className="flex items-start justify-between gap-2">
-                      <div>
-                        <p className="font-bold text-cobalt-950">🎵 {song.title}</p>
+                      <div className="min-w-0 flex-1">
+                        <p className="font-bold text-cobalt-950 truncate">🎵 {song.title}</p>
                         <p className="mt-0.5 text-[11px] text-cobalt-700 leading-tight">{song.note}</p>
                       </div>
                     </div>
-                    <div className="mt-2 flex items-center gap-2">
-                      {song.type === "youtube" ? (
-                        <button
-                          onClick={() => playSongVideo(song)}
-                          className={cn(
-                            "inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-[11px] font-bold transition",
-                            activeSongVideo?.id === song.id
-                              ? "bg-flame-500 text-white"
-                              : "bg-red-600 text-white hover:bg-red-700",
-                          )}
-                        >
-                          <Icon.play className="h-3 w-3" />
-                          Xem Video
-                        </button>
-                      ) : (
+                    <div className="mt-2.5 flex items-center justify-between gap-2 border-t border-cobalt-100/80 pt-2">
+                      <button
+                        onClick={() => playSongVideo(song)}
+                        className={cn(
+                          "inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-[11px] font-bold transition",
+                          activeSongVideo?.id === song.id
+                            ? "bg-flame-500 text-white shadow-xs"
+                            : "bg-red-600 text-white hover:bg-red-700",
+                        )}
+                      >
+                        <Icon.play className="h-3 w-3" />
+                        {activeSongVideo?.id === song.id ? "Đang phát" : "Phát trên web"}
+                      </button>
+
+                      <div className="flex items-center gap-1.5">
                         <a
                           href={song.url}
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-2.5 py-1 text-[11px] font-bold text-white transition hover:bg-emerald-700"
+                          title="Mở trên YouTube"
+                          className="inline-flex items-center gap-1 rounded-lg border border-cobalt-200 bg-white px-2 py-1 text-[10.5px] font-semibold text-red-600 transition hover:bg-red-50"
                         >
-                          <span>🎧</span>
-                          Nghe MP3
-                          <svg viewBox="0 0 20 20" fill="currentColor" className="h-3 w-3">
-                            <path fillRule="evenodd" d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z" clipRule="evenodd" />
-                          </svg>
+                          <span>▶</span> YouTube
                         </a>
-                      )}
+                        {song.zingUrl && (
+                          <a
+                            href={song.zingUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            title="Nghe trên Zing MP3"
+                            className="inline-flex items-center gap-1 rounded-lg border border-cobalt-200 bg-white px-2 py-1 text-[10.5px] font-semibold text-emerald-700 transition hover:bg-emerald-50"
+                          >
+                            <span>🎧</span> Zing
+                          </a>
+                        )}
+                      </div>
                     </div>
                   </li>
                 ))}
@@ -608,9 +618,9 @@ export default function DanceLab({ onToast }: { onToast: (msg: string) => void }
           <div className="mt-8">
             <div className="mb-3 flex items-center justify-between">
               <h4 className="text-xs font-bold tracking-widest text-flame-800 uppercase">
-                🎵 4 Bài hát truyền thống Ban Liên Lạc
+                🎵 4 Bài hát truyền thống Ban Liên Lạc (Phát trực tiếp trên web)
               </h4>
-              <span className="text-xs font-medium text-cobalt-500">Video &amp; Audio ZingMP3</span>
+              <span className="text-xs font-medium text-cobalt-500">4 bài hát</span>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -620,79 +630,88 @@ export default function DanceLab({ onToast }: { onToast: (msg: string) => void }
                   <div
                     key={song.id}
                     className={cn(
-                      "flex flex-col justify-between overflow-hidden rounded-2xl border bg-white p-3.5 transition-all duration-300 hover:shadow-lift",
+                      "group flex flex-col justify-between overflow-hidden rounded-2xl border bg-white p-3 transition-all duration-300 hover:shadow-lift",
                       isSelected
                         ? "border-flame-500 ring-2 ring-flame-400/80 shadow-soft"
                         : "border-cobalt-200 hover:border-cobalt-300",
                     )}
                   >
                     <div>
-                      <div className="flex items-start justify-between gap-2">
-                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-flame-50 text-base">
-                          {song.type === "youtube" ? "🎬" : "🎧"}
-                        </span>
-                        <span className={cn(
-                          "rounded-full px-2 py-0.5 text-[10px] font-bold",
-                          song.type === "youtube"
-                            ? "bg-red-50 text-red-700 border border-red-200"
-                            : "bg-emerald-50 text-emerald-700 border border-emerald-200",
-                        )}>
-                          {song.type === "youtube" ? "Video Clip" : "Audio MP3"}
-                        </span>
-                      </div>
-
-                      <div className="mt-3">
-                        <p className="font-display text-sm font-bold text-cobalt-950">
-                          {song.title}
-                        </p>
-                        <p className="mt-1 text-xs text-cobalt-700 leading-relaxed font-normal">
-                          {song.note}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="mt-4 pt-3 border-t border-cobalt-100 flex items-center justify-between gap-1">
-                      {song.type === "youtube" ? (
-                        <>
+                      {/* Thumbnail 16:9 YouTube của bài hát */}
+                      <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-cobalt-950">
+                        <img
+                          src={song.thumbnail}
+                          alt={song.title}
+                          loading="lazy"
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 flex items-center justify-center bg-cobalt-950/30 transition-colors group-hover:bg-cobalt-950/15">
                           <button
                             onClick={() => {
                               playSongVideo(song);
                               document.getElementById("dance-workspace")?.scrollIntoView({ behavior: "smooth" });
                             }}
-                            className={cn(
-                              "inline-flex items-center gap-1 rounded-xl px-2.5 py-1.5 text-xs font-bold transition",
-                              isSelected
-                                ? "bg-flame-500 text-white"
-                                : "bg-red-600 text-white hover:bg-red-700",
-                            )}
+                            aria-label={`Phát bài hát ${song.title}`}
+                            className="flex h-11 w-11 items-center justify-center rounded-full bg-flame-500 text-white shadow-lift transition-transform duration-300 group-hover:scale-110 active:scale-95"
                           >
-                            <Icon.play className="h-3.5 w-3.5" />
-                            {isSelected ? "Đang phát" : "Xem Video"}
+                            <Icon.play className="ml-0.5 h-5 w-5" />
                           </button>
-                          <a
-                            href={song.url}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="inline-flex items-center gap-1 rounded-xl border border-cobalt-200 px-2 py-1.5 text-xs font-semibold text-red-600 transition hover:bg-red-50"
-                          >
-                            <span>▶</span>
-                            YouTube
-                          </a>
-                        </>
-                      ) : (
+                        </div>
+                        <span className="absolute top-2 left-2 rounded-md bg-red-600/90 px-2 py-0.5 text-[10px] font-bold text-white shadow-xs">
+                          Bài hát truyền thống
+                        </span>
+                      </div>
+
+                      {/* Info */}
+                      <div className="mt-3">
+                        <p className="font-display text-sm font-bold text-cobalt-950 group-hover:text-flame-600">
+                          {song.title}
+                        </p>
+                        <p className="mt-1 line-clamp-2 text-xs text-cobalt-700 leading-relaxed font-normal">
+                          {song.note}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="mt-3 pt-3 border-t border-cobalt-100 flex items-center justify-between gap-1">
+                      <button
+                        onClick={() => {
+                          playSongVideo(song);
+                          document.getElementById("dance-workspace")?.scrollIntoView({ behavior: "smooth" });
+                        }}
+                        className={cn(
+                          "inline-flex items-center gap-1 rounded-xl px-2.5 py-1.5 text-xs font-bold transition",
+                          isSelected
+                            ? "bg-flame-500 text-white shadow-xs"
+                            : "bg-red-600 text-white hover:bg-red-700",
+                        )}
+                      >
+                        <Icon.play className="h-3.5 w-3.5" />
+                        {isSelected ? "Đang phát" : "Phát trên web"}
+                      </button>
+
+                      <div className="flex items-center gap-1">
                         <a
                           href={song.url}
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-emerald-600 px-3 py-1.5 text-xs font-bold text-white transition hover:bg-emerald-700"
+                          title="Mở trên YouTube"
+                          className="inline-flex items-center gap-1 rounded-xl border border-cobalt-200 px-2 py-1.5 text-xs font-semibold text-red-600 transition hover:border-red-300 hover:bg-red-50"
                         >
-                          <span>🎧</span>
-                          Nghe MP3 Zing
-                          <svg viewBox="0 0 20 20" fill="currentColor" className="h-3 w-3">
-                            <path fillRule="evenodd" d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z" clipRule="evenodd" />
-                          </svg>
+                          <span>▶</span> YouTube
                         </a>
-                      )}
+                        {song.zingUrl && (
+                          <a
+                            href={song.zingUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            title="Nghe trên Zing MP3"
+                            className="inline-flex items-center gap-1 rounded-xl border border-cobalt-200 px-2 py-1.5 text-xs font-semibold text-emerald-700 transition hover:border-emerald-300 hover:bg-emerald-50"
+                          >
+                            <span>🎧</span> Zing
+                          </a>
+                        )}
+                      </div>
                     </div>
                   </div>
                 );
