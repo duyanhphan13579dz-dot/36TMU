@@ -36,7 +36,7 @@ export function Kicker({ children, className }: { children: React.ReactNode; cla
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-2 rounded-full bg-cobalt-800/5 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-tmu-700 ring-1 ring-tmu-500/25 sm:text-xs",
+        "inline-flex items-center gap-2 rounded-full bg-white/90 px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-cobalt-900 shadow-xs ring-1 ring-cobalt-200 sm:text-xs",
         className,
       )}
     >
@@ -67,10 +67,10 @@ export function SectionHeading({
     >
       <div className={cn("max-w-2xl space-y-3", align === "center" && "flex flex-col items-center")}>
         <Kicker>{kicker}</Kicker>
-        <h2 className="text-balance-vn text-2xl leading-tight font-extrabold text-cobalt-900 sm:text-3xl lg:text-[2.6rem]">
+        <h2 className="text-balance-vn text-2xl leading-tight font-black text-cobalt-950 sm:text-3xl lg:text-[2.6rem]">
           {title}
         </h2>
-        {desc ? <p className="text-sm leading-relaxed text-cobalt-700/80 sm:text-base">{desc}</p> : null}
+        {desc ? <p className="text-sm leading-relaxed font-medium text-cobalt-800 sm:text-base">{desc}</p> : null}
       </div>
       {action ? <div className="shrink-0">{action}</div> : null}
     </div>

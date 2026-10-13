@@ -22,12 +22,12 @@ export default function Hero() {
       <div className="mx-auto grid w-full max-w-[1400px] grid-cols-1 items-center gap-10 px-4 sm:px-6 lg:grid-cols-[1.05fr_1fr] lg:gap-14">
         {/* ---------- Cột trái ---------- */}
         <div className="order-2 lg:order-1" data-reveal>
-          <Kicker className="bg-white/70">
+          <Kicker className="border border-cobalt-200/80 bg-white/95 font-bold text-cobalt-950 shadow-xs">
             <span className="flex h-2 w-2 rounded-full bg-flame-500" />
             BLLSV Thanh Hóa · Đại học Thương Mại · từ 2011
           </Kicker>
 
-          <h1 className="mt-4 text-balance-vn font-display text-[2.1rem] leading-[1.08] font-extrabold tracking-tight text-cobalt-900 sm:text-5xl lg:text-[3.65rem]">
+          <h1 className="mt-4 text-balance-vn font-display text-[2.1rem] leading-[1.08] font-black tracking-tight text-cobalt-950 sm:text-5xl lg:text-[3.65rem]">
             Xa nhà 300 cây số,
             <span className="relative mx-1 inline-block">
               <span className="relative z-10 bg-gradient-to-r from-flame-500 via-flame-600 to-flame-400 bg-clip-text text-transparent">
@@ -40,7 +40,7 @@ export default function Hero() {
             một mái nhà mang tên <span className="text-tmu-600">xứ Thanh</span>.
           </h1>
 
-          <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-cobalt-700/85 sm:text-lg">
+          <p className="mt-5 max-w-xl text-[15px] leading-relaxed font-medium text-cobalt-800 sm:text-lg">
             Chào bạn! Chúng mình là <strong className="font-semibold text-cobalt-900">Ban Liên Lạc Sinh Viên Thanh Hóa – TMU</strong>.
             Nơi những người con sông Mã gặp nhau tại 79 Hồ Tùng Mậu, cùng đi tình nguyện, cùng tập flashmob
             và cùng gọi nhau bằng hai chữ thân thương: <em className="text-flame-600 not-italic font-semibold">người nhà</em>.

@@ -268,8 +268,8 @@ export function Footer() {
                 <p className="text-[12px] tracking-[0.18em] text-glow-300 uppercase">{ORG.school}</p>
               </div>
             </div>
-            <p className="mt-4 max-w-md text-[13.5px] leading-relaxed text-white/70 italic">“{ORG.slogan}”</p>
-            <p className="mt-4 max-w-md text-[13px] leading-relaxed text-white/60">
+            <p className="mt-4 max-w-md text-[13.5px] leading-relaxed text-white/90 italic">“{ORG.slogan}”</p>
+            <p className="mt-4 max-w-md text-[13px] leading-relaxed text-white/80">
               Nhà chung của sinh viên Thanh Hóa đang học tập tại Hà Nội, hoạt động dưới sự hỗ trợ của Hội Sinh viên
               Trường Đại học Thương Mại. Thành lập năm {ORG.founded} – 15 năm một chuyến đi.
             </p>
@@ -288,7 +288,7 @@ export function Footer() {
                 <li key={l.href}>
                   <a
                     href={l.href}
-                    className="group inline-flex items-center gap-2 text-[13.5px] text-white/70 transition hover:text-white"
+                    className="group inline-flex items-center gap-2 text-[13.5px] text-white/85 transition hover:text-white"
                   >
                     <span className="h-1 w-1 rounded-full bg-flame-500 transition-all group-hover:w-3" />
                     {l.label}
@@ -300,7 +300,7 @@ export function Footer() {
 
           <div>
             <p className="text-[11px] font-bold tracking-[0.2em] text-glow-300 uppercase">Liên hệ</p>
-            <ul className="mt-4 space-y-3 text-[13.5px] text-white/70">
+            <ul className="mt-4 space-y-3 text-[13.5px] text-white/85">
               <li className="flex items-start gap-2.5">
                 <Icon.pin className="mt-0.5 h-4 w-4 shrink-0 text-flame-400" />
                 {ORG.address}
@@ -336,11 +336,11 @@ export function Footer() {
         </div>
 
         <div className="mt-10 flex flex-col gap-4 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-[12px] text-white/50">
+          <p className="text-[12px] text-white/75">
             © {new Date().getFullYear()} BLLSV Thanh Hóa – TMU. Made with 💙 bởi Ban Truyền thông – Kỹ thuật.
           </p>
           <div className="flex items-center gap-3">
-            <a href="#home" className="text-[12px] font-semibold text-white/60 transition hover:text-white">
+            <a href="#home" className="text-[12px] font-semibold text-white/80 transition hover:text-white">
               Điều khoản sử dụng
             </a>
             <span className="h-1 w-1 rounded-full bg-white/30" />

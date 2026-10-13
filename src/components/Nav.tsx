@@ -85,8 +85,8 @@ export default function Nav({ active }: { active: NavId }) {
             className={cn(
               "flex items-center justify-between gap-3 rounded-2xl border px-3 py-2 transition-all duration-300 sm:px-4",
               scrolled
-                ? "border-white/60 bg-white/80 shadow-soft backdrop-blur-xl"
-                : "border-white/40 bg-white/55 backdrop-blur-md",
+                ? "border-cobalt-100 bg-white/95 shadow-soft backdrop-blur-xl"
+                : "border-white/80 bg-white/90 shadow-soft backdrop-blur-lg",
             )}
           >
             <LogoLockup />
@@ -101,7 +101,7 @@ export default function Nav({ active }: { active: NavId }) {
                       onClick={() => go(item.id)}
                       className={cn(
                         "group relative flex min-h-11 items-center gap-1.5 rounded-xl px-3.5 text-sm font-semibold transition-colors",
-                        isActive ? "text-cobalt-800" : "text-cobalt-700/70 hover:text-cobalt-800",
+                        isActive ? "text-cobalt-950 font-bold" : "text-cobalt-800 hover:text-flame-600",
                       )}
                     >
                       <span

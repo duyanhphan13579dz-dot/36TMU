@@ -44,15 +44,15 @@ export function LogoLockup({ compact = false }: { compact?: boolean }) {
       <span className="flex flex-col leading-tight">
         <span
           className={cn(
-            "font-display font-black uppercase tracking-tight text-cobalt-900 leading-tight",
-            compact ? "text-[10px] sm:text-[11.5px]" : "text-[11px] sm:text-[13.5px]",
+            "font-sans font-black uppercase tracking-tight text-cobalt-950 leading-tight",
+            compact ? "text-[10px] sm:text-[11.5px]" : "text-[11.5px] sm:text-[14px]",
           )}
         >
           BAN LIÊN LẠC SINH VIÊN THANH HÓA
         </span>
         <span
           className={cn(
-            "mt-0.5 font-bold tracking-[0.14em] text-flame-600 uppercase leading-tight",
+            "mt-0.5 font-extrabold tracking-[0.14em] text-flame-700 uppercase leading-tight",
             compact ? "text-[8.5px] sm:text-[9.5px]" : "text-[9.5px] sm:text-[11px]",
           )}
         >
