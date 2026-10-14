@@ -640,6 +640,9 @@ export default function AdminPanel({
                                 onChange={(e) => setProgCategory(e.target.value as AdminProgram["category"])}
                                 className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
                               >
+                                <option value="Tình nguyện">Tình nguyện</option>
+                                <option value="Hội đồng hương">Hội đồng hương</option>
+                                <option value="Chào tân sinh viên">Chào tân sinh viên</option>
                                 <option value="Chiến dịch Mùa Hè Xanh">Chiến dịch Mùa Hè Xanh</option>
                                 <option value="Chiến dịch Đông Ấm">Chiến dịch Đông Ấm</option>
                                 <option value="Âm Vang Xứ Thanh">Âm Vang Xứ Thanh</option>

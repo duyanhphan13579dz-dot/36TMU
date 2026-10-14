@@ -1,4 +1,4 @@
-import { ORG, PROGRAMS, LEADERSHIP_HISTORY, type Program, type LeaderRecord } from "@/data/content";
+import { ORG, PROGRAMS, LEADERSHIP_HISTORY, type Program, type EventCategory, type ProgramStatus, type LeaderRecord } from "@/data/content";
 
 /* ==========================================================================
    1. TYPES
@@ -19,8 +19,8 @@ export type AdminPost = {
 export type AdminProgram = {
   id: string;
   title: string;
-  category: "Chiến dịch Mùa Hè Xanh" | "Chiến dịch Đông Ấm" | "Âm Vang Xứ Thanh" | "Đào tạo & Gắn kết" | "Truyền thông & Đời sống";
-  status: "Mới đăng" | "Đang mở đăng ký" | "Sắp diễn ra" | "Đã kết thúc";
+  category: EventCategory;
+  status: ProgramStatus;
   month: string;
   day: string;
   dateLabel: string;

@@ -42,8 +42,16 @@ export default function Events({ onToast }: { onToast: (msg: string) => void }) 
     return [...adminPrograms, ...basePrograms];
   }, [adminPosts, basePrograms]);
 
+  const matchCategory = (cat: string, f: string) => {
+    if (f === "Tất cả") return true;
+    if (cat === f) return true;
+    if (f === "Tình nguyện" && (cat === "Chiến dịch Mùa Hè Xanh" || cat === "Chiến dịch Đông Ấm" || cat === "Đào tạo & Gắn kết")) return true;
+    if (f === "Hội đồng hương" && (cat === "Âm Vang Xứ Thanh" || cat === "Truyền thông & Đời sống")) return true;
+    return false;
+  };
+
   const list = useMemo(
-    () => (filter === "Tất cả" ? allPrograms : allPrograms.filter((p) => p.category === filter)),
+    () => allPrograms.filter((p) => matchCategory(p.category, filter)),
     [filter, allPrograms],
   );
 
@@ -66,7 +74,7 @@ export default function Events({ onToast }: { onToast: (msg: string) => void }) 
         {/* ===== Bộ lọc chuyên mục ===== */}
         <div className="scrollbar-none -mx-4 mt-7 flex snap-x gap-2 overflow-x-auto px-4 pb-1 lg:mx-0 lg:px-0">
           {EVENT_FILTERS.map((f) => {
-            const count = f === "Tất cả" ? allPrograms.length : allPrograms.filter((p) => p.category === f).length;
+            const count = allPrograms.filter((p) => matchCategory(p.category, f)).length;
             const active = filter === f;
             return (
               <button

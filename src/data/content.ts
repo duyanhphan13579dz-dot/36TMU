@@ -600,8 +600,18 @@ const IMG = {
   community: "https://images.pexels.com/photos/33368443/pexels-photo-33368443.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
 };
 
-export type EventCategory = "Tình nguyện" | "Hội đồng hương" | "Chào tân sinh viên";
+export type EventCategory =
+  | "Tình nguyện"
+  | "Hội đồng hương"
+  | "Chào tân sinh viên"
+  | "Chiến dịch Mùa Hè Xanh"
+  | "Chiến dịch Đông Ấm"
+  | "Âm Vang Xứ Thanh"
+  | "Đào tạo & Gắn kết"
+  | "Truyền thông & Đời sống";
 export const EVENT_FILTERS = ["Tất cả", "Tình nguyện", "Hội đồng hương", "Chào tân sinh viên"] as const;
+
+export type ProgramStatus = "Mới đăng" | "Đang mở đăng ký" | "Sắp diễn ra" | "Đã kết thúc";
 
 export type Program = {
   id: string;
@@ -611,7 +621,7 @@ export type Program = {
   month: string;
   day: string;
   location: string;
-  status: "Đang mở đăng ký" | "Sắp diễn ra" | "Đã kết thúc";
+  status: ProgramStatus;
   excerpt: string;
   cover: string;
   gallery: string[];
