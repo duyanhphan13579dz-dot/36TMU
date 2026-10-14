@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { CONFESSIONS, MEMORIES, type Confession } from "@/data/content";
 import { Button, Icon, Kicker, SectionHeading, Sheet } from "@/components/ui";
 import { getAllLeaders } from "@/data/adminStore";
@@ -11,19 +11,45 @@ const TONES: Record<Confession["tone"], string> = {
   mint: "bg-emerald-50 border-emerald-200 text-cobalt-900",
 };
 
+const CONFESSIONS_STORAGE_KEY = "bllsv_confessions";
+
+function getStoredConfessions(): Confession[] {
+  try {
+    const raw = localStorage.getItem(CONFESSIONS_STORAGE_KEY);
+    if (!raw) return CONFESSIONS;
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed : CONFESSIONS;
+  } catch {
+    return CONFESSIONS;
+  }
+}
+
+function saveStoredConfessions(notes: Confession[]) {
+  try {
+    localStorage.setItem(CONFESSIONS_STORAGE_KEY, JSON.stringify(notes));
+  } catch {}
+}
+
 export default function Gallery({ onToast }: { onToast: (msg: string) => void }) {
   const [lightbox, setLightbox] = useState<number | null>(null);
   const [sliderIndex, setSliderIndex] = useState(0);
   const trackRef = useRef<HTMLDivElement>(null);
 
-  const [notes, setNotes] = useState<Confession[]>(CONFESSIONS);
+  const [notes, setNotes] = useState<Confession[]>(() => getStoredConfessions());
   const [draft, setDraft] = useState("");
   const [author, setAuthor] = useState("");
 
   const [leaderSearch, setLeaderSearch] = useState("");
   const [selectedKhoa, setSelectedKhoa] = useState<string>("all");
+  const [leadersDataVersion, setLeadersDataVersion] = useState(0);
 
-  const allLeaders = useMemo(() => getAllLeaders(), []);
+  useEffect(() => {
+    const handleUpdate = () => setLeadersDataVersion((v) => v + 1);
+    window.addEventListener("bllsv_data_updated", handleUpdate);
+    return () => window.removeEventListener("bllsv_data_updated", handleUpdate);
+  }, []);
+
+  const allLeaders = useMemo(() => getAllLeaders(), [leadersDataVersion]);
 
   const khoasList = useMemo(() => {
     const list: string[] = [];
@@ -62,17 +88,17 @@ export default function Gallery({ onToast }: { onToast: (msg: string) => void })
     }
     const tones: Confession["tone"][] = ["blue", "orange", "paper", "mint"];
     const rotates = ["-2deg", "1.6deg", "-1.2deg", "2.2deg"];
-    setNotes((n) => [
-      {
-        id: `me-${Date.now()}`,
-        text: draft.trim(),
-        author: author.trim() || "Bạn ẩn danh",
-        role: "Tân thành viên K17",
-        tone: tones[Math.floor(Math.random() * tones.length)],
-        rotate: rotates[Math.floor(Math.random() * rotates.length)],
-      },
-      ...n,
-    ]);
+    const newNote: Confession = {
+      id: `me-${Date.now()}`,
+      text: draft.trim(),
+      author: author.trim() || "Bạn ẩn danh",
+      role: "Tân thành viên K60",
+      tone: tones[Math.floor(Math.random() * tones.length)],
+      rotate: rotates[Math.floor(Math.random() * rotates.length)],
+    };
+    const next = [newNote, ...notes];
+    setNotes(next);
+    saveStoredConfessions(next);
     setDraft("");
     setAuthor("");
     onToast("Lời nhắn của bạn đã được dán lên tường nhà chung 💙");
@@ -261,7 +287,7 @@ export default function Gallery({ onToast }: { onToast: (msg: string) => void })
                 Mẩu giấy nhỏ, tình thương to 💛
               </h3>
               <p className="text-sm leading-relaxed text-cobalt-700/80">
-                Những dòng nhắn từ anh chị cựu thành viên và các bạn tân sinh viên K17. Bạn cũng có thể dán thêm một
+                Những dòng nhắn từ anh chị cựu thành viên và các bạn tân sinh viên K60, K61. Bạn cũng có thể dán thêm một
                 mẩu giấy lên tường ngay dưới đây!
               </p>
             </div>
@@ -301,12 +327,12 @@ export default function Gallery({ onToast }: { onToast: (msg: string) => void })
           {/* Form dán giấy */}
           <div className="mt-8 rounded-3xl border border-cobalt-100 bg-white/85 p-5 shadow-sm backdrop-blur sm:p-6">
             <p className="font-display text-base font-extrabold text-cobalt-900">Dán một mẩu giấy của bạn</p>
-            <p className="mt-1 text-[13px] text-cobalt-600/80">Cảm nhận của bạn về nhà chung, hoặc lời động viên gửi tân sinh viên K17.</p>
+            <p className="mt-1 text-[13px] text-cobalt-600/80">Cảm nhận của bạn về nhà chung, hoặc lời động viên gửi tân sinh viên K60, K61.</p>
             <div className="mt-4 grid gap-3 sm:grid-cols-[1fr_1fr_auto]">
               <input
                 value={author}
                 onChange={(e) => setAuthor(e.target.value)}
-                placeholder="Tên của bạn (VD: Minh Trí – K17)"
+                placeholder="Tên của bạn (VD: Minh Trí – K60)"
                 className="min-h-12 w-full rounded-2xl border border-cobalt-200 bg-white px-4 text-[14px] text-cobalt-900 outline-none transition placeholder:text-cobalt-400 focus:border-tmu-400 focus:ring-4 focus:ring-tmu-100"
               />
               <textarea

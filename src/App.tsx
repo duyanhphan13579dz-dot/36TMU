@@ -119,16 +119,16 @@ export default function App() {
         <Hero />
 
         {/* Dải ranh giới trang trí với Slogan / Châm ngôn cập nhật mới nhất của BCH */}
-        <Divider key={`divider-${dataVersion}`} />
+        <Divider />
 
-        <About key={`about-${dataVersion}`} />
-        <Events key={`events-${dataVersion}`} onToast={pushToast} />
+        <About />
+        <Events onToast={pushToast} />
         <DanceLab onToast={pushToast} />
-        <Gallery key={`gallery-${dataVersion}`} onToast={pushToast} />
-        <Contact key={`contact-${dataVersion}`} isAdmin={isAdmin} onToast={pushToast} />
+        <Gallery onToast={pushToast} />
+        <Contact isAdmin={isAdmin} onToast={pushToast} />
       </main>
 
-      <Footer key={`footer-${dataVersion}`} />
+      <Footer />
       
       {/* Cổng Quản Trị Viên thu nhỏ ở góc màn hình */}
       <AdminPanel
@@ -145,9 +145,17 @@ export default function App() {
 }
 
 function Divider() {
+  const [dataVersion, setDataVersion] = useState(0);
+
+  useEffect(() => {
+    const handleUpdate = () => setDataVersion((v) => v + 1);
+    window.addEventListener("bllsv_data_updated", handleUpdate);
+    return () => window.removeEventListener("bllsv_data_updated", handleUpdate);
+  }, []);
+
   const motto = getStoredAdminMotto();
   return (
-    <div className="relative border-y border-cobalt-100 bg-white/60 py-3">
+    <div key={dataVersion} className="relative border-y border-cobalt-100 bg-white/60 py-3">
       <div className="mx-auto flex w-full max-w-[1400px] items-center gap-3 px-4 sm:px-6">
         <span className="hidden h-px flex-1 bg-gradient-to-r from-transparent to-tmu-200 sm:block" />
         <p className="text-center text-[11px] font-bold tracking-[0.2em] text-tmu-700 uppercase sm:text-[12.5px]">

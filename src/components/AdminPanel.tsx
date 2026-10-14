@@ -496,6 +496,7 @@ export default function AdminPanel({
     setNotes(next);
     saveStoredNotes(next);
     onToast("Đã xóa ghi chú của TNV khỏi hệ thống 🗑️");
+    onPostCreated?.();
   };
 
   const handleTogglePinNote = (id: string) => {
@@ -503,6 +504,7 @@ export default function AdminPanel({
     setNotes(next);
     saveStoredNotes(next);
     onToast("Đã cập nhật trạng thái ghim ghi chú 📌");
+    onPostCreated?.();
   };
 
   // =========================================================================

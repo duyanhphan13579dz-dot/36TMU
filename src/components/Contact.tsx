@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import TnvNoteBoard from "@/components/TnvNoteBoard";
 import { LogoBadge } from "@/components/Logo";
 import { ORG } from "@/data/content";
@@ -13,7 +13,15 @@ export default function Contact({
   isAdmin?: boolean;
   onToast: (msg: string) => void;
 }) {
-  const contact = useMemo(() => getStoredAdminContact(), []);
+  const [dataVersion, setDataVersion] = useState(0);
+
+  useEffect(() => {
+    const handleUpdate = () => setDataVersion((v) => v + 1);
+    window.addEventListener("bllsv_data_updated", handleUpdate);
+    return () => window.removeEventListener("bllsv_data_updated", handleUpdate);
+  }, []);
+
+  const contact = useMemo(() => getStoredAdminContact(), [dataVersion]);
   return (
     <section id="contact" className="relative overflow-hidden py-16 sm:py-20 lg:py-28">
       <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-tmu-50/70 to-white" />
@@ -81,10 +89,10 @@ export default function Contact({
               <p className="mt-1 text-[13px] text-cobalt-600/80">Fanpage cập nhật hoạt động hằng ngày, Group nội bộ chỉ dành cho thành viên 36.</p>
               <div className="mt-4 grid grid-cols-2 gap-3">
                 {[
-                  { label: "Fanpage", sub: "BLLSVTH TMU", href: ORG.fanpage, icon: <Icon.facebook className="h-5 w-5" />, tone: "from-tmu-500 to-cobalt-700" },
-                  { label: "Group nội bộ", sub: "Nhà chung 36", href: ORG.group, icon: <Icon.users className="h-5 w-5" />, tone: "from-cobalt-600 to-cobalt-900" },
-                  { label: "TikTok", sub: "@bllsvth.tmu", href: ORG.tiktok, icon: <Icon.tiktok className="h-5 w-5" />, tone: "from-flame-500 to-flame-700" },
-                  { label: "Zalo nhóm", sub: "Tân SV K17", href: ORG.zalo, icon: <Icon.chat className="h-5 w-5" />, tone: "from-glow-400 to-flame-500" },
+                  { label: "Fanpage", sub: "BLLSVTH TMU", href: contact.fanpage || ORG.fanpage, icon: <Icon.facebook className="h-5 w-5" />, tone: "from-tmu-500 to-cobalt-700" },
+                  { label: "Group nội bộ", sub: "Nhà chung 36", href: contact.group || ORG.group, icon: <Icon.users className="h-5 w-5" />, tone: "from-cobalt-600 to-cobalt-900" },
+                  { label: "TikTok", sub: "@bllsvth.tmu", href: contact.tiktok || ORG.tiktok, icon: <Icon.tiktok className="h-5 w-5" />, tone: "from-flame-500 to-flame-700" },
+                  { label: "Zalo nhóm", sub: "Tân SV K60, K61", href: ORG.zalo, icon: <Icon.chat className="h-5 w-5" />, tone: "from-glow-400 to-flame-500" },
                 ].map((s) => (
                   <a
                     key={s.label}
@@ -112,6 +120,17 @@ export default function Contact({
 }
 
 export function Footer() {
+  const [dataVersion, setDataVersion] = useState(0);
+
+  useEffect(() => {
+    const handleUpdate = () => setDataVersion((v) => v + 1);
+    window.addEventListener("bllsv_data_updated", handleUpdate);
+    return () => window.removeEventListener("bllsv_data_updated", handleUpdate);
+  }, []);
+
+  const motto = useMemo(() => getStoredAdminMotto(), [dataVersion]);
+  const contact = useMemo(() => getStoredAdminContact(), [dataVersion]);
+
   return (
     <footer className="relative overflow-hidden bg-cobalt-950 pt-14 pb-28 text-white xl:pb-10">
       <div className="pointer-events-none absolute inset-0 opacity-[0.15] bg-dots" />
@@ -127,7 +146,7 @@ export function Footer() {
                 <p className="text-[12px] tracking-[0.18em] text-glow-300 uppercase">{ORG.school}</p>
               </div>
             </div>
-            <p className="mt-4 max-w-md text-[13.5px] leading-relaxed text-white/90 italic">“{getStoredAdminMotto().slogan}”</p>
+            <p className="mt-4 max-w-md text-[13.5px] leading-relaxed text-white/90 italic">“{motto.slogan}”</p>
             <p className="mt-4 max-w-md text-[13px] leading-relaxed text-white/80">
               Mái nhà chung của sinh viên Thanh Hóa tại Trường Đại học Thương Mại, trực thuộc {ORG.parentOrg}. Thành lập ngày {ORG.foundedDate} – hơn 18 năm giữ lửa và cống hiến.
             </p>

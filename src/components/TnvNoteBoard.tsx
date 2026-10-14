@@ -58,6 +58,7 @@ export function getStoredNotes(): TnvNote[] {
 export function saveStoredNotes(notes: TnvNote[]) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
+    window.dispatchEvent(new CustomEvent("bllsv_data_updated", { detail: { type: "notes" } }));
   } catch {
     // Ignore storage quota
   }
@@ -78,7 +79,10 @@ export default function TnvNoteBoard({
   const [filter, setFilter] = useState<string>("all");
 
   useEffect(() => {
-    setNotes(getStoredNotes());
+    const reload = () => setNotes(getStoredNotes());
+    reload();
+    window.addEventListener("bllsv_data_updated", reload);
+    return () => window.removeEventListener("bllsv_data_updated", reload);
   }, []);
 
   const handleAddNote = (e: React.FormEvent) => {

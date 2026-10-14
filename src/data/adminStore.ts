@@ -285,10 +285,25 @@ export function saveStoredAdminContact(contact: AdminContact): void {
   } catch {}
 }
 
+const NOTES_KEY = "bllsv_tnv_notes";
+const CONFESSIONS_KEY = "bllsv_confessions";
+
 // --- BACKUP & RESTORE DỮ LIỆU ---
 export function exportAllAdminData(): string {
+  let notes: unknown[] = [];
+  try {
+    const rawNotes = localStorage.getItem(NOTES_KEY);
+    if (rawNotes) notes = JSON.parse(rawNotes);
+  } catch {}
+
+  let confessions: unknown[] = [];
+  try {
+    const rawConf = localStorage.getItem(CONFESSIONS_KEY);
+    if (rawConf) confessions = JSON.parse(rawConf);
+  } catch {}
+
   const data = {
-    version: "1.0",
+    version: "1.1",
     appName: "BLLSVTMU-Manager",
     exportedAt: new Date().toLocaleString("vi-VN"),
     posts: getStoredAdminPosts(),
@@ -297,6 +312,8 @@ export function exportAllAdminData(): string {
     motto: getStoredAdminMotto(),
     rules: getStoredAdminRules(),
     contact: getStoredAdminContact(),
+    notes,
+    confessions,
   };
   return JSON.stringify(data, null, 2);
 }
@@ -310,6 +327,17 @@ export function importAllAdminData(jsonStr: string): boolean {
     if (data.motto?.slogan) saveStoredAdminMotto(data.motto);
     if (data.rules?.rules) saveStoredAdminRules(data.rules);
     if (data.contact?.email) saveStoredAdminContact(data.contact);
+    if (Array.isArray(data.notes)) {
+      try {
+        localStorage.setItem(NOTES_KEY, JSON.stringify(data.notes));
+      } catch {}
+    }
+    if (Array.isArray(data.confessions)) {
+      try {
+        localStorage.setItem(CONFESSIONS_KEY, JSON.stringify(data.confessions));
+      } catch {}
+    }
+    window.dispatchEvent(new CustomEvent("bllsv_data_updated", { detail: { type: "all" } }));
     return true;
   } catch {
     return false;
@@ -324,6 +352,8 @@ export function resetAllAdminDataToDefaults(): void {
     localStorage.removeItem(MOTTO_KEY);
     localStorage.removeItem(RULES_KEY);
     localStorage.removeItem(CONTACT_KEY);
+    localStorage.removeItem(NOTES_KEY);
+    localStorage.removeItem(CONFESSIONS_KEY);
     window.dispatchEvent(new CustomEvent("bllsv_data_updated", { detail: { type: "all" } }));
   } catch {}
 }

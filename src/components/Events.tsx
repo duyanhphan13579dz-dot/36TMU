@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { EVENT_FILTERS, YEARLY_TIMELINE, type Program } from "@/data/content";
 import { Button, Icon, Kicker, SectionHeading, Sheet } from "@/components/ui";
 import { getStoredAdminPosts, getAllPrograms } from "@/data/adminStore";
@@ -14,9 +14,16 @@ const STATUS_STYLE: Record<string, string> = {
 export default function Events({ onToast }: { onToast: (msg: string) => void }) {
   const [filter, setFilter] = useState<string>("Tất cả");
   const [current, setCurrent] = useState<Program | null>(null);
+  const [dataVersion, setDataVersion] = useState(0);
 
-  const adminPosts = useMemo(() => getStoredAdminPosts(), []);
-  const basePrograms = useMemo(() => getAllPrograms(), []);
+  useEffect(() => {
+    const handleUpdate = () => setDataVersion((v) => v + 1);
+    window.addEventListener("bllsv_data_updated", handleUpdate);
+    return () => window.removeEventListener("bllsv_data_updated", handleUpdate);
+  }, []);
+
+  const adminPosts = useMemo(() => getStoredAdminPosts(), [dataVersion]);
+  const basePrograms = useMemo(() => getAllPrograms(), [dataVersion]);
 
   const allPrograms = useMemo(() => {
     const adminPrograms: Program[] = adminPosts.map((p) => ({

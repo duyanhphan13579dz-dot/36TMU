@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BANS, ORG, VOLUNTEER_TEAM } from "@/data/content";
 import { Button, Icon, Kicker, SectionHeading } from "@/components/ui";
 import { getStoredAdminMotto, getStoredAdminRules } from "@/data/adminStore";
@@ -7,6 +7,13 @@ import { cn } from "@/utils/cn";
 export default function About() {
   const [mobileTab, setMobileTab] = useState(0);
   const [flipped, setFlipped] = useState<string | null>(null);
+  const [, setDataVersion] = useState(0);
+
+  useEffect(() => {
+    const handleUpdate = () => setDataVersion((v) => v + 1);
+    window.addEventListener("bllsv_data_updated", handleUpdate);
+    return () => window.removeEventListener("bllsv_data_updated", handleUpdate);
+  }, []);
 
   return (
     <section id="about" className="relative overflow-hidden py-16 sm:py-20 lg:py-28">

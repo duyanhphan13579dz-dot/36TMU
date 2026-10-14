@@ -171,7 +171,7 @@ function VideoFeature() {
         <span className="font-display text-2xl font-extrabold text-tmu-600">1000+</span>
         <span className="text-xs leading-tight font-semibold text-cobalt-800">
           Thành viên
-          <span className="block text-[11px] font-medium text-cobalt-600/70">từ K9 đến K17</span>
+          <span className="block text-[11px] font-medium text-cobalt-600/70">từ K44 đến K60</span>
         </span>
       </div>
 
