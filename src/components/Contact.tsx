@@ -2,6 +2,7 @@ import TnvNoteBoard from "@/components/TnvNoteBoard";
 import { LogoBadge } from "@/components/Logo";
 import { ORG } from "@/data/content";
 import { Button, Icon, Kicker, SectionHeading } from "@/components/ui";
+import { getStoredAdminMotto } from "@/data/adminStore";
 import { cn } from "@/utils/cn";
 
 export default function Contact({
@@ -124,7 +125,7 @@ export function Footer() {
                 <p className="text-[12px] tracking-[0.18em] text-glow-300 uppercase">{ORG.school}</p>
               </div>
             </div>
-            <p className="mt-4 max-w-md text-[13.5px] leading-relaxed text-white/90 italic">“{ORG.slogan}”</p>
+            <p className="mt-4 max-w-md text-[13.5px] leading-relaxed text-white/90 italic">“{getStoredAdminMotto().slogan}”</p>
             <p className="mt-4 max-w-md text-[13px] leading-relaxed text-white/80">
               Mái nhà chung của sinh viên Thanh Hóa tại Trường Đại học Thương Mại, trực thuộc {ORG.parentOrg}. Thành lập ngày {ORG.foundedDate} – hơn 18 năm giữ lửa và cống hiến.
             </p>

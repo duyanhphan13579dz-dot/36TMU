@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { BANS, ORG, VOLUNTEER_TEAM } from "@/data/content";
 import { Button, Icon, Kicker, SectionHeading } from "@/components/ui";
+import { getStoredAdminMotto, getStoredAdminRules } from "@/data/adminStore";
 import { cn } from "@/utils/cn";
 
 export default function About() {
@@ -235,55 +236,137 @@ export default function About() {
           </div>
         </div>
 
-        {/* Dải thông tin truyền thống & Văn hóa nhà chung */}
-        <div className="mt-14 overflow-hidden rounded-3xl bg-gradient-to-br from-cobalt-900 via-cobalt-800 to-tmu-700 p-6 text-white shadow-lift sm:p-10 lg:mt-20">
-          <div className="grid gap-8 lg:grid-cols-[1.2fr_1fr] lg:items-center">
-            <div>
-              <Kicker className="bg-white/10 text-glow-300 ring-white/20">Tinh thần 36</Kicker>
-              <h3 className="mt-4 text-balance-vn font-display text-2xl leading-tight font-extrabold sm:text-3xl lg:text-4xl">
-                Slogan & Nghi thức thiêng liêng
-              </h3>
-              <blockquote className="mt-4 border-l-4 border-flame-500 pl-4 text-base font-bold italic text-glow-300 sm:text-lg">
-                “{ORG.slogan}”
-              </blockquote>
-              <p className="mt-3 text-[13.5px] leading-relaxed text-white/85 sm:text-sm">
-                ⭕ <strong>Nghi thức hô slogan:</strong> {ORG.sloganRitual}
-              </p>
-              <p className="mt-2 text-[13.5px] leading-relaxed text-white/85 sm:text-sm">
-                🍚 <strong>Khẩu hiệu mời cơm truyền thống:</strong> “{ORG.mealCheer}”
-              </p>
-              <p className="mt-3 text-[13px] leading-relaxed text-white/75">
-                🏛️ <strong>Tổ chức trực thuộc:</strong> {ORG.parentOrg} ({ORG.parentOrgMembersCount} đơn vị, Chủ tịch: {ORG.parentOrgPresident}).
-              </p>
-              <div className="mt-6 flex flex-wrap gap-3">
-                <Button as="a" href="#contact" variant="flame">
-                  Gia nhập gia đình 36
-                  <Icon.arrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                </Button>
-                <Button as="a" href="#dance" variant="ghost" className="bg-white/10 text-white hover:bg-white/20">
-                  <Icon.mirror className="h-4 w-4" />
-                  4 Bài nhảy truyền thống
-                </Button>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-3 sm:gap-4">
-              {[
-                { n: "12/04/2008", l: "Ngày thành lập Ban liên lạc" },
-                { n: "16 Khóa", l: "Thế hệ BCH (K44 – K60)" },
-                { n: "20 Đơn vị", l: "Thuộc Hội ĐH Thanh Hóa" },
-                { n: "4 Năm", l: "Vô địch Âm Vang Xứ Thanh" },
-              ].map((x) => (
-                <div
-                  key={x.l}
-                  className="rounded-2xl border border-white/15 bg-white/10 p-3.5 text-center backdrop-blur transition hover:-translate-y-1 hover:bg-white/20 sm:p-4"
-                >
-                  <p className="font-display text-2xl font-black text-glow-300 sm:text-3xl">{x.n}</p>
-                  <p className="mt-1 text-[11.5px] leading-snug font-medium text-white/85 sm:text-xs">{x.l}</p>
+        {/* Dải thông tin truyền thống & Văn hóa nhà chung (Slogan & Châm ngôn BCH mới nhất) */}
+        {(() => {
+          const motto = getStoredAdminMotto();
+          const rules = getStoredAdminRules();
+          return (
+            <>
+              <div className="mt-14 overflow-hidden rounded-3xl bg-gradient-to-br from-cobalt-900 via-cobalt-800 to-tmu-700 p-6 text-white shadow-lift sm:p-10 lg:mt-20">
+                <div className="grid gap-8 lg:grid-cols-[1.2fr_1fr] lg:items-center">
+                  <div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Kicker className="bg-white/10 text-glow-300 ring-white/20">Tinh thần 36</Kicker>
+                      <span className="rounded-full bg-flame-500/80 px-2.5 py-0.5 text-[10.5px] font-bold text-white uppercase tracking-wider backdrop-blur-xs">
+                        {motto.term}
+                      </span>
+                    </div>
+                    <h3 className="mt-4 text-balance-vn font-display text-2xl leading-tight font-extrabold sm:text-3xl lg:text-4xl">
+                      Châm ngôn &amp; Nghi thức thiêng liêng
+                    </h3>
+                    <blockquote className="mt-4 border-l-4 border-flame-500 pl-4 text-base font-bold italic text-glow-300 sm:text-lg">
+                      “{motto.slogan}”
+                    </blockquote>
+                    {motto.meaning && (
+                      <p className="mt-2.5 text-[13px] italic leading-relaxed text-glow-200/90">
+                        ✨ <strong>Thông điệp BCH:</strong> “{motto.meaning}”
+                      </p>
+                    )}
+                    <p className="mt-3 text-[13.5px] leading-relaxed text-white/85 sm:text-sm">
+                      ⭕ <strong>Nghi thức hô slogan:</strong> {ORG.sloganRitual}
+                    </p>
+                    <p className="mt-2 text-[13.5px] leading-relaxed text-white/85 sm:text-sm">
+                      🍚 <strong>Khẩu hiệu mời cơm truyền thống:</strong> “{ORG.mealCheer}”
+                    </p>
+                    <p className="mt-3 text-[13px] leading-relaxed text-white/75">
+                      🏛️ <strong>Tổ chức trực thuộc:</strong> {ORG.parentOrg} ({ORG.parentOrgMembersCount} đơn vị, Chủ tịch: {ORG.parentOrgPresident}).
+                    </p>
+                    <div className="mt-6 flex flex-wrap gap-3">
+                      <Button as="a" href="#contact" variant="flame">
+                        Gia nhập gia đình 36
+                        <Icon.arrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                      </Button>
+                      <Button as="a" href="#dance" variant="ghost" className="bg-white/10 text-white hover:bg-white/20">
+                        <Icon.mirror className="h-4 w-4" />
+                        4 Bài nhảy truyền thống
+                      </Button>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                    {[
+                      { n: "12/04/2008", l: "Ngày thành lập Ban liên lạc" },
+                      { n: "16 Khóa", l: "Thế hệ BCH (K44 – K60)" },
+                      { n: "20 Đơn vị", l: "Thuộc Hội ĐH Thanh Hóa" },
+                      { n: "4 Năm", l: "Vô địch Âm Vang Xứ Thanh" },
+                    ].map((x) => (
+                      <div
+                        key={x.l}
+                        className="rounded-2xl border border-white/15 bg-white/10 p-3.5 text-center backdrop-blur transition hover:-translate-y-1 hover:bg-white/20 sm:p-4"
+                      >
+                        <p className="font-display text-2xl font-black text-glow-300 sm:text-3xl">{x.n}</p>
+                        <p className="mt-1 text-[11.5px] leading-snug font-medium text-white/85 sm:text-xs">{x.l}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              ))}
-            </div>
-          </div>
-        </div>
+              </div>
+
+              {/* ============ BẢNG THÔNG BÁO NỘI QUY & QUY CHẾ HOẠT ĐỘNG MỚI NHẤT ============ */}
+              <div className="mt-14 overflow-hidden rounded-3xl border border-cobalt-200/80 bg-white p-6 shadow-soft sm:p-8 lg:mt-16 lg:p-10" data-reveal>
+                <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between border-b border-cobalt-100 pb-5">
+                  <div className="max-w-2xl space-y-2">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-flame-100 px-3 py-1 text-[11px] font-bold tracking-wider text-flame-800 uppercase">
+                        📜 Thông Báo Nội Quy &amp; Quy Chế
+                      </span>
+                      <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10.5px] font-bold text-emerald-800">
+                        {rules.effectiveDate}
+                      </span>
+                    </div>
+                    <h3 className="font-display text-xl font-black text-cobalt-950 sm:text-2xl">
+                      {rules.title}
+                    </h3>
+                    <p className="text-xs text-cobalt-600 sm:text-sm leading-relaxed">
+                      {rules.summary}
+                    </p>
+                  </div>
+
+                  <div className="flex flex-col items-start md:items-end gap-1 shrink-0">
+                    <span className="rounded-xl border border-cobalt-200 bg-cobalt-50 px-3 py-1.5 text-xs font-bold text-cobalt-800">
+                      🏛️ {rules.issuedBy}
+                    </span>
+                    <span className="text-[11px] text-cobalt-500">
+                      Cập nhật: {rules.updatedAt}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Danh sách các điều khoản nội quy */}
+                <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                  {rules.rules.map((item, idx) => (
+                    <div
+                      key={idx}
+                      className="group flex flex-col justify-between rounded-2xl border border-cobalt-100 bg-gradient-to-br from-cobalt-50/40 via-white to-tmu-50/20 p-4 transition-all duration-300 hover:-translate-y-1 hover:border-flame-300 hover:shadow-soft"
+                    >
+                      <div className="flex items-start gap-3">
+                        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-flame-500 text-xs font-black text-white shadow-2xs group-hover:bg-cobalt-950 transition-colors">
+                          {idx + 1}
+                        </span>
+                        <p className="text-xs font-semibold text-cobalt-900 leading-relaxed">
+                          {item}
+                        </p>
+                      </div>
+                      <div className="mt-3 flex items-center gap-1 pt-2 border-t border-cobalt-100/60 text-[10.5px] font-bold text-tmu-700">
+                        <span>✓</span>
+                        <span>Quy định bắt buộc đối với mọi TNV</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-cobalt-50/80 p-3.5 text-xs text-cobalt-700">
+                  <div className="flex items-center gap-2">
+                    <span className="text-base">🛡️</span>
+                    <span>
+                      Mọi thắc mắc hoặc đề xuất điều chỉnh nội quy, vui lòng liên hệ <strong>Đội Trưởng Đội SVTN</strong> hoặc <strong>Ban Chủ Nhiệm</strong>.
+                    </span>
+                  </div>
+                  <span className="font-bold text-flame-700">#KỷLuật #GắnKết #TinhThần36</span>
+                </div>
+              </div>
+            </>
+          );
+        })()}
       </div>
     </section>
   );

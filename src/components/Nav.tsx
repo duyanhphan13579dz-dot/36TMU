@@ -50,21 +50,14 @@ const MOBILE_TABS = [
   { id: "memories", label: "Kỷ niệm", icon: Icon.camera },
 ] as const;
 
-import AdminPanel from "@/components/AdminPanel";
-
 export default function Nav({
   active,
-  isAdmin,
-  onLoginAdmin,
-  onLogoutAdmin,
-  onToast,
-  onPostCreated,
 }: {
   active: NavId;
-  isAdmin: boolean;
-  onLoginAdmin: () => void;
-  onLogoutAdmin: () => void;
-  onToast: (msg: string) => void;
+  isAdmin?: boolean;
+  onLoginAdmin?: () => void;
+  onLogoutAdmin?: () => void;
+  onToast?: (msg: string) => void;
   onPostCreated?: () => void;
 }) {
   const [open, setOpen] = useState(false);
@@ -143,14 +136,6 @@ export default function Nav({
             </ul>
 
             <div className="flex items-center gap-2">
-              <AdminPanel
-                isAdmin={isAdmin}
-                onLogin={onLoginAdmin}
-                onLogout={onLogoutAdmin}
-                onToast={onToast}
-                onPostCreated={onPostCreated}
-              />
-
               <Button
                 as="a"
                 href="#contact"

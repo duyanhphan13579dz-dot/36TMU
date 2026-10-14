@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
-import { EVENT_FILTERS, PROGRAMS, YEARLY_TIMELINE, type Program } from "@/data/content";
+import { EVENT_FILTERS, YEARLY_TIMELINE, type Program } from "@/data/content";
 import { Button, Icon, Kicker, SectionHeading, Sheet } from "@/components/ui";
-import { getStoredAdminPosts } from "@/components/AdminPanel";
+import { getStoredAdminPosts, getAllPrograms } from "@/data/adminStore";
 import { cn } from "@/utils/cn";
 
 const STATUS_STYLE: Record<string, string> = {
@@ -16,6 +16,7 @@ export default function Events({ onToast }: { onToast: (msg: string) => void }) 
   const [current, setCurrent] = useState<Program | null>(null);
 
   const adminPosts = useMemo(() => getStoredAdminPosts(), []);
+  const basePrograms = useMemo(() => getAllPrograms(), []);
 
   const allPrograms = useMemo(() => {
     const adminPrograms: Program[] = adminPosts.map((p) => ({
@@ -38,8 +39,8 @@ export default function Events({ onToast }: { onToast: (msg: string) => void }) 
         { label: "Chuyên mục", value: p.category },
       ],
     }));
-    return [...adminPrograms, ...PROGRAMS];
-  }, [adminPosts]);
+    return [...adminPrograms, ...basePrograms];
+  }, [adminPosts, basePrograms]);
 
   const list = useMemo(
     () => (filter === "Tất cả" ? allPrograms : allPrograms.filter((p) => p.category === filter)),
@@ -65,7 +66,7 @@ export default function Events({ onToast }: { onToast: (msg: string) => void }) 
         {/* ===== Bộ lọc chuyên mục ===== */}
         <div className="scrollbar-none -mx-4 mt-7 flex snap-x gap-2 overflow-x-auto px-4 pb-1 lg:mx-0 lg:px-0">
           {EVENT_FILTERS.map((f) => {
-            const count = f === "Tất cả" ? PROGRAMS.length : PROGRAMS.filter((p) => p.category === f).length;
+            const count = f === "Tất cả" ? allPrograms.length : allPrograms.filter((p) => p.category === f).length;
             const active = filter === f;
             return (
               <button

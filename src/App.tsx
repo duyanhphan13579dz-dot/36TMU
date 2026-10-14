@@ -6,8 +6,10 @@ import Events from "@/components/Events";
 import DanceLab from "@/components/DanceLab";
 import Gallery from "@/components/Gallery";
 import Contact, { Footer } from "@/components/Contact";
+import AdminPanel from "@/components/AdminPanel";
 import { Toast } from "@/components/ui";
-import { NAV_ITEMS, ORG, type NavId } from "@/data/content";
+import { NAV_ITEMS, type NavId } from "@/data/content";
+import { getStoredAdminMotto } from "@/data/adminStore";
 
 const SECTION_IDS: NavId[] = NAV_ITEMS.map((n) => n.id);
 
@@ -64,7 +66,14 @@ export default function App() {
   }, []);
 
   const [isAdmin, setIsAdmin] = useState(false);
-  const [postsVersion, setPostsVersion] = useState(0);
+  const [dataVersion, setDataVersion] = useState(0);
+
+  // Lắng nghe sự kiện đồng bộ dữ liệu admin trên toàn website
+  useEffect(() => {
+    const handleDataUpdated = () => setDataVersion((v) => v + 1);
+    window.addEventListener("bllsv_data_updated", handleDataUpdated);
+    return () => window.removeEventListener("bllsv_data_updated", handleDataUpdated);
+  }, []);
 
   return (
     <div className="min-h-dvh overflow-x-hidden bg-sky-paper">
@@ -73,17 +82,27 @@ export default function App() {
         <div className="sticky top-0 z-[120] flex items-center justify-between gap-3 bg-red-600 px-4 py-2 text-xs font-bold text-white shadow-lift">
           <div className="flex items-center gap-2">
             <span className="animate-pulse text-base">⚙️</span>
-            <span>BẢN QUẢN TRỊ VIÊN (ADMIN MODE): Bạn có quyền đăng bài viết mới, duyệt/xóa ghi chú TNV và cập nhật website.</span>
+            <span>
+              BẢN QUẢN TRỊ VIÊN (ADMIN MODE): Bạn có quyền đăng thông báo mới, cập nhật chương trình, đội ngũ BCH, châm ngôn và nội quy mới.
+            </span>
           </div>
-          <button
-            onClick={() => {
-              setIsAdmin(false);
-              pushToast("Đã thoát chế độ Quản trị viên");
-            }}
-            className="rounded-lg bg-white/20 px-2.5 py-1 text-[11px] font-bold text-white transition hover:bg-white/30 shrink-0"
-          >
-            Thoát Admin
-          </button>
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent("bllsv_open_admin"))}
+              className="rounded-lg bg-white px-2.5 py-1 text-[11px] font-bold text-red-700 shadow-xs transition hover:bg-white/90"
+            >
+              Mở Bảng Điều Khiển
+            </button>
+            <button
+              onClick={() => {
+                setIsAdmin(false);
+                pushToast("Đã thoát chế độ Quản trị viên");
+              }}
+              className="rounded-lg bg-white/20 px-2.5 py-1 text-[11px] font-bold text-white transition hover:bg-white/30"
+            >
+              Thoát Admin
+            </button>
+          </div>
         </div>
       )}
 
@@ -93,41 +112,46 @@ export default function App() {
       >
         Bỏ qua tới nội dung chính
       </a>
-      <Nav
-        active={active}
-        isAdmin={isAdmin}
-        onLoginAdmin={() => setIsAdmin(true)}
-        onLogoutAdmin={() => setIsAdmin(false)}
-        onToast={pushToast}
-        onPostCreated={() => setPostsVersion((v) => v + 1)}
-      />
+
+      <Nav active={active} />
 
       <main>
         <Hero />
 
-        {/* Dải ranh giới trang trí */}
-        <Divider />
+        {/* Dải ranh giới trang trí với Slogan / Châm ngôn cập nhật mới nhất của BCH */}
+        <Divider key={`divider-${dataVersion}`} />
 
-        <About />
-        <Events key={postsVersion} onToast={pushToast} />
+        <About key={`about-${dataVersion}`} />
+        <Events key={`events-${dataVersion}`} onToast={pushToast} />
         <DanceLab onToast={pushToast} />
-        <Gallery onToast={pushToast} />
-        <Contact isAdmin={isAdmin} onToast={pushToast} />
+        <Gallery key={`gallery-${dataVersion}`} onToast={pushToast} />
+        <Contact key={`contact-${dataVersion}`} isAdmin={isAdmin} onToast={pushToast} />
       </main>
 
-      <Footer />
+      <Footer key={`footer-${dataVersion}`} />
+      
+      {/* Cổng Quản Trị Viên thu nhỏ ở góc màn hình */}
+      <AdminPanel
+        isAdmin={isAdmin}
+        onLogin={() => setIsAdmin(true)}
+        onLogout={() => setIsAdmin(false)}
+        onToast={pushToast}
+        onPostCreated={() => setDataVersion((v) => v + 1)}
+      />
+
       <Toast message={toast} />
     </div>
   );
 }
 
 function Divider() {
+  const motto = getStoredAdminMotto();
   return (
     <div className="relative border-y border-cobalt-100 bg-white/60 py-3">
       <div className="mx-auto flex w-full max-w-[1400px] items-center gap-3 px-4 sm:px-6">
         <span className="hidden h-px flex-1 bg-gradient-to-r from-transparent to-tmu-200 sm:block" />
         <p className="text-center text-[11px] font-bold tracking-[0.2em] text-tmu-700 uppercase sm:text-[12.5px]">
-          {ORG.slogan}
+          {motto.slogan}
         </p>
         <span className="hidden h-px flex-1 bg-gradient-to-l from-transparent to-tmu-200 sm:block" />
       </div>

@@ -1,6 +1,7 @@
 import { useMemo, useRef, useState } from "react";
-import { CONFESSIONS, LEADERSHIP_HISTORY, MEMORIES, type Confession } from "@/data/content";
+import { CONFESSIONS, MEMORIES, type Confession } from "@/data/content";
 import { Button, Icon, Kicker, SectionHeading, Sheet } from "@/components/ui";
+import { getAllLeaders } from "@/data/adminStore";
 import { cn } from "@/utils/cn";
 
 const TONES: Record<Confession["tone"], string> = {
@@ -22,16 +23,18 @@ export default function Gallery({ onToast }: { onToast: (msg: string) => void })
   const [leaderSearch, setLeaderSearch] = useState("");
   const [selectedKhoa, setSelectedKhoa] = useState<string>("all");
 
+  const allLeaders = useMemo(() => getAllLeaders(), []);
+
   const khoasList = useMemo(() => {
     const list: string[] = [];
-    LEADERSHIP_HISTORY.forEach((l) => {
+    allLeaders.forEach((l) => {
       if (!list.includes(l.khoa)) list.push(l.khoa);
     });
     return list;
-  }, []);
+  }, [allLeaders]);
 
   const filteredLeaders = useMemo(() => {
-    return LEADERSHIP_HISTORY.filter((l) => {
+    return allLeaders.filter((l) => {
       const matchKhoa = selectedKhoa === "all" || l.khoa === selectedKhoa;
       const matchSearch =
         !leaderSearch ||
@@ -41,7 +44,7 @@ export default function Gallery({ onToast }: { onToast: (msg: string) => void })
         l.term.includes(leaderSearch);
       return matchKhoa && matchSearch;
     });
-  }, [selectedKhoa, leaderSearch]);
+  }, [allLeaders, selectedKhoa, leaderSearch]);
 
   const onTrackScroll = () => {
     const el = trackRef.current;
@@ -176,7 +179,7 @@ export default function Gallery({ onToast }: { onToast: (msg: string) => void })
             </div>
             <div className="text-right">
               <span className="inline-block rounded-2xl bg-cobalt-50 px-4 py-2 text-[12px] font-bold text-cobalt-800">
-                Tổng cộng {LEADERSHIP_HISTORY.length} anh chị BCH
+                Tổng cộng {allLeaders.length} anh chị BCH
               </span>
             </div>
           </div>
