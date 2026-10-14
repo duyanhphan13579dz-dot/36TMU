@@ -83,7 +83,7 @@ export function SectionHeading({
 type BtnProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
   React.AnchorHTMLAttributes<HTMLAnchorElement> & {
     variant?: "primary" | "ghost" | "flame" | "outline" | "soft";
-    size?: "md" | "lg";
+    size?: "sm" | "md" | "lg";
     as?: "button" | "a";
     href?: string;
   };
@@ -99,6 +99,7 @@ export function Button({
   const base =
     "group relative inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl px-5 text-sm font-semibold transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-tmu-500 active:scale-[0.97] sm:min-h-12";
   const sizes = {
+    sm: "min-h-9 sm:min-h-9 px-3.5 py-1.5 text-xs rounded-xl",
     md: "px-5",
     lg: "px-6 text-base sm:px-7 sm:min-h-14",
   };

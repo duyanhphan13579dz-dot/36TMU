@@ -1,4 +1,5 @@
 import TnvNoteBoard from "@/components/TnvNoteBoard";
+import { LogoBadge } from "@/components/Logo";
 import { ORG } from "@/data/content";
 import { Button, Icon, Kicker, SectionHeading } from "@/components/ui";
 import { cn } from "@/utils/cn";
