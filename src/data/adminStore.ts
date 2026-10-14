@@ -54,15 +54,41 @@ export type AdminRule = {
   updatedAt: string;
 };
 
+export type AdminContact = {
+  email: string;
+  phone: string;
+  address: string;
+  fanpage: string;
+  group: string;
+  tiktok: string;
+  scheduleInfo: string;
+  updatedAt: string;
+};
+
 /* ==========================================================================
    2. STORAGE KEYS & DEFAULTS
    ========================================================================== */
 
+const PIN_KEY = "bllsv_admin_pin";
+export const DEFAULT_PIN = "36tmu";
+
+const CONTACT_KEY = "bllsv_admin_contact";
 const POSTS_KEY = "bllsv_admin_posts";
 const PROGRAMS_KEY = "bllsv_admin_programs";
 const LEADERS_KEY = "bllsv_admin_leaders";
 const MOTTO_KEY = "bllsv_admin_motto";
 const RULES_KEY = "bllsv_admin_rules";
+
+export const DEFAULT_CONTACT: AdminContact = {
+  email: ORG.email,
+  phone: ORG.phone,
+  address: ORG.address,
+  fanpage: ORG.fanpage,
+  group: ORG.group,
+  tiktok: ORG.tiktok,
+  scheduleInfo: "19:00 – 21:00 tối thứ Ba hàng tuần",
+  updatedAt: "12/04/2026",
+};
 
 export const DEFAULT_MOTTO: AdminMotto = {
   slogan: ORG.slogan,
@@ -211,5 +237,93 @@ export function saveStoredAdminRules(rules: AdminRule) {
   try {
     localStorage.setItem(RULES_KEY, JSON.stringify(rules));
     window.dispatchEvent(new CustomEvent("bllsv_data_updated", { detail: { type: "rules" } }));
+  } catch {}
+}
+
+// --- PIN / MẬT KHẨU QUẢN TRỊ ---
+export function getStoredAdminPin(): string {
+  try {
+    return localStorage.getItem(PIN_KEY) || DEFAULT_PIN;
+  } catch {
+    return DEFAULT_PIN;
+  }
+}
+
+export function saveStoredAdminPin(newPin: string): boolean {
+  try {
+    const trimmed = newPin.trim();
+    if (!trimmed || trimmed.length < 3) return false;
+    localStorage.setItem(PIN_KEY, trimmed);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export function resetStoredAdminPin(): void {
+  try {
+    localStorage.removeItem(PIN_KEY);
+  } catch {}
+}
+
+// --- CONTACT / THÔNG TIN LIÊN HỆ & KÊNH TRUYỀN THÔNG ---
+export function getStoredAdminContact(): AdminContact {
+  try {
+    const raw = localStorage.getItem(CONTACT_KEY);
+    if (!raw) return DEFAULT_CONTACT;
+    const parsed = JSON.parse(raw);
+    return parsed?.email ? { ...DEFAULT_CONTACT, ...parsed } : DEFAULT_CONTACT;
+  } catch {
+    return DEFAULT_CONTACT;
+  }
+}
+
+export function saveStoredAdminContact(contact: AdminContact): void {
+  try {
+    localStorage.setItem(CONTACT_KEY, JSON.stringify(contact));
+    window.dispatchEvent(new CustomEvent("bllsv_data_updated", { detail: { type: "contact" } }));
+  } catch {}
+}
+
+// --- BACKUP & RESTORE DỮ LIỆU ---
+export function exportAllAdminData(): string {
+  const data = {
+    version: "1.0",
+    appName: "BLLSVTMU-Manager",
+    exportedAt: new Date().toLocaleString("vi-VN"),
+    posts: getStoredAdminPosts(),
+    programs: getStoredAdminPrograms(),
+    leaders: getStoredAdminLeaders(),
+    motto: getStoredAdminMotto(),
+    rules: getStoredAdminRules(),
+    contact: getStoredAdminContact(),
+  };
+  return JSON.stringify(data, null, 2);
+}
+
+export function importAllAdminData(jsonStr: string): boolean {
+  try {
+    const data = JSON.parse(jsonStr);
+    if (Array.isArray(data.posts)) saveStoredAdminPosts(data.posts);
+    if (Array.isArray(data.programs)) saveStoredAdminPrograms(data.programs);
+    if (Array.isArray(data.leaders)) saveStoredAdminLeaders(data.leaders);
+    if (data.motto?.slogan) saveStoredAdminMotto(data.motto);
+    if (data.rules?.rules) saveStoredAdminRules(data.rules);
+    if (data.contact?.email) saveStoredAdminContact(data.contact);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export function resetAllAdminDataToDefaults(): void {
+  try {
+    localStorage.removeItem(POSTS_KEY);
+    localStorage.removeItem(PROGRAMS_KEY);
+    localStorage.removeItem(LEADERS_KEY);
+    localStorage.removeItem(MOTTO_KEY);
+    localStorage.removeItem(RULES_KEY);
+    localStorage.removeItem(CONTACT_KEY);
+    window.dispatchEvent(new CustomEvent("bllsv_data_updated", { detail: { type: "all" } }));
   } catch {}
 }

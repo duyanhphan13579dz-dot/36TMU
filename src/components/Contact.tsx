@@ -1,8 +1,9 @@
+import { useMemo } from "react";
 import TnvNoteBoard from "@/components/TnvNoteBoard";
 import { LogoBadge } from "@/components/Logo";
 import { ORG } from "@/data/content";
 import { Button, Icon, Kicker, SectionHeading } from "@/components/ui";
-import { getStoredAdminMotto } from "@/data/adminStore";
+import { getStoredAdminMotto, getStoredAdminContact } from "@/data/adminStore";
 import { cn } from "@/utils/cn";
 
 export default function Contact({
@@ -12,6 +13,7 @@ export default function Contact({
   isAdmin?: boolean;
   onToast: (msg: string) => void;
 }) {
+  const contact = useMemo(() => getStoredAdminContact(), []);
   return (
     <section id="contact" className="relative overflow-hidden py-16 sm:py-20 lg:py-28">
       <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-tmu-50/70 to-white" />
@@ -40,13 +42,13 @@ export default function Contact({
               <h3 className="mt-4 font-display text-xl leading-snug font-extrabold sm:text-2xl">
                 Trường Đại học Thương Mại
               </h3>
-              <p className="mt-1.5 text-[14px] text-white/85">{ORG.address}</p>
+              <p className="mt-1.5 text-[14px] text-white/85">{contact.address}</p>
 
               <div className="mt-5 space-y-3">
                 {[
-                  { icon: <Icon.mail className="h-4 w-4" />, label: ORG.email, sub: "Email nhà chung" },
-                  { icon: <Icon.chat className="h-4 w-4" />, label: ORG.phone, sub: "Hotline Ban Nhân sự" },
-                  { icon: <Icon.calendar className="h-4 w-4" />, label: "19:00 – 21:00 tối thứ Ba", sub: "Sinh hoạt & tập bài nhảy" },
+                  { icon: <Icon.mail className="h-4 w-4" />, label: contact.email, sub: "Email nhà chung" },
+                  { icon: <Icon.chat className="h-4 w-4" />, label: contact.phone, sub: "Hotline Ban Nhân sự" },
+                  { icon: <Icon.calendar className="h-4 w-4" />, label: contact.scheduleInfo || "19:00 – 21:00 tối thứ Ba", sub: "Sinh hoạt & tập bài nhảy" },
                 ].map((row) => (
                   <div key={row.sub} className="flex items-center gap-3 rounded-2xl bg-white/10 p-3 backdrop-blur transition hover:bg-white/20">
                     <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-glow-400/20 text-glow-300">
@@ -156,38 +158,45 @@ export function Footer() {
 
           <div>
             <p className="text-[11px] font-bold tracking-[0.2em] text-glow-300 uppercase">Liên hệ</p>
-            <ul className="mt-4 space-y-3 text-[13.5px] text-white/85">
-              <li className="flex items-start gap-2.5">
-                <Icon.pin className="mt-0.5 h-4 w-4 shrink-0 text-flame-400" />
-                {ORG.address}
-              </li>
-              <li className="flex items-start gap-2.5">
-                <Icon.mail className="mt-0.5 h-4 w-4 shrink-0 text-flame-400" />
-                {ORG.email}
-              </li>
-              <li className="flex items-start gap-2.5">
-                <Icon.chat className="mt-0.5 h-4 w-4 shrink-0 text-flame-400" />
-                {ORG.phone}
-              </li>
-            </ul>
-            <div className="mt-5 flex gap-2">
-              {[
-                { href: ORG.fanpage, icon: <Icon.facebook className="h-4 w-4" />, label: "Fanpage" },
-                { href: ORG.tiktok, icon: <Icon.tiktok className="h-4 w-4" />, label: "TikTok" },
-                { href: ORG.group, icon: <Icon.users className="h-4 w-4" />, label: "Group" },
-              ].map((s) => (
-                <a
-                  key={s.label}
-                  href={s.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label={s.label}
-                  className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/10 text-white transition hover:-translate-y-1 hover:bg-flame-500"
-                >
-                  {s.icon}
-                </a>
-              ))}
-            </div>
+            {(() => {
+              const contact = getStoredAdminContact();
+              return (
+                <>
+                  <ul className="mt-4 space-y-3 text-[13.5px] text-white/85">
+                    <li className="flex items-start gap-2.5">
+                      <Icon.pin className="mt-0.5 h-4 w-4 shrink-0 text-flame-400" />
+                      {contact.address}
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <Icon.mail className="mt-0.5 h-4 w-4 shrink-0 text-flame-400" />
+                      {contact.email}
+                    </li>
+                    <li className="flex items-start gap-2.5">
+                      <Icon.chat className="mt-0.5 h-4 w-4 shrink-0 text-flame-400" />
+                      {contact.phone}
+                    </li>
+                  </ul>
+                  <div className="mt-5 flex gap-2">
+                    {[
+                      { href: contact.fanpage, icon: <Icon.facebook className="h-4 w-4" />, label: "Fanpage" },
+                      { href: contact.tiktok, icon: <Icon.tiktok className="h-4 w-4" />, label: "TikTok" },
+                      { href: contact.group, icon: <Icon.users className="h-4 w-4" />, label: "Group" },
+                    ].map((s) => (
+                      <a
+                        key={s.label}
+                        href={s.href}
+                        target="_blank"
+                        rel="noreferrer"
+                        aria-label={s.label}
+                        className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/10 text-white transition hover:-translate-y-1 hover:bg-flame-500"
+                      >
+                        {s.icon}
+                      </a>
+                    ))}
+                  </div>
+                </>
+              );
+            })()}
           </div>
         </div>
 
