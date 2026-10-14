@@ -24,7 +24,6 @@ import {
   DEFAULT_MOTTO,
   DEFAULT_RULES,
   DEFAULT_CONTACT,
-  DEFAULT_PIN,
   type AdminPost,
   type AdminProgram,
   type AdminLeader,
