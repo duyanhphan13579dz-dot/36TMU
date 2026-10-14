@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, useRef } from "react";
+import React, { useEffect, useState, useMemo, useRef } from "react";
 import { cn } from "@/utils/cn";
 import { Button } from "@/components/ui";
 import { getStoredNotes, saveStoredNotes, type TnvNote } from "@/components/TnvNoteBoard";
@@ -43,6 +43,17 @@ import {
   type DbAdmin,
   type DbAuditLog,
 } from "@/lib/db";
+
+import AdminPostsTab from "./admin/AdminPostsTab";
+import AdminProgramsTab from "./admin/AdminProgramsTab";
+import AdminLeadersTab from "./admin/AdminLeadersTab";
+import AdminMottoTab from "./admin/AdminMottoTab";
+import AdminRulesTab from "./admin/AdminRulesTab";
+import AdminNotesTab from "./admin/AdminNotesTab";
+import AdminContactTab from "./admin/AdminContactTab";
+import AdminUsersTab from "./admin/AdminUsersTab";
+import AdminAuditTab from "./admin/AdminAuditTab";
+import AdminSettingsTab from "./admin/AdminSettingsTab";
 
 export { getStoredAdminPosts, saveStoredAdminPosts, type AdminPost };
 
@@ -231,9 +242,7 @@ export default function AdminPanel({
     }
   };
 
-  // =========================================================================
-  // 1. QUẢN LÝ BÀI VIẾT / POSTS
-  // =========================================================================
+  // --- POSTS HANDLERS ---
   const handleStartEditPost = (p: AdminPost) => {
     setEditingPostId(p.id);
     setPostTitle(p.title);
@@ -257,7 +266,6 @@ export default function AdminPanel({
     if (!postTitle.trim() || !postSummary.trim()) return;
 
     if (editingPostId) {
-      // Cập nhật bài viết có sẵn
       const next = posts.map((p) =>
         p.id === editingPostId
           ? {
@@ -276,7 +284,6 @@ export default function AdminPanel({
       handleCancelEditPost();
       onToast("Đã cập nhật bài viết thành công! ✨");
     } else {
-      // Tạo bài viết mới
       const newPost: AdminPost = {
         id: "post-" + Date.now(),
         title: postTitle.trim(),
@@ -316,9 +323,7 @@ export default function AdminPanel({
     onPostCreated?.();
   };
 
-  // =========================================================================
-  // 2. QUẢN LÝ CHƯƠNG TRÌNH / PROGRAMS
-  // =========================================================================
+  // --- PROGRAMS HANDLERS ---
   const handleStartEditProgram = (p: AdminProgram) => {
     setEditingProgId(p.id);
     setProgTitle(p.title);
@@ -343,7 +348,6 @@ export default function AdminPanel({
     if (!progTitle.trim() || !progExcerpt.trim()) return;
 
     if (editingProgId) {
-      // Cập nhật chương trình có sẵn
       const next = programs.map((p) =>
         p.id === editingProgId
           ? {
@@ -363,7 +367,6 @@ export default function AdminPanel({
       handleCancelEditProgram();
       onToast("Đã cập nhật chương trình thành công! 🎯");
     } else {
-      // Thêm chương trình mới
       const newProg: AdminProgram = {
         id: "prog-" + Date.now(),
         title: progTitle.trim(),
@@ -411,9 +414,7 @@ export default function AdminPanel({
     onPostCreated?.();
   };
 
-  // =========================================================================
-  // 3. QUẢN LÝ NHÂN SỰ BAN CHẤP HÀNH
-  // =========================================================================
+  // --- LEADERS HANDLERS ---
   const handleStartEditLeader = (l: AdminLeader) => {
     setEditingLeadId(l.id);
     setLeadKhoa(l.khoa);
@@ -435,7 +436,6 @@ export default function AdminPanel({
     if (!leadName.trim() || !leadRole.trim()) return;
 
     if (editingLeadId) {
-      // Cập nhật
       const next = leaders.map((l) =>
         l.id === editingLeadId
           ? {
@@ -454,7 +454,6 @@ export default function AdminPanel({
       handleCancelEditLeader();
       onToast("Đã cập nhật thông tin thành viên BCH! 🤝");
     } else {
-      // Thêm mới
       const newLeader: AdminLeader = {
         id: "leader-" + Date.now(),
         khoa: leadKhoa.trim().toUpperCase(),
@@ -484,9 +483,7 @@ export default function AdminPanel({
     onPostCreated?.();
   };
 
-  // =========================================================================
-  // 4. CHÂM NGÔN & KHẨU HIỆU
-  // =========================================================================
+  // --- MOTTO HANDLER ---
   const handleSaveMotto = (e: React.FormEvent) => {
     e.preventDefault();
     const nextMotto: AdminMotto = {
@@ -499,9 +496,7 @@ export default function AdminPanel({
     onPostCreated?.();
   };
 
-  // =========================================================================
-  // 5. NỘI QUY NHÀ CHUNG
-  // =========================================================================
+  // --- RULES HANDLERS ---
   const handleAddRuleItem = () => {
     if (!newRuleItem.trim()) return;
     const nextRules = [...rulesData.rules, newRuleItem.trim()];
@@ -548,9 +543,7 @@ export default function AdminPanel({
     onPostCreated?.();
   };
 
-  // =========================================================================
-  // 6. GHI CHÚ TNV
-  // =========================================================================
+  // --- NOTES HANDLERS ---
   const handleDeleteNote = (id: string) => {
     const next = notes.filter((n) => n.id !== id);
     setNotes(next);
@@ -567,9 +560,7 @@ export default function AdminPanel({
     onPostCreated?.();
   };
 
-  // =========================================================================
-  // 7. THÔNG TIN LIÊN HỆ
-  // =========================================================================
+  // --- CONTACT HANDLER ---
   const handleSaveContact = (e: React.FormEvent) => {
     e.preventDefault();
     const next = { ...contactData, updatedAt: new Date().toLocaleDateString("vi-VN") };
@@ -579,9 +570,7 @@ export default function AdminPanel({
     onPostCreated?.();
   };
 
-  // =========================================================================
-  // 8. ĐỔI MẬT KHẨU & SAO LƯU DỮ LIỆU
-  // =========================================================================
+  // --- SETTINGS & AUTH HANDLERS ---
   const handleChangePassword = (e: React.FormEvent) => {
     e.preventDefault();
     const currentPin = getStoredAdminPin();
@@ -811,7 +800,7 @@ export default function AdminPanel({
 
   return (
     <>
-      {/* NÚT QUYỀN ADMIN THU NHỎ KÍN ĐÁO Ở GÓC MÀN HÌNH (GÓC DƯỚI PHẢI) */}
+      {/* NÚT QUYỀN ADMIN THU NHỎ KÍN ĐÁO Ở GÓC MÀN HÌNH */}
       <div className="fixed bottom-3 right-3 z-40 sm:bottom-4 sm:right-4 print:hidden">
         <button
           onClick={() => setShowModal(true)}
@@ -1002,1420 +991,184 @@ export default function AdminPanel({
                   ))}
                 </div>
 
-                {/* Khung nội dung theo từng Tab (có scroll) */}
+                {/* Khung nội dung theo từng Tab */}
                 <div className="flex-1 overflow-y-auto p-4 sm:p-6">
-                  {/* TAB 1: BÀI VIẾT / THÔNG BÁO MỚI NHẤT */}
                   {activeTab === "posts" && (
-                    <div className="space-y-6">
-                      <div className="rounded-2xl border border-cobalt-100 bg-cobalt-50/40 p-4 sm:p-5">
-                        <div className="flex items-center justify-between">
-                          <h4 className="font-display text-sm font-extrabold text-cobalt-950 sm:text-base">
-                            {editingPostId ? "✏️ Chỉnh Sửa Bài Viết / Thông Báo" : "📢 Đăng Thông Báo / Tin Tức Mới Lên Trang Chủ"}
-                          </h4>
-                          {editingPostId && (
-                            <button
-                              type="button"
-                              onClick={handleCancelEditPost}
-                              className="rounded-lg bg-cobalt-200 px-2 py-1 text-[11px] font-bold text-cobalt-800 hover:bg-cobalt-300"
-                            >
-                              Hủy sửa
-                            </button>
-                          )}
-                        </div>
-                        <p className="mt-0.5 text-xs text-cobalt-600">
-                          Bài viết sẽ xuất hiện ngay ở phần Sự kiện &amp; Tin tức của website.
-                        </p>
-
-                        <form onSubmit={handleSavePost} className="mt-4 space-y-3">
-                          <div>
-                            <label className="mb-1 block text-xs font-bold text-cobalt-800">Tiêu đề thông báo *</label>
-                            <input
-                              required
-                              value={postTitle}
-                              onChange={(e) => setPostTitle(e.target.value)}
-                              placeholder="VD: Thông báo lịch sinh hoạt chào đón tân sinh viên K60..."
-                              className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
-                            />
-                          </div>
-
-                          <div className="grid gap-3 sm:grid-cols-2">
-                            <div>
-                              <label className="mb-1 block text-xs font-bold text-cobalt-800">Chuyên mục</label>
-                              <select
-                                value={postCategory}
-                                onChange={(e) => setPostCategory(e.target.value)}
-                                className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
-                              >
-                                <option value="Thông báo khẩn">Thông báo khẩn</option>
-                                <option value="Hoạt động tình nguyện">Hoạt động tình nguyện</option>
-                                <option value="Chiến dịch Mùa Hè Xanh">Chiến dịch Mùa Hè Xanh</option>
-                                <option value="Chiến dịch Đông Ấm">Chiến dịch Đông Ấm</option>
-                                <option value="Âm Vang Xứ Thanh">Âm Vang Xứ Thanh</option>
-                                <option value="Tuyển quân & Đào tạo">Tuyển quân &amp; Đào tạo</option>
-                              </select>
-                            </div>
-                            <div>
-                              <label className="mb-1 block text-xs font-bold text-cobalt-800">Người / Đơn vị phát ngôn</label>
-                              <input
-                                value={postAuthor}
-                                onChange={(e) => setPostAuthor(e.target.value)}
-                                placeholder="Ban Chủ nhiệm BLLSV TMU"
-                                className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
-                              />
-                            </div>
-                          </div>
-
-                          <div>
-                            <label className="mb-1 block text-xs font-bold text-cobalt-800">Tóm tắt thông báo *</label>
-                            <textarea
-                              required
-                              rows={2}
-                              value={postSummary}
-                              onChange={(e) => setPostSummary(e.target.value)}
-                              placeholder="Tóm tắt ngắn gọn 1-2 câu để người xem nắm được ý chính..."
-                              className="w-full resize-none rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs text-cobalt-950 outline-none focus:border-flame-500"
-                            />
-                          </div>
-
-                          <div>
-                            <label className="mb-1 block text-xs font-bold text-cobalt-800">Nội dung chi tiết</label>
-                            <textarea
-                              rows={3}
-                              value={postContent}
-                              onChange={(e) => setPostContent(e.target.value)}
-                              placeholder="Chi tiết địa điểm, thời gian, yêu cầu, danh sách tập trung..."
-                              className="w-full resize-none rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs text-cobalt-950 outline-none focus:border-flame-500"
-                            />
-                          </div>
-
-                          <div>
-                            <label className="mb-1 block text-xs font-bold text-cobalt-800">Link hình ảnh minh họa (URL)</label>
-                            <input
-                              value={postImage}
-                              onChange={(e) => setPostImage(e.target.value)}
-                              placeholder="https://... hoặc để trống nếu dùng ảnh mặc định"
-                              className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs text-cobalt-950 outline-none focus:border-flame-500"
-                            />
-                          </div>
-
-                          <div className="flex justify-end gap-2 pt-2">
-                            {editingPostId && (
-                              <button
-                                type="button"
-                                onClick={handleCancelEditPost}
-                                className="rounded-xl border border-cobalt-200 bg-white px-4 py-2 text-xs font-bold text-cobalt-700 hover:bg-cobalt-50"
-                              >
-                                Hủy sửa
-                              </button>
-                            )}
-                            <Button variant="flame" type="submit">
-                              {editingPostId ? "💾 Cập nhật bài viết" : "📢 Đăng thông báo lên web ngay"}
-                            </Button>
-                          </div>
-                        </form>
-                      </div>
-
-                      {/* Danh sách thông báo đã đăng */}
-                      <div>
-                        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                          <h4 className="font-display text-sm font-bold text-cobalt-900">
-                            Các bài đăng / thông báo đã phát hành ({posts.length})
-                          </h4>
-                          <input
-                            type="text"
-                            value={searchPost}
-                            onChange={(e) => setSearchPost(e.target.value)}
-                            placeholder="🔍 Tìm bài viết theo tiêu đề..."
-                            className="rounded-xl border border-cobalt-200 bg-white px-3 py-1.5 text-xs text-cobalt-950 outline-none focus:border-flame-500 sm:w-64"
-                          />
-                        </div>
-
-                        <div className="mt-3 space-y-2.5">
-                          {filteredPosts.length === 0 ? (
-                            <p className="rounded-xl border border-dashed border-cobalt-200 p-6 text-center text-xs text-cobalt-500">
-                              {searchPost ? "Không tìm thấy bài viết nào phù hợp từ khóa tìm kiếm." : "Chưa có bài đăng tùy chỉnh nào từ Admin."}
-                            </p>
-                          ) : (
-                            filteredPosts.map((p) => (
-                              <div
-                                key={p.id}
-                                className={cn(
-                                  "flex items-start justify-between gap-3 rounded-2xl border p-3.5 shadow-2xs transition",
-                                  p.pinned ? "border-amber-300 bg-amber-50/40" : "border-cobalt-100 bg-white"
-                                )}
-                              >
-                                <div className="min-w-0 flex-1">
-                                  <div className="flex flex-wrap items-center gap-2">
-                                    <span className="rounded bg-flame-100 px-2 py-0.5 text-[10px] font-bold text-flame-700">
-                                      {p.category}
-                                    </span>
-                                    {p.pinned && (
-                                      <span className="rounded bg-amber-500 px-1.5 py-0.5 text-[9.5px] font-bold text-white">
-                                        📌 Đã ghim
-                                      </span>
-                                    )}
-                                    <span className="text-[11px] text-cobalt-500">{p.createdAt}</span>
-                                    <span className="text-[11px] font-medium text-cobalt-700">bởi {p.author}</span>
-                                  </div>
-                                  <h5 className="mt-1 font-display text-sm font-bold text-cobalt-950">{p.title}</h5>
-                                  <p className="mt-0.5 text-xs text-cobalt-700 line-clamp-2">{p.summary}</p>
-                                </div>
-                                <div className="flex shrink-0 items-center gap-1.5">
-                                  <button
-                                    onClick={() => handleTogglePinPost(p.id)}
-                                    className="rounded-lg border border-cobalt-200 bg-white p-1.5 text-xs hover:bg-amber-50"
-                                    title={p.pinned ? "Bỏ ghim" : "Ghim lên đầu"}
-                                  >
-                                    📌
-                                  </button>
-                                  <button
-                                    onClick={() => handleStartEditPost(p)}
-                                    className="rounded-lg border border-cobalt-200 bg-white p-1.5 text-xs font-bold text-cobalt-700 hover:bg-cobalt-50"
-                                    title="Chỉnh sửa bài viết"
-                                  >
-                                    ✏️ Sửa
-                                  </button>
-                                  <button
-                                    onClick={() => handleDeletePost(p.id)}
-                                    className="rounded-lg border border-red-200 bg-red-50 p-1.5 text-xs font-bold text-red-600 hover:bg-red-100"
-                                    title="Xóa bài viết"
-                                  >
-                                    🗑️ Xóa
-                                  </button>
-                                </div>
-                              </div>
-                            ))
-                          )}
-                        </div>
-                      </div>
-                    </div>
+                    <AdminPostsTab
+                      posts={posts}
+                      filteredPosts={filteredPosts}
+                      searchPost={searchPost}
+                      onSearchChange={setSearchPost}
+                      editingPostId={editingPostId}
+                      postTitle={postTitle}
+                      onTitleChange={setPostTitle}
+                      postCategory={postCategory}
+                      onCategoryChange={setPostCategory}
+                      postAuthor={postAuthor}
+                      onAuthorChange={setPostAuthor}
+                      postSummary={postSummary}
+                      onSummaryChange={setPostSummary}
+                      postContent={postContent}
+                      onContentChange={setPostContent}
+                      postImage={postImage}
+                      onImageChange={setPostImage}
+                      onSavePost={handleSavePost}
+                      onStartEditPost={handleStartEditPost}
+                      onCancelEditPost={handleCancelEditPost}
+                      onDeletePost={handleDeletePost}
+                      onTogglePinPost={handleTogglePinPost}
+                    />
                   )}
 
-                  {/* TAB 2: CHƯƠNG TRÌNH & SỰ KIỆN */}
                   {activeTab === "programs" && (
-                    <div className="space-y-6">
-                      <div className="rounded-2xl border border-cobalt-100 bg-cobalt-50/40 p-4 sm:p-5">
-                        <div className="flex items-center justify-between">
-                          <h4 className="font-display text-sm font-extrabold text-cobalt-950 sm:text-base">
-                            {editingProgId ? "✏️ Chỉnh Sửa Chương Trình / Sự Kiện" : "🎯 Cập Nhật Chương Trình / Sự Kiện Mới"}
-                          </h4>
-                          {editingProgId && (
-                            <button
-                              type="button"
-                              onClick={handleCancelEditProgram}
-                              className="rounded-lg bg-cobalt-200 px-2 py-1 text-[11px] font-bold text-cobalt-800 hover:bg-cobalt-300"
-                            >
-                              Hủy sửa
-                            </button>
-                          )}
-                        </div>
-                        <p className="mt-0.5 text-xs text-cobalt-600">
-                          Thêm chiến dịch tình nguyện mới, giải thể thao hoặc ngày hội của Ban liên lạc vào danh mục Hoạt động.
-                        </p>
-
-                        <form onSubmit={handleSaveProgram} className="mt-4 space-y-3">
-                          <div>
-                            <label className="mb-1 block text-xs font-bold text-cobalt-800">Tên chương trình / Sự kiện *</label>
-                            <input
-                              required
-                              value={progTitle}
-                              onChange={(e) => setProgTitle(e.target.value)}
-                              placeholder="VD: Chiến dịch Mùa Hè Xanh 2027 – Hành trình về bản Mường..."
-                              className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
-                            />
-                          </div>
-
-                          <div className="grid gap-3 sm:grid-cols-3">
-                            <div>
-                              <label className="mb-1 block text-xs font-bold text-cobalt-800">Chuyên mục</label>
-                              <select
-                                value={progCategory}
-                                onChange={(e) => setProgCategory(e.target.value as AdminProgram["category"])}
-                                className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
-                              >
-                                <option value="Tình nguyện">Tình nguyện</option>
-                                <option value="Hội đồng hương">Hội đồng hương</option>
-                                <option value="Chào tân sinh viên">Chào tân sinh viên</option>
-                                <option value="Chiến dịch Mùa Hè Xanh">Chiến dịch Mùa Hè Xanh</option>
-                                <option value="Chiến dịch Đông Ấm">Chiến dịch Đông Ấm</option>
-                                <option value="Âm Vang Xứ Thanh">Âm Vang Xứ Thanh</option>
-                                <option value="Đào tạo & Gắn kết">Đào tạo &amp; Gắn kết</option>
-                                <option value="Truyền thông & Đời sống">Truyền thông &amp; Đời sống</option>
-                              </select>
-                            </div>
-
-                            <div>
-                              <label className="mb-1 block text-xs font-bold text-cobalt-800">Trạng thái</label>
-                              <select
-                                value={progStatus}
-                                onChange={(e) => setProgStatus(e.target.value as AdminProgram["status"])}
-                                className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
-                              >
-                                <option value="Mới đăng">Mới đăng</option>
-                                <option value="Đang mở đăng ký">Đang mở đăng ký</option>
-                                <option value="Sắp diễn ra">Sắp diễn ra</option>
-                                <option value="Đã kết thúc">Đã kết thúc</option>
-                              </select>
-                            </div>
-
-                            <div>
-                              <label className="mb-1 block text-xs font-bold text-cobalt-800">Thời gian diễn ra</label>
-                              <input
-                                value={progDateLabel}
-                                onChange={(e) => setProgDateLabel(e.target.value)}
-                                placeholder="VD: 15/07 – 28/07"
-                                className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
-                              />
-                            </div>
-                          </div>
-
-                          <div className="grid gap-3 sm:grid-cols-2">
-                            <div>
-                              <label className="mb-1 block text-xs font-bold text-cobalt-800">Địa điểm tổ chức</label>
-                              <input
-                                value={progLocation}
-                                onChange={(e) => setProgLocation(e.target.value)}
-                                placeholder="VD: Huyện Bá Thước, Thanh Hóa"
-                                className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
-                              />
-                            </div>
-                            <div>
-                              <label className="mb-1 block text-xs font-bold text-cobalt-800">Link ảnh bìa chương trình</label>
-                              <input
-                                value={progCover}
-                                onChange={(e) => setProgCover(e.target.value)}
-                                placeholder="https://images.unsplash.com/... hoặc để trống"
-                                className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs text-cobalt-950 outline-none focus:border-flame-500"
-                              />
-                            </div>
-                          </div>
-
-                          <div>
-                            <label className="mb-1 block text-xs font-bold text-cobalt-800">Mô tả tóm tắt chương trình *</label>
-                            <textarea
-                              required
-                              rows={2}
-                              value={progExcerpt}
-                              onChange={(e) => setProgExcerpt(e.target.value)}
-                              placeholder="Mô tả mục tiêu, ý nghĩa và các hoạt động chính trong chương trình..."
-                              className="w-full resize-none rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs text-cobalt-950 outline-none focus:border-flame-500"
-                            />
-                          </div>
-
-                          <div className="flex justify-end gap-2 pt-2">
-                            {editingProgId && (
-                              <button
-                                type="button"
-                                onClick={handleCancelEditProgram}
-                                className="rounded-xl border border-cobalt-200 bg-white px-4 py-2 text-xs font-bold text-cobalt-700 hover:bg-cobalt-50"
-                              >
-                                Hủy sửa
-                              </button>
-                            )}
-                            <Button variant="flame" type="submit">
-                              {editingProgId ? "💾 Cập nhật chương trình" : "🎯 Lưu chương trình mới vào web"}
-                            </Button>
-                          </div>
-                        </form>
-                      </div>
-
-                      {/* Danh sách chương trình đã thêm */}
-                      <div>
-                        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                          <h4 className="font-display text-sm font-bold text-cobalt-900">
-                            Chương trình do Admin thêm mới ({programs.length})
-                          </h4>
-                          <input
-                            type="text"
-                            value={searchProg}
-                            onChange={(e) => setSearchProg(e.target.value)}
-                            placeholder="🔍 Tìm chương trình..."
-                            className="rounded-xl border border-cobalt-200 bg-white px-3 py-1.5 text-xs text-cobalt-950 outline-none focus:border-flame-500 sm:w-64"
-                          />
-                        </div>
-
-                        <div className="mt-3 space-y-2.5">
-                          {filteredPrograms.length === 0 ? (
-                            <p className="rounded-xl border border-dashed border-cobalt-200 p-6 text-center text-xs text-cobalt-500">
-                              {searchProg ? "Không tìm thấy chương trình nào phù hợp." : "Chưa có chương trình tùy biến nào được thêm. Hệ thống đang hiển thị các chương trình chính thức."}
-                            </p>
-                          ) : (
-                            filteredPrograms.map((p) => (
-                              <div
-                                key={p.id}
-                                className="flex flex-col gap-3 rounded-2xl border border-cobalt-100 bg-white p-3.5 shadow-2xs sm:flex-row sm:items-center sm:justify-between"
-                              >
-                                <div className="min-w-0 flex-1">
-                                  <div className="flex flex-wrap items-center gap-2">
-                                    <span className="rounded bg-cobalt-800 px-2 py-0.5 text-[10px] font-bold text-white">
-                                      {p.category}
-                                    </span>
-                                    <select
-                                      value={p.status}
-                                      onChange={(e) => handleQuickChangeProgramStatus(p.id, e.target.value as AdminProgram["status"])}
-                                      className="rounded bg-flame-50 border border-flame-200 px-1.5 py-0.5 text-[10px] font-bold text-flame-700 outline-none cursor-pointer"
-                                    >
-                                      <option value="Mới đăng">Mới đăng</option>
-                                      <option value="Đang mở đăng ký">Đang mở đăng ký</option>
-                                      <option value="Sắp diễn ra">Sắp diễn ra</option>
-                                      <option value="Đã kết thúc">Đã kết thúc</option>
-                                    </select>
-                                    <span className="text-[11px] text-cobalt-500">📍 {p.location}</span>
-                                    <span className="text-[11px] text-cobalt-400">🕒 {p.dateLabel}</span>
-                                  </div>
-                                  <h5 className="mt-1 font-display text-sm font-bold text-cobalt-950">{p.title}</h5>
-                                  <p className="text-xs text-cobalt-600 line-clamp-1">{p.excerpt}</p>
-                                </div>
-                                <div className="flex shrink-0 items-center gap-1.5">
-                                  <button
-                                    onClick={() => handleStartEditProgram(p)}
-                                    className="rounded-lg border border-cobalt-200 bg-white p-1.5 text-xs font-bold text-cobalt-700 hover:bg-cobalt-50"
-                                    title="Chỉnh sửa chương trình"
-                                  >
-                                    ✏️ Sửa
-                                  </button>
-                                  <button
-                                    onClick={() => handleDeleteProgram(p.id)}
-                                    className="rounded-lg border border-red-200 bg-red-50 p-1.5 text-xs font-bold text-red-600 hover:bg-red-100"
-                                    title="Xóa chương trình"
-                                  >
-                                    🗑️ Xóa
-                                  </button>
-                                </div>
-                              </div>
-                            ))
-                          )}
-                        </div>
-                      </div>
-                    </div>
+                    <AdminProgramsTab
+                      programs={programs}
+                      filteredPrograms={filteredPrograms}
+                      searchProg={searchProg}
+                      onSearchChange={setSearchProg}
+                      editingProgId={editingProgId}
+                      progTitle={progTitle}
+                      onTitleChange={setProgTitle}
+                      progCategory={progCategory}
+                      onCategoryChange={setProgCategory}
+                      progStatus={progStatus}
+                      onStatusChange={setProgStatus}
+                      progDateLabel={progDateLabel}
+                      onDateLabelChange={setProgDateLabel}
+                      progLocation={progLocation}
+                      onLocationChange={setProgLocation}
+                      progExcerpt={progExcerpt}
+                      onExcerptChange={setProgExcerpt}
+                      progCover={progCover}
+                      onCoverChange={setProgCover}
+                      onSaveProgram={handleSaveProgram}
+                      onStartEditProgram={handleStartEditProgram}
+                      onCancelEditProgram={handleCancelEditProgram}
+                      onDeleteProgram={handleDeleteProgram}
+                      onQuickChangeStatus={handleQuickChangeProgramStatus}
+                    />
                   )}
 
-                  {/* TAB 3: ĐỘI NGŨ BAN CHẤP HÀNH */}
                   {activeTab === "leaders" && (
-                    <div className="space-y-6">
-                      <div className="rounded-2xl border border-cobalt-100 bg-cobalt-50/40 p-4 sm:p-5">
-                        <div className="flex items-center justify-between">
-                          <h4 className="font-display text-sm font-extrabold text-cobalt-950 sm:text-base">
-                            {editingLeadId ? "✏️ Chỉnh Sửa Thành Viên BCH" : "👥 Cập Nhật Đội Ngũ Ban Chấp Hành Mới Nhất"}
-                          </h4>
-                          {editingLeadId && (
-                            <button
-                              type="button"
-                              onClick={handleCancelEditLeader}
-                              className="rounded-lg bg-cobalt-200 px-2 py-1 text-[11px] font-bold text-cobalt-800 hover:bg-cobalt-300"
-                            >
-                              Hủy sửa
-                            </button>
-                          )}
-                        </div>
-                        <p className="mt-0.5 text-xs text-cobalt-600">
-                          Thêm hoặc chỉnh sửa thông tin các đồng chí BCH nhiệm kỳ mới (K60, K61...) vào danh sách lịch sử thế hệ giữ lửa.
-                        </p>
-
-                        <form onSubmit={handleSaveLeader} className="mt-4 space-y-3">
-                          <div className="grid gap-3 sm:grid-cols-2">
-                            <div>
-                              <label className="mb-1 block text-xs font-bold text-cobalt-800">Khóa sinh viên *</label>
-                              <input
-                                required
-                                value={leadKhoa}
-                                onChange={(e) => setLeadKhoa(e.target.value)}
-                                placeholder="VD: K60, K61..."
-                                className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
-                              />
-                            </div>
-                            <div>
-                              <label className="mb-1 block text-xs font-bold text-cobalt-800">Nhiệm kỳ *</label>
-                              <input
-                                required
-                                value={leadTerm}
-                                onChange={(e) => setLeadTerm(e.target.value)}
-                                placeholder="VD: 2026 - 2027, 2027 - 2028..."
-                                className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
-                              />
-                            </div>
-                          </div>
-
-                          <div className="grid gap-3 sm:grid-cols-3">
-                            <div>
-                              <label className="mb-1 block text-xs font-bold text-cobalt-800">Họ và tên *</label>
-                              <input
-                                required
-                                value={leadName}
-                                onChange={(e) => setLeadName(e.target.value)}
-                                placeholder="VD: Nguyễn Văn A"
-                                className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
-                              />
-                            </div>
-                            <div>
-                              <label className="mb-1 block text-xs font-bold text-cobalt-800">Ngày tháng năm sinh</label>
-                              <input
-                                value={leadDob}
-                                onChange={(e) => setLeadDob(e.target.value)}
-                                placeholder="VD: 15/08/2006"
-                                className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
-                              />
-                            </div>
-                            <div>
-                              <label className="mb-1 block text-xs font-bold text-cobalt-800">Quê quán (huyện/thị)</label>
-                              <input
-                                value={leadHometown}
-                                onChange={(e) => setLeadHometown(e.target.value)}
-                                placeholder="VD: Quảng Xương, Hoằng Hóa..."
-                                className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
-                              />
-                            </div>
-                          </div>
-
-                          <div>
-                            <label className="mb-1 block text-xs font-bold text-cobalt-800">Chức vụ trong BCH / Đội SVTN *</label>
-                            <input
-                              required
-                              value={leadRole}
-                              onChange={(e) => setLeadRole(e.target.value)}
-                              placeholder="VD: Trưởng Ban liên lạc, Đội trưởng SVTN, Trưởng Ban Truyền thông..."
-                              className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
-                            />
-                          </div>
-
-                          <div className="flex justify-end gap-2 pt-2">
-                            {editingLeadId && (
-                              <button
-                                type="button"
-                                onClick={handleCancelEditLeader}
-                                className="rounded-xl border border-cobalt-200 bg-white px-4 py-2 text-xs font-bold text-cobalt-700 hover:bg-cobalt-50"
-                              >
-                                Hủy sửa
-                              </button>
-                            )}
-                            <Button variant="flame" type="submit">
-                              {editingLeadId ? "💾 Cập nhật thành viên" : "👥 Thêm thành viên BCH vào danh sách"}
-                            </Button>
-                          </div>
-                        </form>
-                      </div>
-
-                      {/* Danh sách thành viên BCH bổ sung */}
-                      <div>
-                        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                          <h4 className="font-display text-sm font-bold text-cobalt-900">
-                            Thành viên BCH mới do Admin bổ sung ({leaders.length})
-                          </h4>
-                          <input
-                            type="text"
-                            value={searchLead}
-                            onChange={(e) => setSearchLead(e.target.value)}
-                            placeholder="🔍 Tìm đồng chí theo tên, vai trò..."
-                            className="rounded-xl border border-cobalt-200 bg-white px-3 py-1.5 text-xs text-cobalt-950 outline-none focus:border-flame-500 sm:w-64"
-                          />
-                        </div>
-
-                        <div className="mt-3 space-y-2.5">
-                          {filteredLeaders.length === 0 ? (
-                            <p className="rounded-xl border border-dashed border-cobalt-200 p-6 text-center text-xs text-cobalt-500">
-                              {searchLead ? "Không tìm thấy đồng chí nào phù hợp." : "Chưa có thành viên BCH mới nào được thêm riêng. Hệ thống đang hiển thị đầy đủ 16 thế hệ từ K44 đến K60."}
-                            </p>
-                          ) : (
-                            filteredLeaders.map((lead) => (
-                              <div
-                                key={lead.id}
-                                className="flex items-center justify-between gap-3 rounded-2xl border border-cobalt-100 bg-white p-3.5 shadow-2xs"
-                              >
-                                <div>
-                                  <div className="flex items-center gap-2">
-                                    <span className="font-display text-sm font-black text-cobalt-950">{lead.name}</span>
-                                    <span className="rounded bg-flame-100 px-1.5 py-0.5 text-[10px] font-bold text-flame-700">
-                                      {lead.khoa}
-                                    </span>
-                                    <span className="text-[11px] text-cobalt-500">{lead.term}</span>
-                                  </div>
-                                  <p className="text-xs font-semibold text-tmu-700">{lead.role}</p>
-                                  <p className="text-[11.5px] text-cobalt-600">📍 {lead.hometown} {lead.dob ? `· Sinh: ${lead.dob}` : ""}</p>
-                                </div>
-                                <div className="flex shrink-0 items-center gap-1.5">
-                                  <button
-                                    onClick={() => handleStartEditLeader(lead)}
-                                    className="rounded-lg border border-cobalt-200 bg-white p-1.5 text-xs font-bold text-cobalt-700 hover:bg-cobalt-50"
-                                    title="Chỉnh sửa thông tin"
-                                  >
-                                    ✏️ Sửa
-                                  </button>
-                                  <button
-                                    onClick={() => handleDeleteLeader(lead.id)}
-                                    className="rounded-lg border border-red-200 bg-red-50 p-1.5 text-xs font-bold text-red-600 hover:bg-red-100"
-                                    title="Xóa thành viên"
-                                  >
-                                    🗑️ Xóa
-                                  </button>
-                                </div>
-                              </div>
-                            ))
-                          )}
-                        </div>
-                      </div>
-                    </div>
+                    <AdminLeadersTab
+                      leaders={leaders}
+                      filteredLeaders={filteredLeaders}
+                      searchLead={searchLead}
+                      onSearchChange={setSearchLead}
+                      editingLeadId={editingLeadId}
+                      leadKhoa={leadKhoa}
+                      onKhoaChange={setLeadKhoa}
+                      leadTerm={leadTerm}
+                      onTermChange={setLeadTerm}
+                      leadName={leadName}
+                      onNameChange={setLeadName}
+                      leadDob={leadDob}
+                      onDobChange={setLeadDob}
+                      leadHometown={leadHometown}
+                      onHometownChange={setLeadHometown}
+                      leadRole={leadRole}
+                      onRoleChange={setLeadRole}
+                      onSaveLeader={handleSaveLeader}
+                      onStartEditLeader={handleStartEditLeader}
+                      onCancelEditLeader={handleCancelEditLeader}
+                      onDeleteLeader={handleDeleteLeader}
+                    />
                   )}
 
-                  {/* TAB 4: CHÂM NGÔN HOẠT ĐỘNG MỚI NHẤT */}
                   {activeTab === "motto" && (
-                    <div className="rounded-2xl border border-cobalt-100 bg-cobalt-50/40 p-4 sm:p-5">
-                      <h4 className="font-display text-sm font-extrabold text-cobalt-950 sm:text-base">
-                        Cập Nhật Châm Ngôn Hoạt Động &amp; Slogan Của BCH
-                      </h4>
-                      <p className="mt-0.5 text-xs text-cobalt-600">
-                        Châm ngôn sẽ được cập nhật đồng bộ lên toàn bộ website: dải Divider trang chủ, mục Tinh thần 36 và Footer.
-                      </p>
-
-                      <form onSubmit={handleSaveMotto} className="mt-4 space-y-3.5">
-                        <div>
-                          <label className="mb-1 block text-xs font-bold text-cobalt-800">
-                            Châm ngôn / Slogan hoạt động chính thức *
-                          </label>
-                          <textarea
-                            required
-                            rows={2}
-                            value={motto.slogan}
-                            onChange={(e) => setMotto({ ...motto, slogan: e.target.value })}
-                            className="w-full resize-none rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-bold text-cobalt-950 outline-none focus:border-flame-500"
-                          />
-                        </div>
-
-                        <div className="grid gap-3 sm:grid-cols-2">
-                          <div>
-                            <label className="mb-1 block text-xs font-bold text-cobalt-800">Nhiệm kỳ áp dụng</label>
-                            <input
-                              value={motto.term}
-                              onChange={(e) => setMotto({ ...motto, term: e.target.value })}
-                              placeholder="VD: Nhiệm kỳ 2026 – 2027 (K60)"
-                              className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
-                            />
-                          </div>
-
-                          <div>
-                            <label className="mb-1 block text-xs font-bold text-cobalt-800">Ngày cập nhật gần nhất</label>
-                            <input
-                              disabled
-                              value={motto.updatedAt}
-                              className="w-full rounded-xl border border-cobalt-200 bg-cobalt-100/60 px-3 py-2 text-xs text-cobalt-600 outline-none"
-                            />
-                          </div>
-                        </div>
-
-                        <div>
-                          <label className="mb-1 block text-xs font-bold text-cobalt-800">
-                            Ý nghĩa &amp; Lời dặn dò của Ban Chấp Hành
-                          </label>
-                          <textarea
-                            rows={3}
-                            value={motto.meaning}
-                            onChange={(e) => setMotto({ ...motto, meaning: e.target.value })}
-                            placeholder="Thông điệp truyền cảm hứng cho các thế hệ tình nguyện viên..."
-                            className="w-full resize-none rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs text-cobalt-950 outline-none focus:border-flame-500"
-                          />
-                        </div>
-
-                        <div className="flex items-center justify-between pt-2">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setMotto(DEFAULT_MOTTO);
-                              saveStoredAdminMotto(DEFAULT_MOTTO);
-                              onToast("Đã khôi phục châm ngôn truyền thống ban đầu!");
-                              onPostCreated?.();
-                            }}
-                            className="text-xs font-semibold text-cobalt-600 underline hover:text-cobalt-900"
-                          >
-                            Khôi phục câu truyền thống mặc định
-                          </button>
-
-                          <Button variant="flame" type="submit">
-                            🔥 Lưu châm ngôn BCH mới
-                          </Button>
-                        </div>
-                      </form>
-                    </div>
+                    <AdminMottoTab
+                      motto={motto}
+                      onMottoChange={setMotto}
+                      onSaveMotto={handleSaveMotto}
+                      onToast={onToast}
+                      onPostCreated={onPostCreated}
+                    />
                   )}
 
-                  {/* TAB 5: THÔNG BÁO NỘI QUY */}
                   {activeTab === "rules" && (
-                    <div className="space-y-6">
-                      <div className="rounded-2xl border border-cobalt-100 bg-cobalt-50/40 p-4 sm:p-5">
-                        <h4 className="font-display text-sm font-extrabold text-cobalt-950 sm:text-base">
-                          Ban Hành &amp; Cập Nhật Thông Báo Nội Quy Mới
-                        </h4>
-                        <p className="mt-0.5 text-xs text-cobalt-600">
-                          Điều chỉnh nội quy, quy chế sinh hoạt, tác phong và kỷ luật tình nguyện viên của nhà chung.
-                        </p>
-
-                        <form onSubmit={handleSaveRulesHeader} className="mt-4 space-y-3">
-                          <div>
-                            <label className="mb-1 block text-xs font-bold text-cobalt-800">Tiêu đề thông báo nội quy *</label>
-                            <input
-                              required
-                              value={rulesData.title}
-                              onChange={(e) => setRulesData({ ...rulesData, title: e.target.value })}
-                              className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-bold text-cobalt-950 outline-none focus:border-flame-500"
-                            />
-                          </div>
-
-                          <div className="grid gap-3 sm:grid-cols-2">
-                            <div>
-                              <label className="mb-1 block text-xs font-bold text-cobalt-800">Thời gian hiệu lực</label>
-                              <input
-                                value={rulesData.effectiveDate}
-                                onChange={(e) => setRulesData({ ...rulesData, effectiveDate: e.target.value })}
-                                placeholder="Áp dụng từ năm học 2026 – 2027"
-                                className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
-                              />
-                            </div>
-                            <div>
-                              <label className="mb-1 block text-xs font-bold text-cobalt-800">Cơ quan ban hành</label>
-                              <input
-                                value={rulesData.issuedBy}
-                                onChange={(e) => setRulesData({ ...rulesData, issuedBy: e.target.value })}
-                                placeholder="Ban Chấp Hành & Đội Trưởng Đội SVTN"
-                                className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
-                              />
-                            </div>
-                          </div>
-
-                          <div>
-                            <label className="mb-1 block text-xs font-bold text-cobalt-800">Tóm tắt mục đích &amp; yêu cầu</label>
-                            <textarea
-                              rows={2}
-                              value={rulesData.summary}
-                              onChange={(e) => setRulesData({ ...rulesData, summary: e.target.value })}
-                              className="w-full resize-none rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs text-cobalt-950 outline-none focus:border-flame-500"
-                            />
-                          </div>
-
-                          <div className="flex justify-end pt-1">
-                            <Button variant="flame" type="submit">
-                              💾 Lưu thông tin tiêu đề nội quy
-                            </Button>
-                          </div>
-                        </form>
-                      </div>
-
-                      {/* Danh sách các điều khoản nội quy */}
-                      <div className="rounded-2xl border border-cobalt-100 bg-white p-4 sm:p-5">
-                        <div className="flex items-center justify-between pb-3 border-b border-cobalt-100">
-                          <div>
-                            <h4 className="font-display text-sm font-bold text-cobalt-900">
-                              Các điều khoản nội quy hiện hành ({rulesData.rules.length})
-                            </h4>
-                            <p className="text-[11.5px] text-cobalt-500">Mỗi điều khoản được hiển thị rõ ràng trên mục Nội Quy Nhà Chung</p>
-                          </div>
-                        </div>
-
-                        {/* Thêm điều khoản mới */}
-                        <div className="mt-4 flex gap-2">
-                          <input
-                            value={newRuleItem}
-                            onChange={(e) => setNewRuleItem(e.target.value)}
-                            onKeyDown={(e) => {
-                              if (e.key === "Enter") {
-                                e.preventDefault();
-                                handleAddRuleItem();
-                              }
-                            }}
-                            placeholder="Nhập nội dung điều khoản mới (VD: Quy định về bảo mật hình ảnh...)"
-                            className="flex-1 rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
-                          />
-                          <Button variant="flame" onClick={handleAddRuleItem}>
-                            + Thêm điều
-                          </Button>
-                        </div>
-
-                        <div className="mt-4 space-y-2">
-                          {rulesData.rules.map((rule, idx) => (
-                            <div
-                              key={idx}
-                              className="flex items-start justify-between gap-3 rounded-xl border border-cobalt-100 bg-cobalt-50/50 p-3 text-xs"
-                            >
-                              <div className="flex items-start gap-2.5 flex-1 min-w-0">
-                                <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-tmu-600 text-[10.5px] font-bold text-white">
-                                  {idx + 1}
-                                </span>
-                                {editingRuleIndex === idx ? (
-                                  <div className="flex-1 space-y-2">
-                                    <textarea
-                                      rows={2}
-                                      value={editingRuleText}
-                                      onChange={(e) => setEditingRuleText(e.target.value)}
-                                      className="w-full rounded-lg border border-cobalt-300 p-2 text-xs font-medium text-cobalt-950 outline-none focus:border-flame-500"
-                                    />
-                                    <div className="flex gap-2">
-                                      <button
-                                        type="button"
-                                        onClick={handleSaveEditRule}
-                                        className="rounded bg-flame-600 px-2 py-1 text-[11px] font-bold text-white hover:bg-flame-700"
-                                      >
-                                        Lưu
-                                      </button>
-                                      <button
-                                        type="button"
-                                        onClick={() => setEditingRuleIndex(null)}
-                                        className="rounded bg-cobalt-200 px-2 py-1 text-[11px] font-bold text-cobalt-800 hover:bg-cobalt-300"
-                                      >
-                                        Hủy
-                                      </button>
-                                    </div>
-                                  </div>
-                                ) : (
-                                  <p className="font-medium text-cobalt-900 leading-relaxed">{rule}</p>
-                                )}
-                              </div>
-                              {editingRuleIndex !== idx && (
-                                <div className="flex shrink-0 items-center gap-1.5">
-                                  <button
-                                    onClick={() => handleStartEditRule(idx, rule)}
-                                    className="text-cobalt-600 hover:text-cobalt-900 text-xs p-1 font-semibold"
-                                    title="Sửa điều khoản"
-                                  >
-                                    ✏️
-                                  </button>
-                                  <button
-                                    onClick={() => handleDeleteRuleItem(idx)}
-                                    className="text-red-500 hover:text-red-700 text-xs shrink-0 font-bold p-1"
-                                    title="Xóa điều khoản này"
-                                  >
-                                    ✕
-                                  </button>
-                                </div>
-                              )}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
+                    <AdminRulesTab
+                      rulesData={rulesData}
+                      onRulesDataChange={setRulesData}
+                      newRuleItem={newRuleItem}
+                      onNewRuleItemChange={setNewRuleItem}
+                      editingRuleIndex={editingRuleIndex}
+                      editingRuleText={editingRuleText}
+                      onEditingRuleTextChange={setEditingRuleText}
+                      onAddRuleItem={handleAddRuleItem}
+                      onStartEditRule={handleStartEditRule}
+                      onSaveEditRule={handleSaveEditRule}
+                      onCancelEditRule={() => setEditingRuleIndex(null)}
+                      onDeleteRuleItem={handleDeleteRuleItem}
+                      onSaveRulesHeader={handleSaveRulesHeader}
+                    />
                   )}
 
-                  {/* TAB 6: QUẢN LÝ GHI CHÚ TNV */}
                   {activeTab === "notes" && (
-                    <div className="space-y-3">
-                      <p className="text-xs font-medium text-cobalt-600">
-                        Danh sách các ghi chú, lời nhắn do các bạn TNV gửi lên bảng. Bạn có thể xóa hoặc ghim note lên đầu.
-                      </p>
-
-                      <div className="max-h-[380px] space-y-2.5 overflow-y-auto pr-1">
-                        {notes.length === 0 ? (
-                          <p className="py-8 text-center text-xs text-cobalt-500">Chưa có ghi chú nào từ TNV.</p>
-                        ) : (
-                          notes.map((n) => (
-                            <div
-                              key={n.id}
-                              className="flex items-start justify-between gap-3 rounded-2xl border border-cobalt-100 bg-cobalt-50/60 p-3 text-xs"
-                            >
-                              <div className="min-w-0 flex-1">
-                                <div className="flex items-center gap-2">
-                                  <span className="font-bold text-cobalt-950">{n.author}</span>
-                                  <span className="rounded bg-cobalt-200 px-1.5 py-0.5 text-[10px] font-semibold text-cobalt-800">
-                                    {n.department}
-                                  </span>
-                                  {n.pinned && (
-                                    <span className="rounded bg-flame-500 px-1.5 py-0.5 text-[9.5px] font-bold text-white">
-                                      Đã ghim
-                                    </span>
-                                  )}
-                                </div>
-                                <p className="mt-1 leading-relaxed text-cobalt-800">{n.content}</p>
-                                <span className="mt-1 block text-[10px] text-cobalt-500">{n.createdAt}</span>
-                              </div>
-
-                              <div className="flex shrink-0 items-center gap-1.5">
-                                <button
-                                  onClick={() => handleTogglePinNote(n.id)}
-                                  title={n.pinned ? "Bỏ ghim" : "Ghim note"}
-                                  className="rounded-lg border border-cobalt-200 bg-white p-1.5 hover:bg-flame-50"
-                                >
-                                  📌
-                                </button>
-                                <button
-                                  onClick={() => handleDeleteNote(n.id)}
-                                  title="Xóa note"
-                                  className="rounded-lg border border-red-200 bg-white p-1.5 text-red-600 hover:bg-red-50"
-                                >
-                                  🗑️
-                                </button>
-                              </div>
-                            </div>
-                          ))
-                        )}
-                      </div>
-                    </div>
+                    <AdminNotesTab
+                      notes={notes}
+                      onTogglePinNote={handleTogglePinNote}
+                      onDeleteNote={handleDeleteNote}
+                    />
                   )}
 
-                  {/* TAB 7: THÔNG TIN LIÊN HỆ & KÊNH TRUYỀN THÔNG */}
                   {activeTab === "contact" && (
-                    <div className="rounded-2xl border border-cobalt-100 bg-cobalt-50/40 p-4 sm:p-5">
-                      <h4 className="font-display text-sm font-extrabold text-cobalt-950 sm:text-base">
-                        📞 Quản Lý Thông Tin Liên Hệ &amp; Mạng Xã Hội
-                      </h4>
-                      <p className="mt-0.5 text-xs text-cobalt-600">
-                        Thông tin được đồng bộ tự động tới khối Liên hệ, Chân trang (Footer) và các nút mạng xã hội.
-                      </p>
-
-                      <form onSubmit={handleSaveContact} className="mt-4 space-y-3.5">
-                        <div className="grid gap-3 sm:grid-cols-2">
-                          <div>
-                            <label className="mb-1 block text-xs font-bold text-cobalt-800">Hotline Ban Nhân sự *</label>
-                            <input
-                              required
-                              value={contactData.phone}
-                              onChange={(e) => setContactData({ ...contactData, phone: e.target.value })}
-                              placeholder="0987 654 321"
-                              className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
-                            />
-                          </div>
-
-                          <div>
-                            <label className="mb-1 block text-xs font-bold text-cobalt-800">Email chính thức *</label>
-                            <input
-                              required
-                              type="email"
-                              value={contactData.email}
-                              onChange={(e) => setContactData({ ...contactData, email: e.target.value })}
-                              placeholder="bllsvthanhhoa.tmu@gmail.com"
-                              className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
-                            />
-                          </div>
-                        </div>
-
-                        <div>
-                          <label className="mb-1 block text-xs font-bold text-cobalt-800">Địa chỉ nhà chung *</label>
-                          <input
-                            required
-                            value={contactData.address}
-                            onChange={(e) => setContactData({ ...contactData, address: e.target.value })}
-                            placeholder="79 Hồ Tùng Mậu, Mai Dịch, Cầu Giấy, Hà Nội"
-                            className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
-                          />
-                        </div>
-
-                        <div>
-                          <label className="mb-1 block text-xs font-bold text-cobalt-800">Lịch sinh hoạt &amp; tập nhảy định kỳ</label>
-                          <input
-                            value={contactData.scheduleInfo}
-                            onChange={(e) => setContactData({ ...contactData, scheduleInfo: e.target.value })}
-                            placeholder="19:00 – 21:00 tối thứ Ba hàng tuần"
-                            className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
-                          />
-                        </div>
-
-                        <div className="grid gap-3 sm:grid-cols-3">
-                          <div>
-                            <label className="mb-1 block text-xs font-bold text-cobalt-800">Link Facebook Fanpage</label>
-                            <input
-                              value={contactData.fanpage}
-                              onChange={(e) => setContactData({ ...contactData, fanpage: e.target.value })}
-                              placeholder="https://facebook.com/..."
-                              className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs text-cobalt-950 outline-none focus:border-flame-500"
-                            />
-                          </div>
-
-                          <div>
-                            <label className="mb-1 block text-xs font-bold text-cobalt-800">Link Group Cộng Đồng</label>
-                            <input
-                              value={contactData.group}
-                              onChange={(e) => setContactData({ ...contactData, group: e.target.value })}
-                              placeholder="https://facebook.com/groups/..."
-                              className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs text-cobalt-950 outline-none focus:border-flame-500"
-                            />
-                          </div>
-
-                          <div>
-                            <label className="mb-1 block text-xs font-bold text-cobalt-800">Link Kênh TikTok</label>
-                            <input
-                              value={contactData.tiktok}
-                              onChange={(e) => setContactData({ ...contactData, tiktok: e.target.value })}
-                              placeholder="https://tiktok.com/@..."
-                              className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs text-cobalt-950 outline-none focus:border-flame-500"
-                            />
-                          </div>
-                        </div>
-
-                        <div className="flex items-center justify-between pt-2">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setContactData(DEFAULT_CONTACT);
-                              saveStoredAdminContact(DEFAULT_CONTACT);
-                              onToast("Đã khôi phục thông tin liên hệ chuẩn ban đầu!");
-                              onPostCreated?.();
-                            }}
-                            className="text-xs font-semibold text-cobalt-600 underline hover:text-cobalt-900"
-                          >
-                            Khôi phục thông tin ban đầu
-                          </button>
-
-                          <Button variant="flame" type="submit">
-                            📞 Lưu thông tin liên hệ mới
-                          </Button>
-                        </div>
-                      </form>
-                    </div>
+                    <AdminContactTab
+                      contactData={contactData}
+                      onContactDataChange={setContactData}
+                      onSaveContact={handleSaveContact}
+                      onToast={onToast}
+                      onPostCreated={onPostCreated}
+                    />
                   )}
 
-                  {/* TAB 8: MẬT KHẨU & SAO LƯU DỮ LIỆU */}
-                  {activeTab === "settings" && (
-                    <div className="space-y-6">
-                      {/* KHỐI 1: ĐỔI MẬT KHẨU ADMIN */}
-                      <div className="rounded-2xl border border-cobalt-100 bg-cobalt-50/50 p-4 sm:p-5">
-                        <div className="flex items-center gap-2.5">
-                          <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-flame-100 text-sm">
-                            🔐
-                          </span>
-                          <div>
-                            <h4 className="font-display text-sm font-extrabold text-cobalt-950 sm:text-base">
-                              Đổi Mật Khẩu Quản Trị Viên (Admin PIN)
-                            </h4>
-                            <p className="text-xs text-cobalt-600">
-                              Bảo vệ bảng quản trị với mật khẩu riêng của Ban Chủ Nhiệm / BCH.
-                            </p>
-                          </div>
-                        </div>
-
-                        <form onSubmit={handleChangePassword} className="mt-4 space-y-3">
-                          <div className="grid gap-3 sm:grid-cols-3">
-                            <div>
-                              <label className="mb-1 block text-xs font-bold text-cobalt-800">Mật khẩu hiện tại *</label>
-                              <input
-                                required
-                                type={showPinSettings ? "text" : "password"}
-                                value={oldPinInput}
-                                onChange={(e) => setOldPinInput(e.target.value)}
-                                placeholder="Nhập mật khẩu đang dùng"
-                                className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
-                              />
-                            </div>
-
-                            <div>
-                              <label className="mb-1 block text-xs font-bold text-cobalt-800">Mật khẩu mới *</label>
-                              <input
-                                required
-                                type={showPinSettings ? "text" : "password"}
-                                value={newPinInput}
-                                onChange={(e) => setNewPinInput(e.target.value)}
-                                placeholder="Tối thiểu 3 ký tự"
-                                className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
-                              />
-                            </div>
-
-                            <div>
-                              <label className="mb-1 block text-xs font-bold text-cobalt-800">Nhập lại mật khẩu mới *</label>
-                              <input
-                                required
-                                type={showPinSettings ? "text" : "password"}
-                                value={confirmPinInput}
-                                onChange={(e) => setConfirmPinInput(e.target.value)}
-                                placeholder="Xác nhận mật khẩu mới"
-                                className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
-                              />
-                            </div>
-                          </div>
-
-                          <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
-                            <label className="flex items-center gap-2 text-xs text-cobalt-600 cursor-pointer">
-                              <input
-                                type="checkbox"
-                                checked={showPinSettings}
-                                onChange={(e) => setShowPinSettings(e.target.checked)}
-                                className="rounded text-flame-600 focus:ring-flame-500"
-                              />
-                              <span>Hiển thị mật khẩu khi nhập</span>
-                            </label>
-
-                            <div className="flex gap-2">
-                              <button
-                                type="button"
-                                onClick={handleResetPinQuick}
-                                className="rounded-xl border border-cobalt-200 bg-white px-3 py-1.5 text-xs font-semibold text-cobalt-700 hover:bg-cobalt-50"
-                              >
-                                Đặt lại 36tmu
-                              </button>
-                              <Button variant="flame" type="submit">
-                                🔐 Cập nhật mật khẩu mới
-                              </Button>
-                            </div>
-                          </div>
-                        </form>
-                      </div>
-
-                      {/* KHỐI 2: SAO LƯU & KHÔI PHỤC DỮ LIỆU */}
-                      <div className="rounded-2xl border border-cobalt-100 bg-white p-4 sm:p-5">
-                        <div className="flex items-center gap-2.5">
-                          <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-tmu-100 text-sm">
-                            💾
-                          </span>
-                          <div>
-                            <h4 className="font-display text-sm font-extrabold text-cobalt-950 sm:text-base">
-                              Sao Lưu &amp; Khôi Phục Dữ Liệu Toàn Hệ Thống
-                            </h4>
-                            <p className="text-xs text-cobalt-600">
-                              Xuất toàn bộ bài viết, sự kiện, BCH, liên hệ thành file JSON để lưu trữ hoặc chuyển sang máy khác.
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="mt-5 grid gap-4 sm:grid-cols-2">
-                          <div className="rounded-2xl border border-cobalt-100 bg-cobalt-50/50 p-4">
-                            <h5 className="text-xs font-bold text-cobalt-900">📥 Xuất Tệp Sao Lưu (Export)</h5>
-                            <p className="mt-1 text-[11.5px] text-cobalt-600">
-                              Tải về tệp <code className="font-mono text-cobalt-800">.json</code> chứa toàn bộ nội dung mà quản trị viên đã tạo.
-                            </p>
-                            <Button variant="primary" className="mt-3 w-full" onClick={handleExportData}>
-                              📥 Tải về file sao lưu JSON
-                            </Button>
-                          </div>
-
-                          <div className="rounded-2xl border border-cobalt-100 bg-cobalt-50/50 p-4">
-                            <h5 className="text-xs font-bold text-cobalt-900">📤 Nhập Tệp Khôi Phục (Import)</h5>
-                            <p className="mt-1 text-[11.5px] text-cobalt-600">
-                              Chọn file sao lưu JSON đã lưu từ trước để nạp lại đầy đủ dữ liệu lên trang web.
-                            </p>
-                            <input
-                              type="file"
-                              accept=".json"
-                              ref={fileInputRef}
-                              onChange={handleImportFile}
-                              className="hidden"
-                            />
-                            <Button
-                              variant="outline"
-                              className="mt-3 w-full"
-                              onClick={() => fileInputRef.current?.click()}
-                            >
-                              📤 Chọn tệp sao lưu JSON để nạp
-                            </Button>
-                          </div>
-                        </div>
-
-                        {/* KHỐI 3: ĐỒNG BỘ ĐÁM MÂY NEON POSTGRESQL (CLOUD SYNC) */}
-                        <div className="mt-6 rounded-2xl border border-indigo-200 bg-gradient-to-br from-indigo-50/60 via-white to-sky-50/40 p-4 sm:p-5">
-                          <div className="flex items-center justify-between gap-2">
-                            <div className="flex items-center gap-2.5">
-                              <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-indigo-100 text-sm">
-                                ☁️
-                              </span>
-                              <div>
-                                <h4 className="font-display text-sm font-extrabold text-cobalt-950 sm:text-base">
-                                  Đồng Bộ Đám Mây Neon Serverless PostgreSQL
-                                </h4>
-                                <p className="text-xs text-cobalt-600">
-                                  Lưu trữ dữ liệu toàn trang lên cơ sở dữ liệu Neon PostgreSQL để các thành viên BCH truy cập trên mọi thiết bị.
-                                </p>
-                              </div>
-                            </div>
-                            <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10.5px] font-bold text-emerald-800">
-                              🟢 Neon Connected
-                            </span>
-                          </div>
-
-                          <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                            <button
-                              type="button"
-                              disabled={isSyncingCloud}
-                              onClick={handleCloudSyncPush}
-                              className="flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-xs font-bold text-white shadow-soft transition hover:bg-indigo-700 active:scale-95 disabled:opacity-50"
-                            >
-                              <span>🚀</span>
-                              {isSyncingCloud ? "Đang đồng bộ..." : "Đẩy Dữ Liệu Lên Đám Mây (Cloud Push)"}
-                            </button>
-                            <button
-                              type="button"
-                              disabled={isSyncingCloud}
-                              onClick={handleCloudSyncPull}
-                              className="flex items-center justify-center gap-2 rounded-xl border border-indigo-200 bg-white px-4 py-2.5 text-xs font-bold text-indigo-700 shadow-2xs transition hover:bg-indigo-50 active:scale-95 disabled:opacity-50"
-                            >
-                              <span>📥</span>
-                              {isSyncingCloud ? "Đang tải về..." : "Kéo Dữ Liệu Mới Nhất Về Máy (Cloud Pull)"}
-                            </button>
-                          </div>
-                        </div>
-
-                        {/* Nút Reset toàn bộ */}
-                        <div className="mt-6 flex flex-col gap-2 rounded-2xl border border-red-200 bg-red-50/50 p-3.5 sm:flex-row sm:items-center sm:justify-between">
-                          <div>
-                            <p className="text-xs font-bold text-red-900">⚠️ Vùng nguy hiểm: Làm sạch dữ liệu</p>
-                            <p className="text-[11px] text-red-700">
-                              Xóa toàn bộ các bài đăng, chương trình, nhân sự tùy chỉnh và đưa tất cả về mặc định chuẩn ban đầu.
-                            </p>
-                          </div>
-                          <button
-                            type="button"
-                            onClick={handleResetAllData}
-                            className="rounded-xl border border-red-300 bg-white px-3.5 py-1.5 text-xs font-bold text-red-600 shadow-2xs hover:bg-red-600 hover:text-white transition shrink-0"
-                          >
-                            Khôi phục toàn bộ về gốc
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* TAB 8: QUẢN LÝ ADMIN (NEON POSTGRESQL) */}
                   {activeTab === "admins" && (
-                    <div className="space-y-6">
-                      {/* Form tạo tài khoản admin */}
-                      <div className="rounded-2xl border border-cobalt-100 bg-cobalt-50/40 p-4 sm:p-5">
-                        <div className="flex items-center justify-between">
-                          <h4 className="font-display text-sm font-extrabold text-cobalt-950 sm:text-base">
-                            👥 Cấp Quyền &amp; Tạo Tài Khoản Quản Trị Viên Mới
-                          </h4>
-                          <span className="rounded-full bg-cobalt-100 px-2.5 py-0.5 text-[10.5px] font-bold text-cobalt-800">
-                            Neon Database
-                          </span>
-                        </div>
-                        <p className="mt-0.5 text-xs text-cobalt-600">
-                          Tài khoản được lưu an toàn trên Neon Serverless PostgreSQL. Thành viên có thể đăng nhập bằng mã PIN hoặc Username.
-                        </p>
-
-                        <form onSubmit={handleCreateAdminSubmit} className="mt-4 space-y-3">
-                          <div className="grid gap-3 sm:grid-cols-3">
-                            <div>
-                              <label className="mb-1 block text-xs font-bold text-cobalt-800">Tên đầy đủ *</label>
-                              <input
-                                required
-                                value={newAdminName}
-                                onChange={(e) => setNewAdminName(e.target.value)}
-                                placeholder="VD: Lê Thị Mai Linh"
-                                className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
-                              />
-                            </div>
-                            <div>
-                              <label className="mb-1 block text-xs font-bold text-cobalt-800">Tên đăng nhập (Username) *</label>
-                              <input
-                                required
-                                value={newAdminUsername}
-                                onChange={(e) => setNewAdminUsername(e.target.value)}
-                                placeholder="VD: mailinh36"
-                                className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
-                              />
-                            </div>
-                            <div>
-                              <label className="mb-1 block text-xs font-bold text-cobalt-800">Mã PIN đăng nhập *</label>
-                              <input
-                                required
-                                type="password"
-                                value={newAdminPin}
-                                onChange={(e) => setNewAdminPin(e.target.value)}
-                                placeholder="Tối thiểu 3 ký tự"
-                                className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
-                              />
-                            </div>
-                          </div>
-
-                          <div className="grid gap-3 sm:grid-cols-3">
-                            <div>
-                              <label className="mb-1 block text-xs font-bold text-cobalt-800">Chức vụ trong BCH</label>
-                              <input
-                                value={newAdminRole}
-                                onChange={(e) => setNewAdminRole(e.target.value)}
-                                placeholder="VD: Phó Bí thư / Đội Phó SVTN"
-                                className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
-                              />
-                            </div>
-                            <div>
-                              <label className="mb-1 block text-xs font-bold text-cobalt-800">Ban chuyên môn</label>
-                              <select
-                                value={newAdminDept}
-                                onChange={(e) => setNewAdminDept(e.target.value)}
-                                className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
-                              >
-                                <option value="Ban Chấp Hành">Ban Chấp Hành</option>
-                                <option value="Đội SVTN">Đội Sinh Viên Tình Nguyện</option>
-                                <option value="Ban Truyền thông">Ban Truyền thông</option>
-                                <option value="Ban Văn hóa – Sự kiện">Ban Văn hóa – Sự kiện</option>
-                                <option value="Ban Hậu cần">Ban Hậu cần</option>
-                              </select>
-                            </div>
-                            <div>
-                              <label className="mb-1 block text-xs font-bold text-cobalt-800">Khóa TMU</label>
-                              <select
-                                value={newAdminCohort}
-                                onChange={(e) => setNewAdminCohort(e.target.value)}
-                                className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
-                              >
-                                <option value="K61">K61 (Tân sinh viên)</option>
-                                <option value="K60">K60</option>
-                                <option value="K59">K59</option>
-                                <option value="K58">K58</option>
-                                <option value="K57">K57</option>
-                              </select>
-                            </div>
-                          </div>
-
-                          <div className="flex justify-end pt-2">
-                            <Button variant="flame" type="submit">
-                              ➕ Thêm Quản Trị Viên
-                            </Button>
-                          </div>
-                        </form>
-                      </div>
-
-                      {/* Danh sách Admin */}
-                      <div>
-                        <div className="mb-3 flex items-center justify-between">
-                          <h4 className="font-display text-sm font-extrabold text-cobalt-950 sm:text-base">
-                            Danh Sách Quản Trị Viên ({dbAdmins.length})
-                          </h4>
-                          <span className="text-xs text-cobalt-600">Đồng bộ từ Neon PostgreSQL</span>
-                        </div>
-
-                        <div className="overflow-hidden rounded-2xl border border-cobalt-100 bg-white shadow-2xs">
-                          <div className="overflow-x-auto">
-                            <table className="w-full text-left text-xs">
-                              <thead className="border-b border-cobalt-100 bg-cobalt-50/70 text-[11px] font-bold text-cobalt-700 uppercase">
-                                <tr>
-                                  <th className="px-4 py-3">Quản trị viên</th>
-                                  <th className="px-4 py-3">Username</th>
-                                  <th className="px-4 py-3">Chức vụ / Ban</th>
-                                  <th className="px-4 py-3">Khóa</th>
-                                  <th className="px-4 py-3">Đăng nhập gần nhất</th>
-                                  <th className="px-4 py-3 text-right">Thao tác</th>
-                                </tr>
-                              </thead>
-                              <tbody className="divide-y divide-cobalt-100">
-                                {dbAdmins.map((adm) => (
-                                  <tr key={adm.id} className="hover:bg-cobalt-50/40 transition">
-                                    <td className="px-4 py-3">
-                                      <div className="flex items-center gap-2">
-                                        <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-flame-100 font-bold text-flame-800 text-xs">
-                                          {adm.name.slice(0, 1)}
-                                        </span>
-                                        <div>
-                                          <p className="font-bold text-cobalt-950">{adm.name}</p>
-                                          {adm.id === "admin-root" && (
-                                            <span className="text-[10px] text-flame-600 font-semibold">Tài khoản gốc</span>
-                                          )}
-                                        </div>
-                                      </div>
-                                    </td>
-                                    <td className="px-4 py-3 font-mono font-bold text-cobalt-800">@{adm.username}</td>
-                                    <td className="px-4 py-3">
-                                      <p className="font-semibold text-cobalt-900">{adm.role}</p>
-                                      <p className="text-[10.5px] text-cobalt-600">{adm.department}</p>
-                                    </td>
-                                    <td className="px-4 py-3">
-                                      <span className="rounded-md bg-tmu-100 px-2 py-0.5 font-bold text-tmu-800 text-[10.5px]">
-                                        {adm.cohort}
-                                      </span>
-                                    </td>
-                                    <td className="px-4 py-3 text-cobalt-600 text-[11px]">
-                                      {adm.last_login_at
-                                        ? new Date(adm.last_login_at).toLocaleString("vi-VN")
-                                        : "Chưa đăng nhập"}
-                                    </td>
-                                    <td className="px-4 py-3 text-right">
-                                      {adm.id !== "admin-root" ? (
-                                        <button
-                                          type="button"
-                                          onClick={() => handleDeleteAdminClick(adm.id, adm.name)}
-                                          className="rounded-lg border border-red-200 bg-white px-2 py-1 text-[11px] font-bold text-red-600 hover:bg-red-50"
-                                        >
-                                          Xóa
-                                        </button>
-                                      ) : (
-                                        <span className="text-[10px] text-cobalt-400 italic">Bảo vệ</span>
-                                      )}
-                                    </td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    <AdminUsersTab
+                      dbAdmins={dbAdmins}
+                      newAdminName={newAdminName}
+                      onAdminNameChange={setNewAdminName}
+                      newAdminUsername={newAdminUsername}
+                      onAdminUsernameChange={setNewAdminUsername}
+                      newAdminPin={newAdminPin}
+                      onAdminPinChange={setNewAdminPin}
+                      newAdminRole={newAdminRole}
+                      onAdminRoleChange={setNewAdminRole}
+                      newAdminDept={newAdminDept}
+                      onAdminDeptChange={setNewAdminDept}
+                      newAdminCohort={newAdminCohort}
+                      onAdminCohortChange={setNewAdminCohort}
+                      onCreateAdmin={handleCreateAdminSubmit}
+                      onDeleteAdmin={handleDeleteAdminClick}
+                    />
                   )}
 
-                  {/* TAB 9: LỊCH SỬ THAY ĐỔI / AUDIT LOGS (NEON POSTGRESQL) */}
                   {activeTab === "audit" && (
-                    <div className="space-y-4">
-                      <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-cobalt-100 bg-cobalt-50/50 p-4">
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <h4 className="font-display text-sm font-extrabold text-cobalt-950 sm:text-base">
-                              📜 Lịch Sử Hoạt Động &amp; Thay Đổi (Audit Logs)
-                            </h4>
-                            <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10.5px] font-bold text-emerald-800">
-                              Neon PostgreSQL
-                            </span>
-                          </div>
-                          <p className="mt-0.5 text-xs text-cobalt-600">
-                            Ghi nhận minh bạch mọi thao tác đăng nhập, chỉnh sửa nội dung, xóa bài viết hoặc đồng bộ dữ liệu của Ban Chấp Hành.
-                          </p>
-                        </div>
-                        <button
-                          type="button"
-                          disabled={isLoadingLogs}
-                          onClick={handleRefreshAuditLogs}
-                          className="flex items-center gap-1.5 rounded-xl border border-cobalt-200 bg-white px-3 py-1.5 text-xs font-bold text-cobalt-800 shadow-2xs hover:bg-cobalt-50 transition active:scale-95"
-                        >
-                          <span>🔄</span>
-                          {isLoadingLogs ? "Đang tải..." : "Làm mới lịch sử"}
-                        </button>
-                      </div>
+                    <AdminAuditTab
+                      auditLogs={auditLogs}
+                      isLoading={isLoadingLogs}
+                      onRefresh={handleRefreshAuditLogs}
+                    />
+                  )}
 
-                      {/* Bảng danh sách Audit Log */}
-                      <div className="overflow-hidden rounded-2xl border border-cobalt-100 bg-white shadow-2xs">
-                        <div className="overflow-x-auto">
-                          <table className="w-full text-left text-xs">
-                            <thead className="border-b border-cobalt-100 bg-cobalt-50/70 text-[11px] font-bold text-cobalt-700 uppercase">
-                              <tr>
-                                <th className="px-4 py-3">Thời gian</th>
-                                <th className="px-4 py-3">Quản trị viên</th>
-                                <th className="px-4 py-3">Hành động</th>
-                                <th className="px-4 py-3">Chuyên mục</th>
-                                <th className="px-4 py-3">Nội dung thay đổi</th>
-                              </tr>
-                            </thead>
-                            <tbody className="divide-y divide-cobalt-100">
-                              {auditLogs.length > 0 ? (
-                                auditLogs.map((log) => {
-                                  const getActionBadge = (act: string) => {
-                                    if (act.includes("CREATE")) return "bg-emerald-100 text-emerald-800 border-emerald-200";
-                                    if (act.includes("DELETE") || act.includes("RESET")) return "bg-red-100 text-red-800 border-red-200";
-                                    if (act.includes("UPDATE") || act.includes("PIN")) return "bg-sky-100 text-sky-800 border-sky-200";
-                                    return "bg-amber-100 text-amber-800 border-amber-200";
-                                  };
-
-                                  return (
-                                    <tr key={log.id} className="hover:bg-cobalt-50/40 transition">
-                                      <td className="px-4 py-3 text-cobalt-600 font-mono text-[11px] whitespace-nowrap">
-                                        {new Date(log.created_at).toLocaleString("vi-VN")}
-                                      </td>
-                                      <td className="px-4 py-3">
-                                        <p className="font-bold text-cobalt-950">{log.admin_name}</p>
-                                        <p className="text-[10px] text-cobalt-500 font-mono">{log.admin_id || "root"}</p>
-                                      </td>
-                                      <td className="px-4 py-3 whitespace-nowrap">
-                                        <span className={cn("inline-flex items-center rounded-md border px-2 py-0.5 text-[10px] font-bold uppercase", getActionBadge(log.action_type))}>
-                                          {log.action_type}
-                                        </span>
-                                      </td>
-                                      <td className="px-4 py-3 font-semibold text-cobalt-800 uppercase text-[10.5px]">
-                                        {log.target_entity}
-                                      </td>
-                                      <td className="px-4 py-3 text-cobalt-900 leading-relaxed font-medium">
-                                        {log.summary}
-                                      </td>
-                                    </tr>
-                                  );
-                                })
-                              ) : (
-                                <tr>
-                                  <td colSpan={5} className="py-8 text-center text-xs text-cobalt-500">
-                                    Chưa có nhật ký hoạt động nào được ghi nhận.
-                                  </td>
-                                </tr>
-                              )}
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    </div>
+                  {activeTab === "settings" && (
+                    <AdminSettingsTab
+                      oldPinInput={oldPinInput}
+                      onOldPinChange={setOldPinInput}
+                      newPinInput={newPinInput}
+                      onNewPinChange={setNewPinInput}
+                      confirmPinInput={confirmPinInput}
+                      onConfirmPinChange={setConfirmPinInput}
+                      showPinSettings={showPinSettings}
+                      onToggleShowPinSettings={() => setShowPinSettings((prev) => !prev)}
+                      onChangePassword={handleChangePassword}
+                      onResetPinQuick={handleResetPinQuick}
+                      onExportData={handleExportData}
+                      onImportFile={handleImportFile}
+                      fileInputRef={fileInputRef}
+                      isSyncingCloud={isSyncingCloud}
+                      onCloudSyncPush={handleCloudSyncPush}
+                      onCloudSyncPull={handleCloudSyncPull}
+                      onResetAllData={handleResetAllData}
+                    />
                   )}
                 </div>
               </div>

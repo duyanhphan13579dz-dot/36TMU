@@ -1,4 +1,13 @@
 import { ORG, PROGRAMS, LEADERSHIP_HISTORY, type Program, type EventCategory, type ProgramStatus, type LeaderRecord } from "@/data/content";
+import { safeLocalStorageSet } from "@/utils/storage";
+
+function notifyQuotaError() {
+  window.dispatchEvent(
+    new CustomEvent("bllsv_toast", {
+      detail: { message: "⚠️ Dung lượng lưu trữ trình duyệt gần đầy! Vui lòng dùng link ảnh trực tuyến." },
+    })
+  );
+}
 
 /* ==========================================================================
    1. TYPES
@@ -131,10 +140,9 @@ export function getStoredAdminPosts(): AdminPost[] {
 }
 
 export function saveStoredAdminPosts(posts: AdminPost[]) {
-  try {
-    localStorage.setItem(POSTS_KEY, JSON.stringify(posts));
+  if (safeLocalStorageSet(POSTS_KEY, JSON.stringify(posts), notifyQuotaError)) {
     window.dispatchEvent(new CustomEvent("bllsv_data_updated", { detail: { type: "posts" } }));
-  } catch {}
+  }
 }
 
 // --- PROGRAMS / CHƯƠNG TRÌNH ---
@@ -150,10 +158,9 @@ export function getStoredAdminPrograms(): AdminProgram[] {
 }
 
 export function saveStoredAdminPrograms(programs: AdminProgram[]) {
-  try {
-    localStorage.setItem(PROGRAMS_KEY, JSON.stringify(programs));
+  if (safeLocalStorageSet(PROGRAMS_KEY, JSON.stringify(programs), notifyQuotaError)) {
     window.dispatchEvent(new CustomEvent("bllsv_data_updated", { detail: { type: "programs" } }));
-  } catch {}
+  }
 }
 
 // Merge programs with defaults
@@ -190,10 +197,9 @@ export function getStoredAdminLeaders(): AdminLeader[] {
 }
 
 export function saveStoredAdminLeaders(leaders: AdminLeader[]) {
-  try {
-    localStorage.setItem(LEADERS_KEY, JSON.stringify(leaders));
+  if (safeLocalStorageSet(LEADERS_KEY, JSON.stringify(leaders), notifyQuotaError)) {
     window.dispatchEvent(new CustomEvent("bllsv_data_updated", { detail: { type: "leaders" } }));
-  } catch {}
+  }
 }
 
 // Merge leaders with defaults
@@ -215,10 +221,9 @@ export function getStoredAdminMotto(): AdminMotto {
 }
 
 export function saveStoredAdminMotto(motto: AdminMotto) {
-  try {
-    localStorage.setItem(MOTTO_KEY, JSON.stringify(motto));
+  if (safeLocalStorageSet(MOTTO_KEY, JSON.stringify(motto), notifyQuotaError)) {
     window.dispatchEvent(new CustomEvent("bllsv_data_updated", { detail: { type: "motto" } }));
-  } catch {}
+  }
 }
 
 // --- RULES / THÔNG BÁO NỘI QUY ---
@@ -234,10 +239,9 @@ export function getStoredAdminRules(): AdminRule {
 }
 
 export function saveStoredAdminRules(rules: AdminRule) {
-  try {
-    localStorage.setItem(RULES_KEY, JSON.stringify(rules));
+  if (safeLocalStorageSet(RULES_KEY, JSON.stringify(rules), notifyQuotaError)) {
     window.dispatchEvent(new CustomEvent("bllsv_data_updated", { detail: { type: "rules" } }));
-  } catch {}
+  }
 }
 
 // --- PIN / MẬT KHẨU QUẢN TRỊ ---
@@ -279,10 +283,9 @@ export function getStoredAdminContact(): AdminContact {
 }
 
 export function saveStoredAdminContact(contact: AdminContact): void {
-  try {
-    localStorage.setItem(CONTACT_KEY, JSON.stringify(contact));
+  if (safeLocalStorageSet(CONTACT_KEY, JSON.stringify(contact), notifyQuotaError)) {
     window.dispatchEvent(new CustomEvent("bllsv_data_updated", { detail: { type: "contact" } }));
-  } catch {}
+  }
 }
 
 const NOTES_KEY = "bllsv_tnv_notes";

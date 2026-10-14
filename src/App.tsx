@@ -26,6 +26,26 @@ export default function App() {
 
   useEffect(() => () => { if (timer.current) window.clearTimeout(timer.current); }, []);
 
+  // Lắng nghe thông báo toast từ các module nền / storage guard
+  useEffect(() => {
+    const handleToastEvent = (e: Event) => {
+      const custom = e as CustomEvent<{ message: string }>;
+      if (custom.detail?.message) pushToast(custom.detail.message);
+    };
+    window.addEventListener("bllsv_toast", handleToastEvent);
+    return () => window.removeEventListener("bllsv_toast", handleToastEvent);
+  }, [pushToast]);
+
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [dataVersion, setDataVersion] = useState(0);
+
+  // Lắng nghe sự kiện đồng bộ dữ liệu admin trên toàn website
+  useEffect(() => {
+    const handleDataUpdated = () => setDataVersion((v) => v + 1);
+    window.addEventListener("bllsv_data_updated", handleDataUpdated);
+    return () => window.removeEventListener("bllsv_data_updated", handleDataUpdated);
+  }, []);
+
   /* Micro-interaction: các khối [data-reveal] hiện dần khi cuộn tới */
   useEffect(() => {
     const els = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"));
@@ -45,8 +65,10 @@ export default function App() {
       { threshold: 0.01, rootMargin: "60px 0px 60px 0px" },
     );
     els.forEach((el, i) => {
-      el.style.transitionDelay = `${Math.min(i % 4, 3) * 60}ms`;
-      io.observe(el);
+      if (!el.classList.contains("is-visible")) {
+        el.style.transitionDelay = `${Math.min(i % 4, 3) * 60}ms`;
+        io.observe(el);
+      }
     });
 
     // Fallback: đảm bảo các element hiển thị sau khi load trang
@@ -57,23 +79,13 @@ export default function App() {
           el.classList.add("is-visible");
         }
       });
-    }, 600);
+    }, 500);
 
     return () => {
       io.disconnect();
       window.clearTimeout(timerId);
     };
-  }, []);
-
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [dataVersion, setDataVersion] = useState(0);
-
-  // Lắng nghe sự kiện đồng bộ dữ liệu admin trên toàn website
-  useEffect(() => {
-    const handleDataUpdated = () => setDataVersion((v) => v + 1);
-    window.addEventListener("bllsv_data_updated", handleDataUpdated);
-    return () => window.removeEventListener("bllsv_data_updated", handleDataUpdated);
-  }, []);
+  }, [dataVersion]);
 
   return (
     <div className="min-h-dvh overflow-x-hidden bg-sky-paper">
