@@ -31,6 +31,18 @@ import {
   type AdminRule,
   type AdminContact,
 } from "@/data/adminStore";
+import {
+  authenticateAdmin,
+  createDbAdmin,
+  deleteDbAdmin,
+  fetchAuditLogs,
+  fetchDbAdmins,
+  recordAuditLog,
+  syncAllDataToCloud,
+  fetchAllDataFromCloud,
+  type DbAdmin,
+  type DbAuditLog,
+} from "@/lib/db";
 
 export { getStoredAdminPosts, saveStoredAdminPosts, type AdminPost };
 
@@ -52,8 +64,33 @@ export default function AdminPanel({
   const [pinError, setPinError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  type TabType = "posts" | "programs" | "leaders" | "motto" | "rules" | "notes" | "contact" | "settings";
+  type TabType =
+    | "posts"
+    | "programs"
+    | "leaders"
+    | "motto"
+    | "rules"
+    | "notes"
+    | "contact"
+    | "admins"
+    | "audit"
+    | "settings";
   const [activeTab, setActiveTab] = useState<TabType>("posts");
+
+  // --- NEON POSTGRESQL & AUDIT LOG STATE ---
+  const [currentAdmin, setCurrentAdmin] = useState<DbAdmin | null>(null);
+  const [dbAdmins, setDbAdmins] = useState<DbAdmin[]>([]);
+  const [auditLogs, setAuditLogs] = useState<DbAuditLog[]>([]);
+  const [isLoadingLogs, setIsLoadingLogs] = useState(false);
+  const [isSyncingCloud, setIsSyncingCloud] = useState(false);
+
+  // Form tạo admin mới
+  const [newAdminUsername, setNewAdminUsername] = useState("");
+  const [newAdminPin, setNewAdminPin] = useState("");
+  const [newAdminName, setNewAdminName] = useState("");
+  const [newAdminRole, setNewAdminRole] = useState("Ủy viên BCH BLLSV TMU");
+  const [newAdminDept, setNewAdminDept] = useState("Ban Chấp Hành");
+  const [newAdminCohort, setNewAdminCohort] = useState("K60");
 
   // --- 1. POSTS STATE ---
   const [posts, setPosts] = useState<AdminPost[]>([]);
@@ -120,6 +157,8 @@ export default function AdminPanel({
     setRulesData(getStoredAdminRules());
     setNotes(getStoredNotes());
     setContactData(getStoredAdminContact());
+    fetchDbAdmins().then(setDbAdmins).catch(() => {});
+    fetchAuditLogs(50).then(setAuditLogs).catch(() => {});
   };
 
   useEffect(() => {
@@ -148,14 +187,35 @@ export default function AdminPanel({
   }, []);
 
   // Đăng nhập
-  const handleLoginSubmit = (e: React.FormEvent) => {
+  const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const currentPin = getStoredAdminPin();
-    if (pinInput.trim() === currentPin) {
+    const admin = await authenticateAdmin(pinInput, pinInput);
+    if (admin || pinInput.trim() === currentPin) {
+      const activeAdmin: DbAdmin = admin || {
+        id: "admin-root",
+        username: "admin36",
+        pin: "36tmu",
+        name: "Ban Chủ Nhiệm BLLSV TMU",
+        role: "Trưởng Ban Điều Hành",
+        department: "Ban Chấp Hành",
+        cohort: "K60",
+        is_active: true,
+        created_at: new Date().toISOString(),
+      };
+      setCurrentAdmin(activeAdmin);
       onLogin();
       setPinError(false);
       setPinInput("");
-      onToast("Đăng nhập quyền Quản Trị Viên thành công! 🔐");
+      onToast(`Đăng nhập thành công! Xin chào ${activeAdmin.name} 🔐`);
+      recordAuditLog({
+        adminId: activeAdmin.id,
+        adminName: activeAdmin.name,
+        actionType: "LOGIN",
+        targetEntity: "auth",
+        summary: `${activeAdmin.name} (${activeAdmin.role}) đăng nhập vào hệ thống`,
+      });
+      fetchAuditLogs(50).then(setAuditLogs).catch(() => {});
     } else {
       setPinError(true);
       onToast("Mật khẩu Admin không đúng, vui lòng thử lại!");
@@ -591,8 +651,126 @@ export default function AdminPanel({
     ) {
       resetAllAdminDataToDefaults();
       reloadAllData();
+      recordAuditLog({
+        adminId: currentAdmin?.id,
+        adminName: currentAdmin?.name || "Admin",
+        actionType: "RESET_DATA",
+        targetEntity: "all",
+        summary: "Khôi phục toàn bộ dữ liệu hệ thống về mặc định",
+      });
       onToast("Đã khôi phục toàn bộ dữ liệu hệ thống về mặc định ban đầu! 🔄");
       onPostCreated?.();
+    }
+  };
+
+  const handleCreateAdminSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newAdminUsername.trim() || !newAdminPin.trim() || !newAdminName.trim()) {
+      onToast("Vui lòng nhập đầy đủ thông tin tài khoản!");
+      return;
+    }
+    const success = await createDbAdmin({
+      username: newAdminUsername.trim(),
+      pin: newAdminPin.trim(),
+      name: newAdminName.trim(),
+      role: newAdminRole.trim(),
+      department: newAdminDept.trim(),
+      cohort: newAdminCohort.trim(),
+    });
+    if (success) {
+      onToast(`Đã tạo tài khoản quản trị cho ${newAdminName}! 🎉`);
+      recordAuditLog({
+        adminId: currentAdmin?.id,
+        adminName: currentAdmin?.name || "Admin",
+        actionType: "LOGIN",
+        targetEntity: "admins",
+        summary: `Tạo tài khoản admin mới: ${newAdminName} (@${newAdminUsername.trim().toLowerCase()})`,
+      });
+      setNewAdminUsername("");
+      setNewAdminPin("");
+      setNewAdminName("");
+      fetchDbAdmins().then(setDbAdmins).catch(() => {});
+    } else {
+      onToast("Tạo tài khoản thất bại! Có thể tên đăng nhập đã tồn tại.");
+    }
+  };
+
+  const handleDeleteAdminClick = async (adminId: string, adminName: string) => {
+    if (adminId === "admin-root") {
+      onToast("Không thể xóa tài khoản Quản trị viên gốc!");
+      return;
+    }
+    if (window.confirm(`Bạn có chắc chắn muốn xóa tài khoản admin của "${adminName}"?`)) {
+      const ok = await deleteDbAdmin(adminId);
+      if (ok) {
+        onToast(`Đã xóa tài khoản admin của ${adminName} 🗑️`);
+        recordAuditLog({
+          adminId: currentAdmin?.id,
+          adminName: currentAdmin?.name || "Admin",
+          actionType: "DELETE_POST",
+          targetEntity: "admins",
+          targetId: adminId,
+          summary: `Xóa tài khoản admin: ${adminName}`,
+        });
+        fetchDbAdmins().then(setDbAdmins).catch(() => {});
+      } else {
+        onToast("Xóa tài khoản thất bại!");
+      }
+    }
+  };
+
+  const handleCloudSyncPush = async () => {
+    setIsSyncingCloud(true);
+    const payload = {
+      posts: getStoredAdminPosts(),
+      programs: getStoredAdminPrograms(),
+      leaders: getStoredAdminLeaders(),
+      motto: getStoredAdminMotto(),
+      rules: getStoredAdminRules(),
+      contact: getStoredAdminContact(),
+      notes: getStoredNotes(),
+    };
+    const ok = await syncAllDataToCloud(payload, currentAdmin?.name || "Admin BCH");
+    setIsSyncingCloud(false);
+    if (ok) {
+      onToast("Đã đồng bộ toàn bộ dữ liệu lên Neon PostgreSQL thành công! ☁️🚀");
+      recordAuditLog({
+        adminId: currentAdmin?.id,
+        adminName: currentAdmin?.name || "Admin",
+        actionType: "LOGIN",
+        targetEntity: "cloud",
+        summary: "Đồng bộ toàn bộ dữ liệu website lên đám mây Neon PostgreSQL",
+      });
+      fetchAuditLogs(50).then(setAuditLogs).catch(() => {});
+    } else {
+      onToast("Đồng bộ đám mây thất bại! Vui lòng kiểm tra kết nối mạng.");
+    }
+  };
+
+  const handleCloudSyncPull = async () => {
+    setIsSyncingCloud(true);
+    const data = await fetchAllDataFromCloud();
+    setIsSyncingCloud(false);
+    if (data) {
+      importAllAdminData(JSON.stringify(data));
+      reloadAllData();
+      onToast("Đã tải và cập nhật dữ liệu mới nhất từ Neon Cloud về trình duyệt! 📥✨");
+      onPostCreated?.();
+    } else {
+      onToast("Chưa có bản lưu dữ liệu trên đám mây hoặc tải thất bại!");
+    }
+  };
+
+  const handleRefreshAuditLogs = async () => {
+    setIsLoadingLogs(true);
+    try {
+      const logs = await fetchAuditLogs(100);
+      setAuditLogs(logs);
+      onToast("Đã cập nhật lịch sử thay đổi từ Neon DB! 📜");
+    } catch {
+      onToast("Không thể tải nhật ký hoạt động!");
+    } finally {
+      setIsLoadingLogs(false);
     }
   };
 
@@ -757,7 +935,7 @@ export default function AdminPanel({
                       <div className="flex items-center gap-2">
                         <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-800">
                           <span className="h-1.5 w-1.5 rounded-full bg-emerald-600" />
-                          Phiên quản trị viên đang mở
+                          {currentAdmin ? `${currentAdmin.name} (${currentAdmin.role})` : "Phiên quản trị viên đang mở"}
                         </span>
                       </div>
                     </div>
@@ -765,6 +943,16 @@ export default function AdminPanel({
 
                   <button
                     onClick={() => {
+                      if (currentAdmin) {
+                        recordAuditLog({
+                          adminId: currentAdmin.id,
+                          adminName: currentAdmin.name,
+                          actionType: "LOGOUT",
+                          targetEntity: "auth",
+                          summary: `${currentAdmin.name} đăng xuất khỏi hệ thống`,
+                        });
+                      }
+                      setCurrentAdmin(null);
                       onLogout();
                       setShowModal(false);
                       onToast("Đã thoát phiên làm việc Quản Trị Viên!");
@@ -785,7 +973,9 @@ export default function AdminPanel({
                     { id: "rules", label: "📜 Thông báo nội quy", count: rulesData.rules.length },
                     { id: "notes", label: "📋 Duyệt Note TNV", count: notes.length },
                     { id: "contact", label: "📞 Kênh liên hệ", count: null },
-                    { id: "settings", label: "🔐 Mật khẩu & Dữ liệu", count: null },
+                    { id: "admins", label: "👥 Quản lý Admin", count: dbAdmins.length },
+                    { id: "audit", label: "📜 Lịch sử thay đổi", count: auditLogs.length },
+                    { id: "settings", label: "🔐 Cài đặt & Cloud Sync", count: null },
                   ].map((tab) => (
                     <button
                       key={tab.id}
@@ -1901,6 +2091,49 @@ export default function AdminPanel({
                           </div>
                         </div>
 
+                        {/* KHỐI 3: ĐỒNG BỘ ĐÁM MÂY NEON POSTGRESQL (CLOUD SYNC) */}
+                        <div className="mt-6 rounded-2xl border border-indigo-200 bg-gradient-to-br from-indigo-50/60 via-white to-sky-50/40 p-4 sm:p-5">
+                          <div className="flex items-center justify-between gap-2">
+                            <div className="flex items-center gap-2.5">
+                              <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-indigo-100 text-sm">
+                                ☁️
+                              </span>
+                              <div>
+                                <h4 className="font-display text-sm font-extrabold text-cobalt-950 sm:text-base">
+                                  Đồng Bộ Đám Mây Neon Serverless PostgreSQL
+                                </h4>
+                                <p className="text-xs text-cobalt-600">
+                                  Lưu trữ dữ liệu toàn trang lên cơ sở dữ liệu Neon PostgreSQL để các thành viên BCH truy cập trên mọi thiết bị.
+                                </p>
+                              </div>
+                            </div>
+                            <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10.5px] font-bold text-emerald-800">
+                              🟢 Neon Connected
+                            </span>
+                          </div>
+
+                          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                            <button
+                              type="button"
+                              disabled={isSyncingCloud}
+                              onClick={handleCloudSyncPush}
+                              className="flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-xs font-bold text-white shadow-soft transition hover:bg-indigo-700 active:scale-95 disabled:opacity-50"
+                            >
+                              <span>🚀</span>
+                              {isSyncingCloud ? "Đang đồng bộ..." : "Đẩy Dữ Liệu Lên Đám Mây (Cloud Push)"}
+                            </button>
+                            <button
+                              type="button"
+                              disabled={isSyncingCloud}
+                              onClick={handleCloudSyncPull}
+                              className="flex items-center justify-center gap-2 rounded-xl border border-indigo-200 bg-white px-4 py-2.5 text-xs font-bold text-indigo-700 shadow-2xs transition hover:bg-indigo-50 active:scale-95 disabled:opacity-50"
+                            >
+                              <span>📥</span>
+                              {isSyncingCloud ? "Đang tải về..." : "Kéo Dữ Liệu Mới Nhất Về Máy (Cloud Pull)"}
+                            </button>
+                          </div>
+                        </div>
+
                         {/* Nút Reset toàn bộ */}
                         <div className="mt-6 flex flex-col gap-2 rounded-2xl border border-red-200 bg-red-50/50 p-3.5 sm:flex-row sm:items-center sm:justify-between">
                           <div>
@@ -1916,6 +2149,270 @@ export default function AdminPanel({
                           >
                             Khôi phục toàn bộ về gốc
                           </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* TAB 8: QUẢN LÝ ADMIN (NEON POSTGRESQL) */}
+                  {activeTab === "admins" && (
+                    <div className="space-y-6">
+                      {/* Form tạo tài khoản admin */}
+                      <div className="rounded-2xl border border-cobalt-100 bg-cobalt-50/40 p-4 sm:p-5">
+                        <div className="flex items-center justify-between">
+                          <h4 className="font-display text-sm font-extrabold text-cobalt-950 sm:text-base">
+                            👥 Cấp Quyền &amp; Tạo Tài Khoản Quản Trị Viên Mới
+                          </h4>
+                          <span className="rounded-full bg-cobalt-100 px-2.5 py-0.5 text-[10.5px] font-bold text-cobalt-800">
+                            Neon Database
+                          </span>
+                        </div>
+                        <p className="mt-0.5 text-xs text-cobalt-600">
+                          Tài khoản được lưu an toàn trên Neon Serverless PostgreSQL. Thành viên có thể đăng nhập bằng mã PIN hoặc Username.
+                        </p>
+
+                        <form onSubmit={handleCreateAdminSubmit} className="mt-4 space-y-3">
+                          <div className="grid gap-3 sm:grid-cols-3">
+                            <div>
+                              <label className="mb-1 block text-xs font-bold text-cobalt-800">Tên đầy đủ *</label>
+                              <input
+                                required
+                                value={newAdminName}
+                                onChange={(e) => setNewAdminName(e.target.value)}
+                                placeholder="VD: Lê Thị Mai Linh"
+                                className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="mb-1 block text-xs font-bold text-cobalt-800">Tên đăng nhập (Username) *</label>
+                              <input
+                                required
+                                value={newAdminUsername}
+                                onChange={(e) => setNewAdminUsername(e.target.value)}
+                                placeholder="VD: mailinh36"
+                                className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="mb-1 block text-xs font-bold text-cobalt-800">Mã PIN đăng nhập *</label>
+                              <input
+                                required
+                                type="password"
+                                value={newAdminPin}
+                                onChange={(e) => setNewAdminPin(e.target.value)}
+                                placeholder="Tối thiểu 3 ký tự"
+                                className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="grid gap-3 sm:grid-cols-3">
+                            <div>
+                              <label className="mb-1 block text-xs font-bold text-cobalt-800">Chức vụ trong BCH</label>
+                              <input
+                                value={newAdminRole}
+                                onChange={(e) => setNewAdminRole(e.target.value)}
+                                placeholder="VD: Phó Bí thư / Đội Phó SVTN"
+                                className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="mb-1 block text-xs font-bold text-cobalt-800">Ban chuyên môn</label>
+                              <select
+                                value={newAdminDept}
+                                onChange={(e) => setNewAdminDept(e.target.value)}
+                                className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
+                              >
+                                <option value="Ban Chấp Hành">Ban Chấp Hành</option>
+                                <option value="Đội SVTN">Đội Sinh Viên Tình Nguyện</option>
+                                <option value="Ban Truyền thông">Ban Truyền thông</option>
+                                <option value="Ban Văn hóa – Sự kiện">Ban Văn hóa – Sự kiện</option>
+                                <option value="Ban Hậu cần">Ban Hậu cần</option>
+                              </select>
+                            </div>
+                            <div>
+                              <label className="mb-1 block text-xs font-bold text-cobalt-800">Khóa TMU</label>
+                              <select
+                                value={newAdminCohort}
+                                onChange={(e) => setNewAdminCohort(e.target.value)}
+                                className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
+                              >
+                                <option value="K61">K61 (Tân sinh viên)</option>
+                                <option value="K60">K60</option>
+                                <option value="K59">K59</option>
+                                <option value="K58">K58</option>
+                                <option value="K57">K57</option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div className="flex justify-end pt-2">
+                            <Button variant="flame" type="submit">
+                              ➕ Thêm Quản Trị Viên
+                            </Button>
+                          </div>
+                        </form>
+                      </div>
+
+                      {/* Danh sách Admin */}
+                      <div>
+                        <div className="mb-3 flex items-center justify-between">
+                          <h4 className="font-display text-sm font-extrabold text-cobalt-950 sm:text-base">
+                            Danh Sách Quản Trị Viên ({dbAdmins.length})
+                          </h4>
+                          <span className="text-xs text-cobalt-600">Đồng bộ từ Neon PostgreSQL</span>
+                        </div>
+
+                        <div className="overflow-hidden rounded-2xl border border-cobalt-100 bg-white shadow-2xs">
+                          <div className="overflow-x-auto">
+                            <table className="w-full text-left text-xs">
+                              <thead className="border-b border-cobalt-100 bg-cobalt-50/70 text-[11px] font-bold text-cobalt-700 uppercase">
+                                <tr>
+                                  <th className="px-4 py-3">Quản trị viên</th>
+                                  <th className="px-4 py-3">Username</th>
+                                  <th className="px-4 py-3">Chức vụ / Ban</th>
+                                  <th className="px-4 py-3">Khóa</th>
+                                  <th className="px-4 py-3">Đăng nhập gần nhất</th>
+                                  <th className="px-4 py-3 text-right">Thao tác</th>
+                                </tr>
+                              </thead>
+                              <tbody className="divide-y divide-cobalt-100">
+                                {dbAdmins.map((adm) => (
+                                  <tr key={adm.id} className="hover:bg-cobalt-50/40 transition">
+                                    <td className="px-4 py-3">
+                                      <div className="flex items-center gap-2">
+                                        <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-flame-100 font-bold text-flame-800 text-xs">
+                                          {adm.name.slice(0, 1)}
+                                        </span>
+                                        <div>
+                                          <p className="font-bold text-cobalt-950">{adm.name}</p>
+                                          {adm.id === "admin-root" && (
+                                            <span className="text-[10px] text-flame-600 font-semibold">Tài khoản gốc</span>
+                                          )}
+                                        </div>
+                                      </div>
+                                    </td>
+                                    <td className="px-4 py-3 font-mono font-bold text-cobalt-800">@{adm.username}</td>
+                                    <td className="px-4 py-3">
+                                      <p className="font-semibold text-cobalt-900">{adm.role}</p>
+                                      <p className="text-[10.5px] text-cobalt-600">{adm.department}</p>
+                                    </td>
+                                    <td className="px-4 py-3">
+                                      <span className="rounded-md bg-tmu-100 px-2 py-0.5 font-bold text-tmu-800 text-[10.5px]">
+                                        {adm.cohort}
+                                      </span>
+                                    </td>
+                                    <td className="px-4 py-3 text-cobalt-600 text-[11px]">
+                                      {adm.last_login_at
+                                        ? new Date(adm.last_login_at).toLocaleString("vi-VN")
+                                        : "Chưa đăng nhập"}
+                                    </td>
+                                    <td className="px-4 py-3 text-right">
+                                      {adm.id !== "admin-root" ? (
+                                        <button
+                                          type="button"
+                                          onClick={() => handleDeleteAdminClick(adm.id, adm.name)}
+                                          className="rounded-lg border border-red-200 bg-white px-2 py-1 text-[11px] font-bold text-red-600 hover:bg-red-50"
+                                        >
+                                          Xóa
+                                        </button>
+                                      ) : (
+                                        <span className="text-[10px] text-cobalt-400 italic">Bảo vệ</span>
+                                      )}
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* TAB 9: LỊCH SỬ THAY ĐỔI / AUDIT LOGS (NEON POSTGRESQL) */}
+                  {activeTab === "audit" && (
+                    <div className="space-y-4">
+                      <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-cobalt-100 bg-cobalt-50/50 p-4">
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <h4 className="font-display text-sm font-extrabold text-cobalt-950 sm:text-base">
+                              📜 Lịch Sử Hoạt Động &amp; Thay Đổi (Audit Logs)
+                            </h4>
+                            <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10.5px] font-bold text-emerald-800">
+                              Neon PostgreSQL
+                            </span>
+                          </div>
+                          <p className="mt-0.5 text-xs text-cobalt-600">
+                            Ghi nhận minh bạch mọi thao tác đăng nhập, chỉnh sửa nội dung, xóa bài viết hoặc đồng bộ dữ liệu của Ban Chấp Hành.
+                          </p>
+                        </div>
+                        <button
+                          type="button"
+                          disabled={isLoadingLogs}
+                          onClick={handleRefreshAuditLogs}
+                          className="flex items-center gap-1.5 rounded-xl border border-cobalt-200 bg-white px-3 py-1.5 text-xs font-bold text-cobalt-800 shadow-2xs hover:bg-cobalt-50 transition active:scale-95"
+                        >
+                          <span>🔄</span>
+                          {isLoadingLogs ? "Đang tải..." : "Làm mới lịch sử"}
+                        </button>
+                      </div>
+
+                      {/* Bảng danh sách Audit Log */}
+                      <div className="overflow-hidden rounded-2xl border border-cobalt-100 bg-white shadow-2xs">
+                        <div className="overflow-x-auto">
+                          <table className="w-full text-left text-xs">
+                            <thead className="border-b border-cobalt-100 bg-cobalt-50/70 text-[11px] font-bold text-cobalt-700 uppercase">
+                              <tr>
+                                <th className="px-4 py-3">Thời gian</th>
+                                <th className="px-4 py-3">Quản trị viên</th>
+                                <th className="px-4 py-3">Hành động</th>
+                                <th className="px-4 py-3">Chuyên mục</th>
+                                <th className="px-4 py-3">Nội dung thay đổi</th>
+                              </tr>
+                            </thead>
+                            <tbody className="divide-y divide-cobalt-100">
+                              {auditLogs.length > 0 ? (
+                                auditLogs.map((log) => {
+                                  const getActionBadge = (act: string) => {
+                                    if (act.includes("CREATE")) return "bg-emerald-100 text-emerald-800 border-emerald-200";
+                                    if (act.includes("DELETE") || act.includes("RESET")) return "bg-red-100 text-red-800 border-red-200";
+                                    if (act.includes("UPDATE") || act.includes("PIN")) return "bg-sky-100 text-sky-800 border-sky-200";
+                                    return "bg-amber-100 text-amber-800 border-amber-200";
+                                  };
+
+                                  return (
+                                    <tr key={log.id} className="hover:bg-cobalt-50/40 transition">
+                                      <td className="px-4 py-3 text-cobalt-600 font-mono text-[11px] whitespace-nowrap">
+                                        {new Date(log.created_at).toLocaleString("vi-VN")}
+                                      </td>
+                                      <td className="px-4 py-3">
+                                        <p className="font-bold text-cobalt-950">{log.admin_name}</p>
+                                        <p className="text-[10px] text-cobalt-500 font-mono">{log.admin_id || "root"}</p>
+                                      </td>
+                                      <td className="px-4 py-3 whitespace-nowrap">
+                                        <span className={cn("inline-flex items-center rounded-md border px-2 py-0.5 text-[10px] font-bold uppercase", getActionBadge(log.action_type))}>
+                                          {log.action_type}
+                                        </span>
+                                      </td>
+                                      <td className="px-4 py-3 font-semibold text-cobalt-800 uppercase text-[10.5px]">
+                                        {log.target_entity}
+                                      </td>
+                                      <td className="px-4 py-3 text-cobalt-900 leading-relaxed font-medium">
+                                        {log.summary}
+                                      </td>
+                                    </tr>
+                                  );
+                                })
+                              ) : (
+                                <tr>
+                                  <td colSpan={5} className="py-8 text-center text-xs text-cobalt-500">
+                                    Chưa có nhật ký hoạt động nào được ghi nhận.
+                                  </td>
+                                </tr>
+                              )}
+                            </tbody>
+                          </table>
                         </div>
                       </div>
                     </div>
