@@ -1,11 +1,11 @@
-import React from "react";
+import type { FormEvent } from "react";
 import { Button } from "@/components/ui";
 import { DEFAULT_CONTACT, saveStoredAdminContact, type AdminContact } from "@/data/adminStore";
 
 interface AdminContactTabProps {
   contactData: AdminContact;
   onContactDataChange: (data: AdminContact) => void;
-  onSaveContact: (e: React.FormEvent) => void;
+  onSaveContact: (e: FormEvent) => void;
   onToast: (msg: string) => void;
   onPostCreated?: () => void;
 }

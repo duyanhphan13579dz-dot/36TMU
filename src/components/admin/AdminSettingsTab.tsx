@@ -1,4 +1,4 @@
-import React from "react";
+import type { ChangeEvent, FormEvent, RefObject } from "react";
 import { Button } from "@/components/ui";
 
 interface AdminSettingsTabProps {
@@ -10,11 +10,11 @@ interface AdminSettingsTabProps {
   onConfirmPinChange: (val: string) => void;
   showPinSettings: boolean;
   onToggleShowPinSettings: () => void;
-  onChangePassword: (e: React.FormEvent) => void;
+  onChangePassword: (e: FormEvent) => void;
   onResetPinQuick: () => void;
   onExportData: () => void;
-  onImportFile: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  fileInputRef: React.RefObject<HTMLInputElement | null>;
+  onImportFile: (e: ChangeEvent<HTMLInputElement>) => void;
+  fileInputRef: RefObject<HTMLInputElement | null>;
   isSyncingCloud: boolean;
   onCloudSyncPush: () => void;
   onCloudSyncPull: () => void;

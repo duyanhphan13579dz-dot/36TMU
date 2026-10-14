@@ -1,11 +1,11 @@
-import React from "react";
+import type { FormEvent } from "react";
 import { Button } from "@/components/ui";
 import { DEFAULT_MOTTO, saveStoredAdminMotto, type AdminMotto } from "@/data/adminStore";
 
 interface AdminMottoTabProps {
   motto: AdminMotto;
   onMottoChange: (motto: AdminMotto) => void;
-  onSaveMotto: (e: React.FormEvent) => void;
+  onSaveMotto: (e: FormEvent) => void;
   onToast: (msg: string) => void;
   onPostCreated?: () => void;
 }

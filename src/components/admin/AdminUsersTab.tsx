@@ -1,39 +1,39 @@
-import React from "react";
+import type { FormEvent } from "react";
 import { Button } from "@/components/ui";
 import { type DbAdmin } from "@/lib/db";
 
 interface AdminUsersTabProps {
   dbAdmins: DbAdmin[];
   newAdminName: string;
-  setNewAdminName: (v: string) => void;
+  onAdminNameChange: (v: string) => void;
   newAdminUsername: string;
-  setNewAdminUsername: (v: string) => void;
+  onAdminUsernameChange: (v: string) => void;
   newAdminPin: string;
-  setNewAdminPin: (v: string) => void;
+  onAdminPinChange: (v: string) => void;
   newAdminRole: string;
-  setNewAdminRole: (v: string) => void;
+  onAdminRoleChange: (v: string) => void;
   newAdminDept: string;
-  setNewAdminDept: (v: string) => void;
+  onAdminDeptChange: (v: string) => void;
   newAdminCohort: string;
-  setNewAdminCohort: (v: string) => void;
-  onCreateAdmin: (e: React.FormEvent) => void;
+  onAdminCohortChange: (v: string) => void;
+  onCreateAdmin: (e: FormEvent) => void;
   onDeleteAdmin: (id: string, name: string) => void;
 }
 
 export default function AdminUsersTab({
   dbAdmins,
   newAdminName,
-  setNewAdminName,
+  onAdminNameChange,
   newAdminUsername,
-  setNewAdminUsername,
+  onAdminUsernameChange,
   newAdminPin,
-  setNewAdminPin,
+  onAdminPinChange,
   newAdminRole,
-  setNewAdminRole,
+  onAdminRoleChange,
   newAdminDept,
-  setNewAdminDept,
+  onAdminDeptChange,
   newAdminCohort,
-  setNewAdminCohort,
+  onAdminCohortChange,
   onCreateAdmin,
   onDeleteAdmin,
 }: AdminUsersTabProps) {
@@ -60,7 +60,7 @@ export default function AdminUsersTab({
               <input
                 required
                 value={newAdminName}
-                onChange={(e) => setNewAdminName(e.target.value)}
+                onChange={(e) => onAdminNameChange(e.target.value)}
                 placeholder="VD: Lê Thị Mai Linh"
                 className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
               />
@@ -70,7 +70,7 @@ export default function AdminUsersTab({
               <input
                 required
                 value={newAdminUsername}
-                onChange={(e) => setNewAdminUsername(e.target.value)}
+                onChange={(e) => onAdminUsernameChange(e.target.value)}
                 placeholder="VD: mailinh36"
                 className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
               />
@@ -81,7 +81,7 @@ export default function AdminUsersTab({
                 required
                 type="password"
                 value={newAdminPin}
-                onChange={(e) => setNewAdminPin(e.target.value)}
+                onChange={(e) => onAdminPinChange(e.target.value)}
                 placeholder="Tối thiểu 3 ký tự"
                 className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
               />
@@ -93,7 +93,7 @@ export default function AdminUsersTab({
               <label className="mb-1 block text-xs font-bold text-cobalt-800">Chức vụ trong BCH</label>
               <input
                 value={newAdminRole}
-                onChange={(e) => setNewAdminRole(e.target.value)}
+                onChange={(e) => onAdminRoleChange(e.target.value)}
                 placeholder="VD: Phó Bí thư / Đội Phó SVTN"
                 className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
               />
@@ -102,7 +102,7 @@ export default function AdminUsersTab({
               <label className="mb-1 block text-xs font-bold text-cobalt-800">Ban chuyên môn</label>
               <select
                 value={newAdminDept}
-                onChange={(e) => setNewAdminDept(e.target.value)}
+                onChange={(e) => onAdminDeptChange(e.target.value)}
                 className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
               >
                 <option value="Ban Chấp Hành">Ban Chấp Hành</option>
@@ -116,7 +116,7 @@ export default function AdminUsersTab({
               <label className="mb-1 block text-xs font-bold text-cobalt-800">Khóa TMU</label>
               <select
                 value={newAdminCohort}
-                onChange={(e) => setNewAdminCohort(e.target.value)}
+                onChange={(e) => onAdminCohortChange(e.target.value)}
                 className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
               >
                 <option value="K61">K61 (Tân sinh viên)</option>

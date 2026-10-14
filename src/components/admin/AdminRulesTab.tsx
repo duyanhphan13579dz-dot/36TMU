@@ -1,4 +1,4 @@
-import React from "react";
+import type { FormEvent } from "react";
 import { Button } from "@/components/ui";
 import { type AdminRule } from "@/data/adminStore";
 
@@ -15,7 +15,7 @@ interface AdminRulesTabProps {
   onSaveEditRule: () => void;
   onCancelEditRule: () => void;
   onDeleteRuleItem: (idx: number) => void;
-  onSaveRulesHeader: (e: React.FormEvent) => void;
+  onSaveRulesHeader: (e: FormEvent) => void;
 }
 
 export default function AdminRulesTab({

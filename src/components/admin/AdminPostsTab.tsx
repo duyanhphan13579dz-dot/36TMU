@@ -1,4 +1,4 @@
-import React from "react";
+import type { FormEvent } from "react";
 import { cn } from "@/utils/cn";
 import { Button } from "@/components/ui";
 import { type AdminPost } from "@/data/adminStore";
@@ -21,7 +21,7 @@ interface AdminPostsTabProps {
   onContentChange: (val: string) => void;
   postImage: string;
   onImageChange: (val: string) => void;
-  onSavePost: (e: React.FormEvent) => void;
+  onSavePost: (e: FormEvent) => void;
   onStartEditPost: (p: AdminPost) => void;
   onCancelEditPost: () => void;
   onDeletePost: (id: string) => void;

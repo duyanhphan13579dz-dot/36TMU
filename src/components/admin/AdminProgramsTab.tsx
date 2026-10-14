@@ -1,4 +1,4 @@
-import React from "react";
+import type { FormEvent } from "react";
 import { Button } from "@/components/ui";
 import { type AdminProgram } from "@/data/adminStore";
 
@@ -22,7 +22,7 @@ interface AdminProgramsTabProps {
   onExcerptChange: (val: string) => void;
   progCover: string;
   onCoverChange: (val: string) => void;
-  onSaveProgram: (e: React.FormEvent) => void;
+  onSaveProgram: (e: FormEvent) => void;
   onStartEditProgram: (p: AdminProgram) => void;
   onCancelEditProgram: () => void;
   onDeleteProgram: (id: string) => void;

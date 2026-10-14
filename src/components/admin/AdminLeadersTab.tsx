@@ -1,4 +1,4 @@
-import React from "react";
+import type { FormEvent } from "react";
 import { Button } from "@/components/ui";
 import { type AdminLeader } from "@/data/adminStore";
 
@@ -20,7 +20,7 @@ interface AdminLeadersTabProps {
   onHometownChange: (val: string) => void;
   leadRole: string;
   onRoleChange: (val: string) => void;
-  onSaveLeader: (e: React.FormEvent) => void;
+  onSaveLeader: (e: FormEvent) => void;
   onStartEditLeader: (l: AdminLeader) => void;
   onCancelEditLeader: () => void;
   onDeleteLeader: (id: string) => void;
