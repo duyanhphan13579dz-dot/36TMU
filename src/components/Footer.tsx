@@ -4,7 +4,7 @@ import { ORG } from "@/data/content";
 import { Icon } from "@/components/ui";
 import { getStoredAdminMotto, getStoredAdminContact } from "@/data/adminStore";
 
-export function Footer() {
+export function Footer({ isAdmin = false }: { isAdmin?: boolean }) {
   const [dataVersion, setDataVersion] = useState(0);
 
   useEffect(() => {
@@ -16,13 +16,18 @@ export function Footer() {
   const motto = useMemo(() => getStoredAdminMotto(), [dataVersion]);
   const contact = useMemo(() => getStoredAdminContact(), [dataVersion]);
 
+  const handleOpenAdmin = () => {
+    window.dispatchEvent(new CustomEvent("bllsv_open_admin"));
+  };
+
   return (
     <footer className="relative overflow-hidden bg-cobalt-950 pt-14 pb-28 text-white xl:pb-10">
       <div className="pointer-events-none absolute inset-0 opacity-[0.15] bg-dots" />
       <div className="pointer-events-none absolute -top-32 left-1/2 h-64 w-[36rem] -translate-x-1/2 rounded-full bg-tmu-500/25 blur-3xl" />
 
       <div className="relative mx-auto w-full max-w-[1400px] px-4 sm:px-6">
-        <div className="grid gap-10 lg:grid-cols-[1.4fr_1fr_1fr]">
+        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.3fr_0.8fr_0.9fr_1fr]">
+          {/* Cột 1: Thông tin tổ chức */}
           <div>
             <div className="flex items-center gap-3">
               <LogoBadge className="h-14 w-14" />
@@ -37,6 +42,7 @@ export function Footer() {
             </p>
           </div>
 
+          {/* Cột 2: Khám phá */}
           <div>
             <p className="text-[11px] font-bold tracking-[0.2em] text-glow-300 uppercase">Khám phá</p>
             <ul className="mt-4 space-y-2.5">
@@ -60,6 +66,7 @@ export function Footer() {
             </ul>
           </div>
 
+          {/* Cột 3: Liên hệ */}
           <div>
             <p className="text-[11px] font-bold tracking-[0.2em] text-glow-300 uppercase">Liên hệ</p>
             <ul className="mt-4 space-y-3 text-[13.5px] text-white/85">
@@ -95,13 +102,66 @@ export function Footer() {
               ))}
             </div>
           </div>
+
+          {/* Cột 4: For Admin (Dành cho Quản trị viên cập nhật thông tin) */}
+          <div className="rounded-2xl border border-white/15 bg-white/[0.04] p-5 backdrop-blur-sm">
+            <div className="flex items-center justify-between">
+              <p className="text-[11px] font-bold tracking-[0.2em] text-flame-400 uppercase">
+                ⚙️ For Admin
+              </p>
+              <span className="rounded-full bg-flame-500/20 px-2.5 py-0.5 text-[10px] font-bold text-flame-300 ring-1 ring-flame-500/30">
+                BCH TMU
+              </span>
+            </div>
+
+            <p className="mt-2.5 text-xs leading-relaxed text-white/80">
+              Cổng quản trị dành cho Ban Chủ Nhiệm & BCH để đăng bài viết, cập nhật chương trình, danh sách cán bộ và nội dung mới lên website.
+            </p>
+
+            <div className="mt-4 space-y-2 text-[11.5px] text-white/70">
+              <div className="flex items-center gap-1.5">
+                <span className="text-flame-400">✓</span> Đăng tin tức, chiến dịch mới
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="text-flame-400">✓</span> Quản lý Ban Chấp Hành K44–K60
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="text-flame-400">✓</span> Đồng bộ dữ liệu Đám mây (Neon DB)
+              </div>
+            </div>
+
+            <div className="mt-5 pt-3 border-t border-white/10 flex flex-col gap-2">
+              <button
+                onClick={handleOpenAdmin}
+                className="flex min-h-10 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-flame-500 to-flame-600 px-4 text-xs font-bold text-white shadow-soft transition hover:from-flame-400 hover:to-flame-500 hover:shadow-lift active:scale-95"
+              >
+                <span>{isAdmin ? "Mở Bảng Điều Khiển" : "Đăng nhập Quản Trị Viên"}</span>
+                <span className="text-sm">→</span>
+              </button>
+
+              <div className="flex items-center justify-between px-1 text-[10px] text-white/50">
+                <span>Phím tắt nhanh:</span>
+                <kbd className="rounded bg-white/10 px-1.5 py-0.5 font-mono text-[9.5px] text-white/75">
+                  Ctrl + Shift + A
+                </kbd>
+              </div>
+            </div>
+          </div>
         </div>
 
+        {/* Chân trang bản quyền & nút cuộn */}
         <div className="mt-10 flex flex-col gap-4 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-[12px] text-white/75">
             © {new Date().getFullYear()} BLLSV Thanh Hóa – TMU. Made with 💙 bởi Ban Truyền thông – Kỹ thuật.
           </p>
           <div className="flex items-center gap-3">
+            <button
+              onClick={handleOpenAdmin}
+              className="text-[12px] font-semibold text-flame-400 hover:text-flame-300 transition"
+            >
+              🔒 Dành cho Ban Quản Trị
+            </button>
+            <span className="h-1 w-1 rounded-full bg-white/30" />
             <a href="#home" className="text-[12px] font-semibold text-white/80 transition hover:text-white">
               Điều khoản sử dụng
             </a>

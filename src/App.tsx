@@ -150,7 +150,7 @@ export default function App() {
         <Contact isAdmin={isAdmin} onToast={pushToast} />
       </main>
 
-      <Footer />
+      <Footer isAdmin={isAdmin} />
       
       {/* Cổng Quản Trị Viên thu nhỏ ở góc màn hình */}
       <AdminPanel
