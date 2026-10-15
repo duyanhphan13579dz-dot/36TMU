@@ -53,7 +53,7 @@ export default function AdminSettingsTab({
               Đổi Mật Khẩu Quản Trị Viên (Admin PIN)
             </h4>
             <p className="text-xs text-cobalt-600">
-              Bảo vệ bảng quản trị với mật khẩu riêng của Ban Chủ Nhiệm / BCH.
+              Bảo vệ bảng quản trị với mật khẩu riêng của Ban Chấp Hành.
             </p>
           </div>
         </div>

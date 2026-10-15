@@ -365,7 +365,7 @@ export default function About() {
                   <div className="flex items-center gap-2">
                     <span className="text-base">🛡️</span>
                     <span>
-                      Mọi thắc mắc hoặc đề xuất điều chỉnh nội quy, vui lòng liên hệ <strong>Đội Trưởng Đội SVTN</strong> hoặc <strong>Ban Chủ Nhiệm</strong>.
+                      Mọi thắc mắc hoặc đề xuất điều chỉnh nội quy, vui lòng liên hệ <strong>Ban Chấp Hành BLLSV TMU</strong>.
                     </span>
                   </div>
                   <span className="font-bold text-flame-700">#KỷLuật #GắnKết #TinhThần36</span>

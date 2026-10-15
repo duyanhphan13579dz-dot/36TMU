@@ -180,7 +180,7 @@ export default function TnvNoteBoard({
                 <option value="Ban Truyền thông">Ban Truyền thông</option>
                 <option value="Ban Văn hóa – Sự kiện">Ban Văn hóa – Sự kiện</option>
                 <option value="Ban Hậu cần">Ban Hậu cần</option>
-                <option value="Đội SVTN / Ban Chủ nhiệm">Đội SVTN / Ban Chủ nhiệm</option>
+                <option value="Ban Chấp Hành BLLSV TMU">Ban Chấp Hành BLLSV TMU</option>
                 <option value="Thành viên nhà chung">Thành viên nhà chung</option>
               </select>
             </div>

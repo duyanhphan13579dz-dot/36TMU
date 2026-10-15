@@ -115,7 +115,7 @@ export function Footer({ isAdmin = false }: { isAdmin?: boolean }) {
             </div>
 
             <p className="mt-2.5 text-xs leading-relaxed text-white/80">
-              Cổng quản trị dành cho Ban Chủ Nhiệm & BCH để đăng bài viết, cập nhật chương trình, danh sách cán bộ và nội dung mới lên website.
+              Cổng quản trị dành cho Ban Chấp Hành BLLSV TMU để đăng bài viết, cập nhật chương trình, danh sách cán bộ và nội dung mới lên website.
             </p>
 
             <div className="mt-4 space-y-2 text-[11.5px] text-white/70">
@@ -135,7 +135,7 @@ export function Footer({ isAdmin = false }: { isAdmin?: boolean }) {
                 onClick={handleOpenAdmin}
                 className="flex min-h-10 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-flame-500 to-flame-600 px-4 text-xs font-bold text-white shadow-soft transition hover:from-flame-400 hover:to-flame-500 hover:shadow-lift active:scale-95"
               >
-                <span>{isAdmin ? "Mở Bảng Điều Khiển" : "Đăng nhập Quản Trị Viên"}</span>
+                <span>{isAdmin ? "Mở Bảng Điều Khiển" : "Đăng nhập Ban Chấp Hành"}</span>
                 <span className="text-sm">→</span>
               </button>
 
@@ -159,7 +159,7 @@ export function Footer({ isAdmin = false }: { isAdmin?: boolean }) {
               onClick={handleOpenAdmin}
               className="text-[12px] font-semibold text-flame-400 hover:text-flame-300 transition"
             >
-              🔒 Dành cho Ban Quản Trị
+              🔒 Dành cho Ban Chấp Hành
             </button>
             <span className="h-1 w-1 rounded-full bg-white/30" />
             <a href="#home" className="text-[12px] font-semibold text-white/80 transition hover:text-white">

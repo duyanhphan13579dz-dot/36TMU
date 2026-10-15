@@ -105,7 +105,7 @@ export default function App() {
           <div className="flex items-center gap-2">
             <span className="animate-pulse text-base">⚙️</span>
             <span>
-              BẢN QUẢN TRỊ VIÊN (ADMIN MODE): Bạn có quyền đăng thông báo mới, cập nhật chương trình, đội ngũ BCH, châm ngôn và nội quy mới.
+              PHIÊN BAN CHẤP HÀNH (ADMIN MODE): Bạn có quyền đăng thông báo mới, cập nhật chương trình, đội ngũ BCH, châm ngôn và nội quy mới.
             </span>
           </div>
           <div className="flex items-center gap-2 shrink-0">
@@ -118,7 +118,7 @@ export default function App() {
             <button
               onClick={() => {
                 setIsAdmin(false);
-                pushToast("Đã thoát chế độ Quản trị viên");
+                pushToast("Đã thoát phiên làm việc Ban Chấp Hành");
               }}
               className="rounded-lg bg-white/20 px-2.5 py-1 text-[11px] font-bold text-white transition hover:bg-white/30"
             >

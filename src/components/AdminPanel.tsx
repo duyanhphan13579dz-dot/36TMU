@@ -109,7 +109,7 @@ export default function AdminPanel({
   const [editingPostId, setEditingPostId] = useState<string | null>(null);
   const [postTitle, setPostTitle] = useState("");
   const [postCategory, setPostCategory] = useState("Hoạt động tình nguyện");
-  const [postAuthor, setPostAuthor] = useState("Ban Chủ nhiệm BLLSV TMU");
+  const [postAuthor, setPostAuthor] = useState("Ban Chấp Hành BLLSV TMU");
   const [postSummary, setPostSummary] = useState("");
   const [postContent, setPostContent] = useState("");
   const [postImage, setPostImage] = useState("");
@@ -207,8 +207,8 @@ export default function AdminPanel({
         id: "admin-root",
         username: "admin36",
         pin: "36tmu",
-        name: "Ban Chủ Nhiệm BLLSV TMU",
-        role: "Trưởng Ban Điều Hành",
+        name: "Ban Chấp Hành BLLSV TMU",
+        role: "Ủy viên Ban Chấp Hành",
         department: "Ban Chấp Hành",
         cohort: "K60",
         is_active: true,
@@ -272,7 +272,7 @@ export default function AdminPanel({
               ...p,
               title: postTitle.trim(),
               category: postCategory,
-              author: postAuthor.trim() || "Ban Chủ nhiệm BLLSV TMU",
+              author: postAuthor.trim() || "Ban Chấp Hành BLLSV TMU",
               summary: postSummary.trim(),
               content: postContent.trim(),
               imageUrl: postImage.trim() || undefined,
@@ -288,7 +288,7 @@ export default function AdminPanel({
         id: "post-" + Date.now(),
         title: postTitle.trim(),
         category: postCategory,
-        author: postAuthor.trim() || "Ban Chủ nhiệm BLLSV TMU",
+        author: postAuthor.trim() || "Ban Chấp Hành BLLSV TMU",
         summary: postSummary.trim(),
         content: postContent.trim(),
         imageUrl: postImage.trim() || undefined,
@@ -804,8 +804,8 @@ export default function AdminPanel({
       <div className="fixed bottom-3 right-3 z-40 sm:bottom-4 sm:right-4 print:hidden">
         <button
           onClick={() => setShowModal(true)}
-          title={isAdmin ? "Bảng Quản Trị Đang Mở (Ctrl+Shift+A)" : "Cổng Quản Trị Viên (Ctrl+Shift+A)"}
-          aria-label="Cổng Quản Trị Viên"
+          title={isAdmin ? "Bảng Quản Trị Đang Mở (Ctrl+Shift+A)" : "Cổng Ban Chấp Hành (Ctrl+Shift+A)"}
+          aria-label="Cổng Ban Chấp Hành"
           className={cn(
             "group relative flex h-8 w-8 items-center justify-center rounded-full border transition-all duration-300 shadow-sm backdrop-blur-md focus:outline-none sm:h-9 sm:w-9",
             isAdmin
@@ -852,10 +852,10 @@ export default function AdminPanel({
                   🔐
                 </div>
                 <h3 className="mt-4 font-display text-xl font-black text-cobalt-950 sm:text-2xl">
-                  Cổng Quản Trị Viên BLLSV TMU
+                  Cổng Ban Chấp Hành BLLSV TMU
                 </h3>
                 <p className="mx-auto mt-2 max-w-md text-xs leading-relaxed text-cobalt-600 sm:text-sm">
-                  Khu vực dành riêng cho Ban Chủ Nhiệm, Ban Chấp Hành &amp; Đội SVTN BLLSV TMU để cập nhật tin tức, sự kiện, nhân sự, liên hệ và nội quy.
+                  Khu vực dành riêng cho Ban Chấp Hành BLLSV TMU để cập nhật tin tức, sự kiện, nhân sự, liên hệ và nội quy.
                 </p>
 
                 <form onSubmit={handleLoginSubmit} className="mx-auto mt-7 max-w-xs space-y-4">
@@ -944,7 +944,7 @@ export default function AdminPanel({
                       setCurrentAdmin(null);
                       onLogout();
                       setShowModal(false);
-                      onToast("Đã thoát phiên làm việc Quản Trị Viên!");
+                      onToast("Đã thoát phiên làm việc Ban Chấp Hành!");
                     }}
                     className="mr-7 rounded-xl border border-red-200 bg-white px-3 py-1.5 text-xs font-bold text-red-600 shadow-2xs transition hover:bg-red-50 sm:mr-8"
                   >

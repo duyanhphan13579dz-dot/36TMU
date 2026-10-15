@@ -106,7 +106,7 @@ export default function AdminPostsTab({
               <input
                 value={postAuthor}
                 onChange={(e) => onAuthorChange(e.target.value)}
-                placeholder="Ban Chủ nhiệm BLLSV TMU"
+                placeholder="Ban Chấp Hành BLLSV TMU"
                 className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
               />
             </div>
