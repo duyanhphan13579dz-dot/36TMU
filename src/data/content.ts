@@ -208,81 +208,112 @@ export type LeaderRecord = {
 };
 
 export const LEADERSHIP_HISTORY: LeaderRecord[] = [
-  { term: "2009 - 2010", khoa: "K44", name: "Đỗ Thị Loan", dob: "20/01/1990", hometown: "Thọ Xuân", role: "Trưởng Ban liên lạc" },
-  { term: "2010 - 2011", khoa: "K45", name: "Nguyễn Ngọc Sơn", dob: "28/12/1991", hometown: "Tĩnh Gia", role: "Trưởng Ban Đối ngoại" },
-  { term: "2010 - 2011", khoa: "K45", name: "Lưu Kim Dung", dob: "18/11/1991", hometown: "Hoằng Hóa", role: "Trưởng Ban Hậu cần" },
-  { term: "2010 - 2011", khoa: "K45", name: "Ngô Thị Thúy", dob: "21/04/1991", hometown: "TP Thanh Hóa", role: "Phó Ban Đối ngoại" },
-  { term: "2010 - 2011", khoa: "K45", name: "Lê Thị Hồng", dob: "24/03/1991", hometown: "Nông Cống", role: "Trưởng Ban Truyền thông" },
-  { term: "2011 - 2014", khoa: "K47", name: "Lê Bích Ngọc", dob: "11/01/1993", hometown: "Hoằng Hóa", role: "Trưởng Ban Đối ngoại" },
-  { term: "2011 - 2014", khoa: "K47", name: "Lê Thị Dung", dob: "14/03/1993", hometown: "Hoằng Hóa", role: "Trưởng Ban TT - NS - Đội trưởng SVTN" },
-  { term: "2011 - 2014", khoa: "K47", name: "Cao Thị Sâm", dob: "24/05/1993", hometown: "Hoằng Hóa", role: "Trưởng Ban Đào tạo Hậu cần" },
-  { term: "2011 - 2014", khoa: "K47", name: "Lê Thị Trang", dob: "05/11/1992", hometown: "Thọ Xuân", role: "Đội trưởng Đội Văn nghệ" },
-  { term: "2011 - 2014", khoa: "K47", name: "Lê Văn Tuấn", dob: "10/10/1993", hometown: "Yên Định", role: "Đội phó Đội SVTN" },
-  { term: "2014 - 2015", khoa: "K48", name: "Mai Thị Thục Hương", dob: "20/08/1994", hometown: "Nga Sơn", role: "Trưởng Ban liên lạc" },
-  { term: "2014 - 2015", khoa: "K48", name: "Hoàng Thị Minh Hòa", dob: "06/03/1994", hometown: "Yên Định", role: "Phó Ban liên lạc" },
-  { term: "2014 - 2015", khoa: "K48", name: "Lương Văn Hải", dob: "06/03/1994", hometown: "Ngọc Lặc", role: "Phó Ban liên lạc - Đội trưởng SVTN" },
-  { term: "2014 - 2015", khoa: "K48", name: "Ngô Thị Thương", dob: "10/05/1994", hometown: "Thiệu Hóa", role: "Trưởng Ban Truyền thông - Kỹ thuật" },
-  { term: "2014 - 2015", khoa: "K48", name: "Đỗ Thị Minh Anh", dob: "17/02/1994", hometown: "Thọ Xuân", role: "Trưởng Ban Tài chính - Hậu cần" },
-  { term: "2014 - 2015", khoa: "K48", name: "Nguyễn Thị Thùy Linh", dob: "10/09/1994", hometown: "Hà Trung", role: "Trưởng Ban Văn nghệ" },
-  { term: "2015 - 2016", khoa: "K49", name: "Nguyễn Thị Thùy Linh", dob: "10/09/1994", hometown: "Hà Trung", role: "Trưởng Ban liên lạc - Đội trưởng SVTN" },
-  { term: "2015 - 2016", khoa: "K49", name: "Mai Thị Thu Hiền", dob: "13/10/1995", hometown: "Nga Sơn", role: "Phó BLL - Đội phó Đội SVTN" },
-  { term: "2015 - 2016", khoa: "K49", name: "Lê Thị Ngọc Ánh", dob: "28/08/1995", hometown: "Đông Sơn", role: "Phó Ban liên lạc" },
-  { term: "2015 - 2016", khoa: "K49", name: "Lê Thị Hương", dob: "29/03/1995", hometown: "Thọ Xuân", role: "Trưởng Ban Hậu cần" },
-  { term: "2016 - 2017", khoa: "K50", name: "Hà Minh Hiếu", dob: "27/04/1996", hometown: "Thường Xuân", role: "Trưởng Ban liên lạc" },
-  { term: "2016 - 2017", khoa: "K50", name: "Nguyễn Thị Quỳnh", dob: "10/06/1996", hometown: "Thiệu Hóa", role: "Phó Ban liên lạc - Đội trưởng SVTN" },
-  { term: "2016 - 2017", khoa: "K50", name: "Phạm Thị Trang", dob: "22/08/1996", hometown: "Quảng Xương", role: "Phó Ban liên lạc - Trưởng Ban Văn nghệ" },
-  { term: "2016 - 2017", khoa: "K50", name: "Trịnh Thị Nguyệt", dob: "27/03/1996", hometown: "Sầm Sơn", role: "Trưởng Ban Hậu cần" },
-  { term: "2016 - 2017", khoa: "K50", name: "Nguyễn Thị Thùy Dung", dob: "06/07/1996", hometown: "TP Thanh Hóa", role: "Trưởng Ban Truyền thông" },
-  { term: "2016 - 2017", khoa: "K50", name: "Nguyễn Việt Thu", dob: "01/09/1996", hometown: "Ngọc Lặc", role: "Trưởng Ban Nội dung - Sự kiện" },
-  { term: "2017 - 2018", khoa: "K51", name: "Nguyễn Thị Thu Hà", dob: "26/06/1997", hometown: "Bỉm Sơn", role: "Trưởng Ban liên lạc" },
-  { term: "2017 - 2018", khoa: "K51", name: "Hoàng Thị Lý", dob: "05/10/1997", hometown: "Yên Định", role: "Phó Ban liên lạc - Đội trưởng SVTN" },
-  { term: "2017 - 2018", khoa: "K51", name: "Phan Ngọc Sơn", dob: "04/02/1997", hometown: "Nông Cống", role: "Phó BLL - Trưởng Ban Văn hóa - Sự kiện" },
-  { term: "2017 - 2018", khoa: "K51", name: "Nguyễn Thị Hạnh", dob: "06/12/1997", hometown: "TP Thanh Hóa", role: "Trưởng Ban Hậu cần" },
-  { term: "2017 - 2018", khoa: "K51", name: "Nguyễn Thị Loan", dob: "31/10/1997", hometown: "Thạch Thành", role: "Trưởng Ban Truyền thông" },
-  { term: "2018 - 2019", khoa: "K52", name: "Lê Văn Hùng", dob: "27/04/1997", hometown: "Đông Sơn", role: "Trưởng Ban liên lạc" },
-  { term: "2018 - 2019", khoa: "K52", name: "Lưu Thị Thương Thương", dob: "10/09/1998", hometown: "Thạch Thành", role: "Phó Ban liên lạc - Đội trưởng SVTN" },
-  { term: "2018 - 2019", khoa: "K52", name: "Nguyễn Hương Ly", dob: "20/11/1998", hometown: "Bỉm Sơn", role: "Trưởng Ban Truyền thông" },
-  { term: "2018 - 2019", khoa: "K52", name: "Phạm Thị Yến", dob: "13/12/1998", hometown: "Nga Sơn", role: "Trưởng Ban Văn hóa - Sự kiện" },
-  { term: "2018 - 2019", khoa: "K52", name: "Nguyễn Thị Vân", dob: "03/01/1998", hometown: "Thiệu Hóa", role: "Trưởng Ban Hậu cần" },
-  { term: "2019 - 2020", khoa: "K53", name: "Lê Cao Định", dob: "15/02/1999", hometown: "Sầm Sơn", role: "Trưởng Ban liên lạc" },
-  { term: "2019 - 2020", khoa: "K53", name: "Phạm Trọng Linh", dob: "27/11/1999", hometown: "Yên Định", role: "Phó Ban liên lạc - Đội trưởng SVTN" },
-  { term: "2019 - 2020", khoa: "K53", name: "Trịnh Thị Ánh", dob: "03/09/1999", hometown: "TP Thanh Hóa", role: "Phó BLL - Trưởng Ban Văn hóa - Sự kiện" },
-  { term: "2019 - 2020", khoa: "K53", name: "Lương Huyền My", dob: "28/09/1999", hometown: "Thọ Xuân", role: "Trưởng Ban Truyền thông" },
-  { term: "2019 - 2020", khoa: "K53", name: "Vũ Thị Trang", dob: "23/05/1999", hometown: "Thạch Thành", role: "Trưởng Ban Hậu cần" },
-  { term: "2020 - 2021", khoa: "K54", name: "Nguyễn Xuân Hưng", dob: "17/01/2000", hometown: "Sầm Sơn", role: "Trưởng Ban liên lạc" },
-  { term: "2020 - 2021", khoa: "K54", name: "Nguyễn Minh Quân", dob: "08/12/2000", hometown: "TX Nghi Sơn", role: "Phó BLL - Đội trưởng SVTN - TB Hậu cần" },
-  { term: "2020 - 2021", khoa: "K54", name: "Lê Thị Phượng", dob: "22/02/2000", hometown: "TP Thanh Hóa", role: "Phó BLL - Trưởng Ban Văn hóa - Sự kiện" },
-  { term: "2020 - 2021", khoa: "K54", name: "Lê Thị Thảo", dob: "20/11/2000", hometown: "Thọ Xuân", role: "Trưởng Ban Truyền thông" },
-  { term: "2021 - 2022", khoa: "K55", name: "Nguyễn Mai Chi", dob: "08/09/2001", hometown: "TP Thanh Hóa", role: "Trưởng Ban liên lạc - Đội trưởng SVTN" },
-  { term: "2021 - 2022", khoa: "K55", name: "Trương Thị Trang", dob: "21/09/2001", hometown: "Hậu Lộc", role: "Phó Ban liên lạc - Trưởng Ban Truyền thông" },
-  { term: "2021 - 2022", khoa: "K55", name: "Phan Thị Thu Ngà", dob: "13/05/2001", hometown: "Thọ Xuân", role: "Phó Ban liên lạc - Trưởng Ban Hậu cần" },
-  { term: "2021 - 2022", khoa: "K55", name: "Quách Thị Kiều Trinh", dob: "07/10/2001", hometown: "Ngọc Lặc", role: "Trưởng Ban Văn hóa - Sự kiện" },
-  { term: "2021 - 2022", khoa: "K55", name: "Trần Quang Thái", dob: "05/07/2002", hometown: "TP Thanh Hóa", role: "Đội phó Đội SVTN" },
-  { term: "2022 - 2023", khoa: "K56", name: "Trần Quang Thái", dob: "05/07/2002", hometown: "TP Thanh Hóa", role: "Trưởng Ban liên lạc" },
-  { term: "2022 - 2023", khoa: "K56", name: "Lê Thùy Linh", dob: "09/04/2002", hometown: "TP Sầm Sơn", role: "Phó Ban liên lạc - Đội trưởng SVTN" },
-  { term: "2022 - 2023", khoa: "K56", name: "Nguyễn Ngọc Anh", dob: "20/11/2002", hometown: "Thường Xuân", role: "Phó Ban liên lạc - Trưởng Ban Truyền thông" },
-  { term: "2022 - 2023", khoa: "K56", name: "Lê Thị Thu Hiền", dob: "08/08/2002", hometown: "Thạch Thành", role: "Trưởng Ban Văn hóa - Sự kiện" },
-  { term: "2022 - 2023", khoa: "K56", name: "Bùi Thị Trang", dob: "29/05/2002", hometown: "Thường Xuân", role: "Trưởng Ban Hậu cần" },
-  { term: "2023 - 2024", khoa: "K57", name: "Nguyễn Minh Tú", dob: "01/08/2003", hometown: "TP Thanh Hóa", role: "Trưởng Ban liên lạc - Đội trưởng SVTN" },
-  { term: "2023 - 2024", khoa: "K57", name: "Phạm Trọng Long", dob: "17/09/2004", hometown: "Yên Định", role: "Phó Ban liên lạc - Đội phó SVTN" },
-  { term: "2023 - 2024", khoa: "K57", name: "Vũ Thị Phương Nhung", dob: "21/11/2003", hometown: "Triệu Sơn", role: "Phó BLL - Trưởng Ban Văn hóa - Sự kiện" },
-  { term: "2023 - 2024", khoa: "K57", name: "Vũ Phạm Tường Vy", dob: "18/12/2003", hometown: "Nghi Sơn", role: "Trưởng Ban Truyền thông" },
-  { term: "2023 - 2024", khoa: "K57", name: "Cao Thị Quỳnh Trang", dob: "16/06/2003", hometown: "Ngọc Lặc", role: "Trưởng Ban Hậu cần" },
-  { term: "2024 - 2025", khoa: "K58", name: "Phạm Thị Thương", dob: "14/02/2004", hometown: "Hậu Lộc", role: "Trưởng Ban liên lạc" },
-  { term: "2024 - 2025", khoa: "K58", name: "Đinh Cao Nguyên", dob: "25/02/2004", hometown: "Hậu Lộc", role: "Phó Ban liên lạc - Đội trưởng SVTN" },
-  { term: "2024 - 2025", khoa: "K58", name: "Lang Thị Châu Anh", dob: "12/07/2003", hometown: "Thường Xuân", role: "Phó BLL - Trưởng Ban Văn hóa - Sự kiện" },
-  { term: "2024 - 2025", khoa: "K58", name: "Bùi Thị Vân", dob: "28/02/2004", hometown: "Ngọc Lặc", role: "Trưởng Ban Truyền thông" },
-  { term: "2024 - 2025", khoa: "K58", name: "Bùi Thị Thúy Hằng", dob: "21/10/2004", hometown: "Thạch Thành", role: "Trưởng Ban Hậu cần" },
-  { term: "2025 - 2026", khoa: "K59", name: "Lê Thị Huyền Trang", dob: "13/10/2005", hometown: "Nghi Sơn", role: "Trưởng Ban liên lạc - Đội trưởng SVTN" },
-  { term: "2025 - 2026", khoa: "K59", name: "Lê Nguyệt Ánh", dob: "09/08/2005", hometown: "Nghi Sơn", role: "Phó BLL - Trưởng Ban Văn hóa - Sự kiện" },
-  { term: "2025 - 2026", khoa: "K59", name: "Trịnh Thị Vinh", dob: "20/12/2005", hometown: "Ngọc Lặc", role: "Trưởng Ban Truyền thông" },
-  { term: "2025 - 2026", khoa: "K59", name: "Phạm Trần Thu Trang", dob: "05/09/2005", hometown: "TP Thanh Hóa", role: "Trưởng Ban Hậu cần" },
+  // Khóa K60 (2026 - 2027)
   { term: "2026 - 2027", khoa: "K60", name: "Trịnh Tứ Huy", dob: "01/04/2006", hometown: "TP Sầm Sơn", role: "Trưởng Ban liên lạc" },
   { term: "2026 - 2027", khoa: "K60", name: "Trần Ngọc Lâm", dob: "24/05/2006", hometown: "Bỉm Sơn", role: "Phó Ban liên lạc - Đội trưởng SVTN" },
   { term: "2026 - 2027", khoa: "K60", name: "Hàn Phụng Nhi", dob: "07/04/2006", hometown: "Quảng Xương", role: "Phó Ban liên lạc - Trưởng Ban Hậu cần" },
   { term: "2026 - 2027", khoa: "K60", name: "Võ Trọng Tuấn Anh", dob: "25/12/2006", hometown: "Thọ Xuân", role: "Trưởng Ban Văn hóa - Sự kiện" },
   { term: "2026 - 2027", khoa: "K60", name: "Hoàng Thị Tiểu Tam", dob: "13/11/2006", hometown: "Như Xuân", role: "Trưởng Ban Truyền thông" },
   { term: "2026 - 2027", khoa: "K60", name: "Phan Ngọc Trâm", dob: "15/08/2006", hometown: "Nghi Sơn", role: "Phó Ban Truyền thông" },
+
+  // Khóa K59 (2025 - 2026)
+  { term: "2025 - 2026", khoa: "K59", name: "Lê Thị Huyền Trang", dob: "13/10/2005", hometown: "Nghi Sơn", role: "Trưởng Ban liên lạc - Đội trưởng SVTN" },
+  { term: "2025 - 2026", khoa: "K59", name: "Lê Nguyệt Ánh", dob: "09/08/2005", hometown: "Nghi Sơn", role: "Phó BLL - Trưởng Ban Văn hóa - Sự kiện" },
+  { term: "2025 - 2026", khoa: "K59", name: "Trịnh Thị Vinh", dob: "20/12/2005", hometown: "Ngọc Lặc", role: "Trưởng Ban Truyền thông" },
+  { term: "2025 - 2026", khoa: "K59", name: "Phạm Trần Thu Trang", dob: "05/09/2005", hometown: "TP Thanh Hóa", role: "Trưởng Ban Hậu cần" },
+
+  // Khóa K58 (2024 - 2025)
+  { term: "2024 - 2025", khoa: "K58", name: "Phạm Thị Thương", dob: "14/02/2004", hometown: "Hậu Lộc", role: "Trưởng Ban liên lạc" },
+  { term: "2024 - 2025", khoa: "K58", name: "Đinh Cao Nguyên", dob: "25/02/2004", hometown: "Hậu Lộc", role: "Phó Ban liên lạc - Đội trưởng SVTN" },
+  { term: "2024 - 2025", khoa: "K58", name: "Lang Thị Châu Anh", dob: "12/07/2003", hometown: "Thường Xuân", role: "Phó BLL - Trưởng Ban Văn hóa - Sự kiện" },
+  { term: "2024 - 2025", khoa: "K58", name: "Bùi Thị Vân", dob: "28/02/2004", hometown: "Ngọc Lặc", role: "Trưởng Ban Truyền thông" },
+  { term: "2024 - 2025", khoa: "K58", name: "Bùi Thị Thúy Hằng", dob: "21/10/2004", hometown: "Thạch Thành", role: "Trưởng Ban Hậu cần" },
+
+  // Khóa K57 (2023 - 2024)
+  { term: "2023 - 2024", khoa: "K57", name: "Nguyễn Minh Tú", dob: "01/08/2003", hometown: "TP Thanh Hóa", role: "Trưởng Ban liên lạc - Đội trưởng SVTN" },
+  { term: "2023 - 2024", khoa: "K57", name: "Phạm Trọng Long", dob: "17/09/2004", hometown: "Yên Định", role: "Phó Ban liên lạc - Đội phó SVTN" },
+  { term: "2023 - 2024", khoa: "K57", name: "Vũ Thị Phương Nhung", dob: "21/11/2003", hometown: "Triệu Sơn", role: "Phó BLL - Trưởng Ban Văn hóa - Sự kiện" },
+  { term: "2023 - 2024", khoa: "K57", name: "Vũ Phạm Tường Vy", dob: "18/12/2003", hometown: "Nghi Sơn", role: "Trưởng Ban Truyền thông" },
+  { term: "2023 - 2024", khoa: "K57", name: "Cao Thị Quỳnh Trang", dob: "16/06/2003", hometown: "Ngọc Lặc", role: "Trưởng Ban Hậu cần" },
+
+  // Khóa K56 (2022 - 2023)
+  { term: "2022 - 2023", khoa: "K56", name: "Trần Quang Thái", dob: "05/07/2002", hometown: "TP Thanh Hóa", role: "Trưởng Ban liên lạc" },
+  { term: "2022 - 2023", khoa: "K56", name: "Lê Thùy Linh", dob: "09/04/2002", hometown: "TP Sầm Sơn", role: "Phó Ban liên lạc - Đội trưởng SVTN" },
+  { term: "2022 - 2023", khoa: "K56", name: "Nguyễn Ngọc Anh", dob: "20/11/2002", hometown: "Thường Xuân", role: "Phó Ban liên lạc - Trưởng Ban Truyền thông" },
+  { term: "2022 - 2023", khoa: "K56", name: "Lê Thị Thu Hiền", dob: "08/08/2002", hometown: "Thạch Thành", role: "Trưởng Ban Văn hóa - Sự kiện" },
+  { term: "2022 - 2023", khoa: "K56", name: "Bùi Thị Trang", dob: "29/05/2002", hometown: "Thường Xuân", role: "Trưởng Ban Hậu cần" },
+
+  // Khóa K55 (2021 - 2022)
+  { term: "2021 - 2022", khoa: "K55", name: "Nguyễn Mai Chi", dob: "08/09/2001", hometown: "TP Thanh Hóa", role: "Trưởng Ban liên lạc - Đội trưởng SVTN" },
+  { term: "2021 - 2022", khoa: "K55", name: "Trương Thị Trang", dob: "21/09/2001", hometown: "Hậu Lộc", role: "Phó Ban liên lạc - Trưởng Ban Truyền thông" },
+  { term: "2021 - 2022", khoa: "K55", name: "Phan Thị Thu Ngà", dob: "13/05/2001", hometown: "Thọ Xuân", role: "Phó Ban liên lạc - Trưởng Ban Hậu cần" },
+  { term: "2021 - 2022", khoa: "K55", name: "Quách Thị Kiều Trinh", dob: "07/10/2001", hometown: "Ngọc Lặc", role: "Trưởng Ban Văn hóa - Sự kiện" },
+  { term: "2021 - 2022", khoa: "K55", name: "Trần Quang Thái", dob: "05/07/2002", hometown: "TP Thanh Hóa", role: "Đội phó Đội SVTN" },
+
+  // Khóa K54 (2020 - 2021)
+  { term: "2020 - 2021", khoa: "K54", name: "Nguyễn Xuân Hưng", dob: "17/01/2000", hometown: "Sầm Sơn", role: "Trưởng Ban liên lạc" },
+  { term: "2020 - 2021", khoa: "K54", name: "Nguyễn Minh Quân", dob: "08/12/2000", hometown: "TX Nghi Sơn", role: "Phó BLL - Đội trưởng SVTN - TB Hậu cần" },
+  { term: "2020 - 2021", khoa: "K54", name: "Lê Thị Phượng", dob: "22/02/2000", hometown: "TP Thanh Hóa", role: "Phó BLL - Trưởng Ban Văn hóa - Sự kiện" },
+  { term: "2020 - 2021", khoa: "K54", name: "Lê Thị Thảo", dob: "20/11/2000", hometown: "Thọ Xuân", role: "Trưởng Ban Truyền thông" },
+
+  // Khóa K53 (2019 - 2020)
+  { term: "2019 - 2020", khoa: "K53", name: "Lê Cao Định", dob: "15/02/1999", hometown: "Sầm Sơn", role: "Trưởng Ban liên lạc" },
+  { term: "2019 - 2020", khoa: "K53", name: "Phạm Trọng Linh", dob: "27/11/1999", hometown: "Yên Định", role: "Phó Ban liên lạc - Đội trưởng SVTN" },
+  { term: "2019 - 2020", khoa: "K53", name: "Trịnh Thị Ánh", dob: "03/09/1999", hometown: "TP Thanh Hóa", role: "Phó BLL - Trưởng Ban Văn hóa - Sự kiện" },
+  { term: "2019 - 2020", khoa: "K53", name: "Lương Huyền My", dob: "28/09/1999", hometown: "Thọ Xuân", role: "Trưởng Ban Truyền thông" },
+  { term: "2019 - 2020", khoa: "K53", name: "Vũ Thị Trang", dob: "23/05/1999", hometown: "Thạch Thành", role: "Trưởng Ban Hậu cần" },
+
+  // Khóa K52 (2018 - 2019)
+  { term: "2018 - 2019", khoa: "K52", name: "Lê Văn Hùng", dob: "27/04/1997", hometown: "Đông Sơn", role: "Trưởng Ban liên lạc" },
+  { term: "2018 - 2019", khoa: "K52", name: "Lưu Thị Thương Thương", dob: "10/09/1998", hometown: "Thạch Thành", role: "Phó Ban liên lạc - Đội trưởng SVTN" },
+  { term: "2018 - 2019", khoa: "K52", name: "Nguyễn Hương Ly", dob: "20/11/1998", hometown: "Bỉm Sơn", role: "Trưởng Ban Truyền thông" },
+  { term: "2018 - 2019", khoa: "K52", name: "Phạm Thị Yến", dob: "13/12/1998", hometown: "Nga Sơn", role: "Trưởng Ban Văn hóa - Sự kiện" },
+  { term: "2018 - 2019", khoa: "K52", name: "Nguyễn Thị Vân", dob: "03/01/1998", hometown: "Thiệu Hóa", role: "Trưởng Ban Hậu cần" },
+
+  // Khóa K51 (2017 - 2018)
+  { term: "2017 - 2018", khoa: "K51", name: "Nguyễn Thị Thu Hà", dob: "26/06/1997", hometown: "Bỉm Sơn", role: "Trưởng Ban liên lạc" },
+  { term: "2017 - 2018", khoa: "K51", name: "Hoàng Thị Lý", dob: "05/10/1997", hometown: "Yên Định", role: "Phó Ban liên lạc - Đội trưởng SVTN" },
+  { term: "2017 - 2018", khoa: "K51", name: "Phan Ngọc Sơn", dob: "04/02/1997", hometown: "Nông Cống", role: "Phó BLL - Trưởng Ban Văn hóa - Sự kiện" },
+  { term: "2017 - 2018", khoa: "K51", name: "Nguyễn Thị Hạnh", dob: "06/12/1997", hometown: "TP Thanh Hóa", role: "Trưởng Ban Hậu cần" },
+  { term: "2017 - 2018", khoa: "K51", name: "Nguyễn Thị Loan", dob: "31/10/1997", hometown: "Thạch Thành", role: "Trưởng Ban Truyền thông" },
+
+  // Khóa K50 (2016 - 2017)
+  { term: "2016 - 2017", khoa: "K50", name: "Hà Minh Hiếu", dob: "27/04/1996", hometown: "Thường Xuân", role: "Trưởng Ban liên lạc" },
+  { term: "2016 - 2017", khoa: "K50", name: "Nguyễn Thị Quỳnh", dob: "10/06/1996", hometown: "Thiệu Hóa", role: "Phó Ban liên lạc - Đội trưởng SVTN" },
+  { term: "2016 - 2017", khoa: "K50", name: "Phạm Thị Trang", dob: "22/08/1996", hometown: "Quảng Xương", role: "Phó Ban liên lạc - Trưởng Ban Văn nghệ" },
+  { term: "2016 - 2017", khoa: "K50", name: "Trịnh Thị Nguyệt", dob: "27/03/1996", hometown: "Sầm Sơn", role: "Trưởng Ban Hậu cần" },
+  { term: "2016 - 2017", khoa: "K50", name: "Nguyễn Thị Thùy Dung", dob: "06/07/1996", hometown: "TP Thanh Hóa", role: "Trưởng Ban Truyền thông" },
+  { term: "2016 - 2017", khoa: "K50", name: "Nguyễn Việt Thu", dob: "01/09/1996", hometown: "Ngọc Lặc", role: "Trưởng Ban Nội dung - Sự kiện" },
+
+  // Khóa K49 (2015 - 2016)
+  { term: "2015 - 2016", khoa: "K49", name: "Nguyễn Thị Thùy Linh", dob: "10/09/1994", hometown: "Hà Trung", role: "Trưởng Ban liên lạc - Đội trưởng SVTN" },
+  { term: "2015 - 2016", khoa: "K49", name: "Mai Thị Thu Hiền", dob: "13/10/1995", hometown: "Nga Sơn", role: "Phó BLL - Đội phó Đội SVTN" },
+  { term: "2015 - 2016", khoa: "K49", name: "Lê Thị Ngọc Ánh", dob: "28/08/1995", hometown: "Đông Sơn", role: "Phó Ban liên lạc" },
+  { term: "2015 - 2016", khoa: "K49", name: "Lê Thị Hương", dob: "29/03/1995", hometown: "Thọ Xuân", role: "Trưởng Ban Hậu cần" },
+
+  // Khóa K48 (2014 - 2015)
+  { term: "2014 - 2015", khoa: "K48", name: "Mai Thị Thục Hương", dob: "20/08/1994", hometown: "Nga Sơn", role: "Trưởng Ban liên lạc" },
+  { term: "2014 - 2015", khoa: "K48", name: "Hoàng Thị Minh Hòa", dob: "06/03/1994", hometown: "Yên Định", role: "Phó Ban liên lạc" },
+  { term: "2014 - 2015", khoa: "K48", name: "Lương Văn Hải", dob: "06/03/1994", hometown: "Ngọc Lặc", role: "Phó Ban liên lạc - Đội trưởng SVTN" },
+  { term: "2014 - 2015", khoa: "K48", name: "Ngô Thị Thương", dob: "10/05/1994", hometown: "Thiệu Hóa", role: "Trưởng Ban Truyền thông - Kỹ thuật" },
+  { term: "2014 - 2015", khoa: "K48", name: "Đỗ Thị Minh Anh", dob: "17/02/1994", hometown: "Thọ Xuân", role: "Trưởng Ban Tài chính - Hậu cần" },
+  { term: "2014 - 2015", khoa: "K48", name: "Nguyễn Thị Thùy Linh", dob: "10/09/1994", hometown: "Hà Trung", role: "Trưởng Ban Văn nghệ" },
+
+  // Khóa K47 (2011 - 2014)
+  { term: "2011 - 2014", khoa: "K47", name: "Lê Bích Ngọc", dob: "11/01/1993", hometown: "Hoằng Hóa", role: "Trưởng Ban Đối ngoại" },
+  { term: "2011 - 2014", khoa: "K47", name: "Lê Thị Dung", dob: "14/03/1993", hometown: "Hoằng Hóa", role: "Trưởng Ban TT - NS - Đội trưởng SVTN" },
+  { term: "2011 - 2014", khoa: "K47", name: "Cao Thị Sâm", dob: "24/05/1993", hometown: "Hoằng Hóa", role: "Trưởng Ban Đào tạo Hậu cần" },
+  { term: "2011 - 2014", khoa: "K47", name: "Lê Thị Trang", dob: "05/11/1992", hometown: "Thọ Xuân", role: "Đội trưởng Đội Văn nghệ" },
+  { term: "2011 - 2014", khoa: "K47", name: "Lê Văn Tuấn", dob: "10/10/1993", hometown: "Yên Định", role: "Đội phó Đội SVTN" },
+
+  // Khóa K45 (2010 - 2011)
+  { term: "2010 - 2011", khoa: "K45", name: "Nguyễn Ngọc Sơn", dob: "28/12/1991", hometown: "Tĩnh Gia", role: "Trưởng Ban Đối ngoại" },
+  { term: "2010 - 2011", khoa: "K45", name: "Lưu Kim Dung", dob: "18/11/1991", hometown: "Hoằng Hóa", role: "Trưởng Ban Hậu cần" },
+  { term: "2010 - 2011", khoa: "K45", name: "Ngô Thị Thúy", dob: "21/04/1991", hometown: "TP Thanh Hóa", role: "Phó Ban Đối ngoại" },
+  { term: "2010 - 2011", khoa: "K45", name: "Lê Thị Hồng", dob: "24/03/1991", hometown: "Nông Cống", role: "Trưởng Ban Truyền thông" },
+
+  // Khóa K44 (2009 - 2010)
+  { term: "2009 - 2010", khoa: "K44", name: "Đỗ Thị Loan", dob: "20/01/1990", hometown: "Thọ Xuân", role: "Trưởng Ban liên lạc" },
 ];
 
 /* ------------------------------------------------------------------ *

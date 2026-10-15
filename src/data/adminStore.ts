@@ -202,10 +202,34 @@ export function saveStoredAdminLeaders(leaders: AdminLeader[]) {
   }
 }
 
-// Merge leaders with defaults
+// Helpers to sort leaders chronologically (newest to oldest)
+function parseKhoa(k: string): number {
+  const match = k.match(/\d+/);
+  return match ? parseInt(match[0], 10) : 0;
+}
+
+function parseTermYear(term: string): number {
+  const match = term.match(/\d{4}/);
+  return match ? parseInt(match[0], 10) : 0;
+}
+
+// Merge leaders with defaults and sort chronologically from newest to oldest (K60 down to K44)
 export function getAllLeaders(): LeaderRecord[] {
   const custom = getStoredAdminLeaders();
-  return [...custom, ...LEADERSHIP_HISTORY];
+  const all = [...custom, ...LEADERSHIP_HISTORY];
+  return all.slice().sort((a, b) => {
+    const kA = parseKhoa(a.khoa);
+    const kB = parseKhoa(b.khoa);
+    if (kA !== kB) {
+      return kB - kA; // Khóa mới nhất xếp trước (K60, K59, ... K44)
+    }
+    const yA = parseTermYear(a.term);
+    const yB = parseTermYear(b.term);
+    if (yA !== yB) {
+      return yB - yA; // Nhiệm kỳ năm học mới nhất xếp trước
+    }
+    return 0; // Giữ nguyên thứ tự chức vụ (Trưởng ban, Phó ban...)
+  });
 }
 
 // --- MOTTO / CHÂM NGÔN HOẠT ĐỘNG ---

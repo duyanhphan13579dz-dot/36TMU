@@ -171,7 +171,7 @@ export default function AdminLeadersTab({
         <div className="mt-3 space-y-2.5">
           {filteredLeaders.length === 0 ? (
             <p className="rounded-xl border border-dashed border-cobalt-200 p-6 text-center text-xs text-cobalt-500">
-              {searchLead ? "Không tìm thấy đồng chí nào phù hợp." : "Chưa có thành viên BCH mới nào được thêm riêng. Hệ thống đang hiển thị đầy đủ 16 thế hệ từ K44 đến K60."}
+              {searchLead ? "Không tìm thấy đồng chí nào phù hợp." : "Chưa có thành viên BCH mới nào được thêm riêng. Hệ thống đang hiển thị đầy đủ 16 thế hệ từ K60 đến K44."}
             </p>
           ) : (
             filteredLeaders.map((lead) => (

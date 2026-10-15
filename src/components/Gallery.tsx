@@ -207,7 +207,7 @@ export default function Gallery({ onToast }: { onToast: (msg: string) => void })
           ))}
         </div>
 
-        {/* ============ BAN CHẤP HÀNH CÁC THẾ HỆ (CHUẨN TỪ K44 ĐẾN K60) ============ */}
+        {/* ============ BAN CHẤP HÀNH CÁC THẾ HỆ (TỪ MỚI NHẤT ĐẾN CŨ NHẤT: K60 ĐẾN K44) ============ */}
         <div className="mt-16 rounded-3xl border border-cobalt-100 bg-white p-6 shadow-soft sm:p-8 lg:mt-24 lg:p-10" data-reveal>
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div className="max-w-2xl space-y-2.5">
@@ -215,7 +215,7 @@ export default function Gallery({ onToast }: { onToast: (msg: string) => void })
                 ⭐ Thế hệ giữ lửa
               </span>
               <h3 className="font-display text-2xl font-black text-cobalt-950 sm:text-3xl">
-                Ban Chấp Hành Các Khóa (K44 – K60)
+                Ban Chấp Hành Các Khóa ({khoasList[0] || "K60"} – {khoasList[khoasList.length - 1] || "K44"})
               </h3>
               <p className="text-sm leading-relaxed text-cobalt-700">
                 16 thế hệ anh chị Ban Chấp Hành đã cống hiến, giữ lửa và xây đắp nên mái nhà chung vững mạnh của con em Thanh Hóa tại ĐH Thương Mại từ 2008 đến nay.
