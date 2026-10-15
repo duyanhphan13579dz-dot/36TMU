@@ -177,45 +177,38 @@ export function Footer() {
 
           <div>
             <p className="text-[11px] font-bold tracking-[0.2em] text-glow-300 uppercase">Liên hệ</p>
-            {(() => {
-              const contact = getStoredAdminContact();
-              return (
-                <>
-                  <ul className="mt-4 space-y-3 text-[13.5px] text-white/85">
-                    <li className="flex items-start gap-2.5">
-                      <Icon.pin className="mt-0.5 h-4 w-4 shrink-0 text-flame-400" />
-                      {contact.address}
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <Icon.mail className="mt-0.5 h-4 w-4 shrink-0 text-flame-400" />
-                      {contact.email}
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <Icon.chat className="mt-0.5 h-4 w-4 shrink-0 text-flame-400" />
-                      {contact.phone}
-                    </li>
-                  </ul>
-                  <div className="mt-5 flex gap-2">
-                    {[
-                      { href: contact.fanpage, icon: <Icon.facebook className="h-4 w-4" />, label: "Fanpage" },
-                      { href: contact.tiktok, icon: <Icon.tiktok className="h-4 w-4" />, label: "TikTok" },
-                      { href: contact.group, icon: <Icon.users className="h-4 w-4" />, label: "Group" },
-                    ].map((s) => (
-                      <a
-                        key={s.label}
-                        href={s.href}
-                        target="_blank"
-                        rel="noreferrer"
-                        aria-label={s.label}
-                        className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/10 text-white transition hover:-translate-y-1 hover:bg-flame-500"
-                      >
-                        {s.icon}
-                      </a>
-                    ))}
-                  </div>
-                </>
-              );
-            })()}
+            <ul className="mt-4 space-y-3 text-[13.5px] text-white/85">
+              <li className="flex items-start gap-2.5">
+                <Icon.pin className="mt-0.5 h-4 w-4 shrink-0 text-flame-400" />
+                {contact.address}
+              </li>
+              <li className="flex items-start gap-2.5">
+                <Icon.mail className="mt-0.5 h-4 w-4 shrink-0 text-flame-400" />
+                {contact.email}
+              </li>
+              <li className="flex items-start gap-2.5">
+                <Icon.chat className="mt-0.5 h-4 w-4 shrink-0 text-flame-400" />
+                {contact.phone}
+              </li>
+            </ul>
+            <div className="mt-5 flex gap-2">
+              {[
+                { href: contact.fanpage, icon: <Icon.facebook className="h-4 w-4" />, label: "Fanpage" },
+                { href: contact.tiktok, icon: <Icon.tiktok className="h-4 w-4" />, label: "TikTok" },
+                { href: contact.group, icon: <Icon.users className="h-4 w-4" />, label: "Group" },
+              ].map((s) => (
+                <a
+                  key={s.label}
+                  href={s.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={s.label}
+                  className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/10 text-white transition hover:-translate-y-1 hover:bg-flame-500"
+                >
+                  {s.icon}
+                </a>
+              ))}
+            </div>
           </div>
         </div>
 
