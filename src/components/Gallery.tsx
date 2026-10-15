@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { CONFESSIONS, MEMORIES, type Confession } from "@/data/content";
-import { Button, Icon, Kicker, SectionHeading, Sheet } from "@/components/ui";
+import { Button, Icon, Kicker, SectionHeading } from "@/components/ui";
 import { getAllLeaders } from "@/data/adminStore";
 import { cn } from "@/utils/cn";
+import { LightboxModal } from "@/components/LightboxModal";
+import { ShimmerImage } from "@/components/ui/ShimmerImage";
 
 const TONES: Record<Confession["tone"], string> = {
   blue: "bg-tmu-100 border-tmu-200 text-cobalt-900",
@@ -47,6 +49,17 @@ export default function Gallery({ onToast }: { onToast: (msg: string) => void })
     const handleUpdate = () => setLeadersDataVersion((v) => v + 1);
     window.addEventListener("bllsv_data_updated", handleUpdate);
     return () => window.removeEventListener("bllsv_data_updated", handleUpdate);
+  }, []);
+
+  useEffect(() => {
+    const handleOpenMemory = (e: Event) => {
+      const custom = e as CustomEvent<{ index: number }>;
+      if (typeof custom.detail?.index === "number") {
+        setLightbox(custom.detail.index);
+      }
+    };
+    window.addEventListener("bllsv_open_memory_lightbox", handleOpenMemory);
+    return () => window.removeEventListener("bllsv_open_memory_lightbox", handleOpenMemory);
   }, []);
 
   const allLeaders = useMemo(() => getAllLeaders(), [leadersDataVersion]);
@@ -134,7 +147,12 @@ export default function Gallery({ onToast }: { onToast: (msg: string) => void })
                 onClick={() => setLightbox(i)}
                 className="group relative w-[82%] shrink-0 snap-center overflow-hidden rounded-3xl border-4 border-white bg-cobalt-900 shadow-lift"
               >
-                <img src={m.src} alt={m.title} loading="lazy" className="h-64 w-full object-cover sm:h-80" />
+                <ShimmerImage
+                  src={m.src}
+                  alt={m.title}
+                  containerClassName="h-64 w-full sm:h-80"
+                  className="h-full w-full object-cover"
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-cobalt-950/90 via-transparent to-transparent" />
                 <span className="absolute top-3 left-3 rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-bold text-cobalt-800">
                   {m.tag}
@@ -170,10 +188,10 @@ export default function Gallery({ onToast }: { onToast: (msg: string) => void })
                 m.height,
               )}
             >
-              <img
+              <ShimmerImage
                 src={m.src}
                 alt={m.title}
-                loading="lazy"
+                containerClassName="h-full w-full"
                 className="h-full w-full object-cover transition-transform duration-[1100ms] group-hover:scale-110"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-cobalt-950/90 via-cobalt-900/10 to-transparent opacity-0 transition-opacity duration-400 group-hover:opacity-100" />
@@ -351,37 +369,14 @@ export default function Gallery({ onToast }: { onToast: (msg: string) => void })
         </div>
       </div>
 
-      {/* ===== Lightbox ===== */}
-      <Sheet open={lightbox !== null} onClose={() => setLightbox(null)}>
-        {lightbox !== null && (
-          <div className="relative">
-            <img src={MEMORIES[lightbox].src} alt={MEMORIES[lightbox].title} className="max-h-[62vh] w-full object-cover" />
-            <div className="space-y-1 p-5">
-              <span className="inline-flex rounded-full bg-flame-100 px-2.5 py-1 text-[11px] font-bold text-flame-700">
-                {MEMORIES[lightbox].tag}
-              </span>
-              <h4 className="font-display text-lg font-extrabold text-cobalt-900">{MEMORIES[lightbox].title}</h4>
-              <p className="text-[13.5px] leading-relaxed text-cobalt-700/85">{MEMORIES[lightbox].caption}</p>
-              <div className="flex gap-2 pt-3">
-                <Button
-                  variant="outline"
-                  className="flex-1"
-                  onClick={() => setLightbox((i) => ((i ?? 0) - 1 + MEMORIES.length) % MEMORIES.length)}
-                >
-                  ← Ảnh trước
-                </Button>
-                <Button
-                  variant="soft"
-                  className="flex-1"
-                  onClick={() => setLightbox((i) => ((i ?? 0) + 1) % MEMORIES.length)}
-                >
-                  Ảnh sau →
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
-      </Sheet>
+      {/* ===== Lightbox xem ảnh toàn màn hình ===== */}
+      <LightboxModal
+        open={lightbox !== null}
+        currentIndex={lightbox ?? 0}
+        items={MEMORIES}
+        onClose={() => setLightbox(null)}
+        onNavigate={(idx) => setLightbox(idx)}
+      />
     </section>
   );
 }

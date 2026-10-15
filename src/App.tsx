@@ -5,9 +5,11 @@ import About from "@/components/About";
 import Events from "@/components/Events";
 import DanceLab from "@/components/DanceLab";
 import Gallery from "@/components/Gallery";
-import Contact, { Footer } from "@/components/Contact";
+import Contact from "@/components/Contact";
+import Footer from "@/components/Footer";
 import AdminPanel from "@/components/AdminPanel";
 import { Toast } from "@/components/ui";
+import { QuickSearchModal } from "@/components/QuickSearchModal";
 import { NAV_ITEMS, type NavId } from "@/data/content";
 import { getStoredAdminMotto } from "@/data/adminStore";
 
@@ -38,6 +40,14 @@ export default function App() {
 
   const [isAdmin, setIsAdmin] = useState(false);
   const [dataVersion, setDataVersion] = useState(0);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  // Lắng nghe sự kiện bật/tắt tìm kiếm nhanh (Ctrl+K)
+  useEffect(() => {
+    const handleToggleSearch = () => setIsSearchOpen((prev) => !prev);
+    window.addEventListener("bllsv_toggle_search", handleToggleSearch);
+    return () => window.removeEventListener("bllsv_toggle_search", handleToggleSearch);
+  }, []);
 
   // Lắng nghe sự kiện đồng bộ dữ liệu admin trên toàn website
   useEffect(() => {
@@ -152,6 +162,17 @@ export default function App() {
       />
 
       <Toast message={toast} />
+
+      {/* Modal tìm kiếm nhanh toàn diện (Spotlight / Ctrl+K) */}
+      <QuickSearchModal
+        open={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+        onSelectMemory={(index) => {
+          window.dispatchEvent(new CustomEvent("bllsv_open_memory_lightbox", { detail: { index } }));
+          const el = document.getElementById("memories");
+          el?.scrollIntoView({ behavior: "smooth" });
+        }}
+      />
     </div>
   );
 }

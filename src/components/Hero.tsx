@@ -1,6 +1,7 @@
 import { HERO_BADGES, HERO_STATS } from "@/data/content";
 import { Button, Icon, Kicker } from "@/components/ui";
 import { LogoBadge } from "@/components/Logo";
+import { ShimmerImage } from "@/components/ui/ShimmerImage";
 
 const MARQUEE = [
   "TINH THẦN 36",
@@ -120,10 +121,10 @@ function VideoFeature() {
     <div className="relative mx-auto w-full max-w-xl">
       {/* Khung video */}
       <div className="group relative aspect-video w-full overflow-hidden rounded-3xl border-4 border-white bg-cobalt-900 shadow-lift">
-        <img
+        <ShimmerImage
           src="https://images.pexels.com/photos/17589607/pexels-photo-17589607.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200"
           alt="Đêm diễn flashmob của BLLSV Thanh Hóa TMU"
-          loading="eager"
+          containerClassName="h-full w-full"
           className="h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-cobalt-950/85 via-cobalt-900/10 to-transparent" />

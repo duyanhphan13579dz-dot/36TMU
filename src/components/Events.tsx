@@ -3,6 +3,7 @@ import { EVENT_FILTERS, YEARLY_TIMELINE, type Program } from "@/data/content";
 import { Button, Icon, Kicker, SectionHeading, Sheet } from "@/components/ui";
 import { getStoredAdminPosts, getAllPrograms } from "@/data/adminStore";
 import { cn } from "@/utils/cn";
+import { ShimmerImage } from "@/components/ui/ShimmerImage";
 
 const STATUS_STYLE: Record<string, string> = {
   "Mới đăng": "bg-red-600 text-white animate-pulse",
@@ -13,6 +14,7 @@ const STATUS_STYLE: Record<string, string> = {
 
 export default function Events({ onToast }: { onToast: (msg: string) => void }) {
   const [filter, setFilter] = useState<string>("Tất cả");
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [current, setCurrent] = useState<Program | null>(null);
   const [dataVersion, setDataVersion] = useState(0);
 
@@ -58,8 +60,19 @@ export default function Events({ onToast }: { onToast: (msg: string) => void }) 
   };
 
   const list = useMemo(
-    () => allPrograms.filter((p) => matchCategory(p.category, filter)),
-    [filter, allPrograms],
+    () =>
+      allPrograms.filter((p) => {
+        const matchesCategory = matchCategory(p.category, filter);
+        const q = searchQuery.trim().toLowerCase();
+        const matchesQuery =
+          !q ||
+          p.title.toLowerCase().includes(q) ||
+          p.location.toLowerCase().includes(q) ||
+          p.excerpt.toLowerCase().includes(q) ||
+          p.category.toLowerCase().includes(q);
+        return matchesCategory && matchesQuery;
+      }),
+    [filter, searchQuery, allPrograms],
   );
 
   return (
@@ -78,8 +91,40 @@ export default function Events({ onToast }: { onToast: (msg: string) => void }) 
           desc="Từ Mùa Hè Xanh tới Xứ Thanh TMU Cup – bấm vào từng thẻ để xem lịch trình chi tiết, chi phí và hình ảnh của các mùa trước nhé."
         />
 
-        {/* ===== Bộ lọc chuyên mục ===== */}
-        <div className="scrollbar-none -mx-4 mt-7 flex snap-x gap-2 overflow-x-auto px-4 pb-1 lg:mx-0 lg:px-0">
+        {/* ===== Tìm kiếm & Bộ lọc chuyên mục ===== */}
+        <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="relative flex-1 max-w-md">
+            <svg
+              viewBox="0 0 24 24"
+              className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-cobalt-400"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <circle cx="11" cy="11" r="7" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Tìm kiếm theo tên chiến dịch, địa điểm, từ khóa..."
+              className="w-full rounded-2xl border border-cobalt-200 bg-white py-2.5 pl-10 pr-9 text-xs sm:text-sm font-semibold text-cobalt-950 placeholder:text-cobalt-400 outline-none transition focus:border-tmu-400 focus:ring-4 focus:ring-tmu-100"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-xs text-cobalt-400 hover:text-cobalt-700"
+              >
+                ✕
+              </button>
+            )}
+          </div>
+          <p className="text-xs font-bold text-cobalt-600">
+            Hiển thị <span className="text-flame-600 font-black">{list.length}</span> / {allPrograms.length} chương trình
+          </p>
+        </div>
+
+        <div className="scrollbar-none -mx-4 mt-3 flex snap-x gap-2 overflow-x-auto px-4 pb-1 lg:mx-0 lg:px-0">
           {EVENT_FILTERS.map((f) => {
             const count = allPrograms.filter((p) => matchCategory(p.category, f)).length;
             const active = filter === f;
@@ -122,10 +167,10 @@ export default function Events({ onToast }: { onToast: (msg: string) => void }) 
               )}
             >
               <div className="relative aspect-[16/10] overflow-hidden">
-                <img
+                <ShimmerImage
                   src={p.cover}
                   alt={p.title}
-                  loading="lazy"
+                  containerClassName="h-full w-full"
                   className="h-full w-full object-cover transition-transform duration-[900ms] group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-cobalt-950/80 via-cobalt-900/10 to-transparent" />
