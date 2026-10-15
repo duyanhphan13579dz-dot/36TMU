@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo, useRef } from "react";
 import { cn } from "@/utils/cn";
-import { Button } from "@/components/ui";
+import { Button, useLockScroll, useEscape } from "@/components/ui";
 import { getStoredNotes, saveStoredNotes, type TnvNote } from "@/components/TnvNoteBoard";
 import {
   getStoredAdminPosts,
@@ -74,6 +74,9 @@ export default function AdminPanel({
   const [pinInput, setPinInput] = useState("");
   const [pinError, setPinError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  useLockScroll(showModal);
+  useEscape(showModal, () => setShowModal(false));
 
   type TabType =
     | "posts"
@@ -829,25 +832,27 @@ export default function AdminPanel({
 
       {/* MODAL CỬA SỔ QUẢN TRỊ VIÊN */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5">
+        <div className="fixed inset-0 z-[260] flex items-center justify-center p-2 sm:p-4 md:p-6" role="dialog" aria-modal="true">
           <div
-            className="fixed inset-0 bg-cobalt-950/70 backdrop-blur-md transition-opacity"
+            className="fixed inset-0 bg-cobalt-950/80 backdrop-blur-md transition-opacity"
             onClick={() => setShowModal(false)}
           />
 
-          <div className="relative flex max-h-[92vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border border-white/20 bg-white shadow-2xl transition-all">
-            {/* Nút đóng modal */}
-            <button
-              onClick={() => setShowModal(false)}
-              className="absolute top-4 right-4 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-cobalt-100/80 text-cobalt-700 transition hover:bg-red-500 hover:text-white"
-              title="Đóng cửa sổ"
-            >
-              ✕
-            </button>
-
+          <div className="relative z-10 flex max-h-[94vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border border-white/20 bg-white shadow-2xl transition-all">
             {!isAdmin ? (
               /* ================== GIAO DIỆN ĐĂNG NHẬP ADMIN ================== */
-              <div className="p-6 text-center sm:p-10">
+              <div className="relative p-6 text-center sm:p-10">
+                {/* Nút đóng modal ở màn hình đăng nhập */}
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="absolute top-4 right-4 z-20 flex h-10 w-10 items-center justify-center rounded-2xl bg-cobalt-100/80 text-cobalt-700 transition hover:bg-red-500 hover:text-white active:scale-95"
+                  title="Đóng cửa sổ (ESC)"
+                  aria-label="Đóng cửa sổ"
+                >
+                  <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2.4}>
+                    <path d="M6 6l12 12M18 6L6 18" />
+                  </svg>
+                </button>
                 <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-3xl bg-red-100 text-3xl text-red-600 shadow-inner">
                   🔐
                 </div>
@@ -911,45 +916,64 @@ export default function AdminPanel({
             ) : (
               /* ================== GIAO DIỆN QUẢN TRỊ ĐẦY ĐỦ ================== */
               <div className="flex h-full flex-col overflow-hidden">
-                {/* Header */}
-                <div className="flex items-center justify-between border-b border-cobalt-100 bg-cobalt-50/60 px-5 py-4 sm:px-6">
-                  <div className="flex items-center gap-3">
+                {/* Header thanh công cụ quản trị */}
+                <div className="flex items-center justify-between border-b border-cobalt-100 bg-cobalt-50/80 px-4 py-3 sm:px-6">
+                  <div className="flex items-center gap-3 min-w-0">
                     <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-red-100 text-xl font-bold text-red-600 shadow-2xs">
                       ⚙️
                     </span>
-                    <div>
-                      <h3 className="font-display text-base font-black text-cobalt-950 sm:text-lg">
+                    <div className="min-w-0">
+                      <h3 className="truncate font-display text-sm font-black text-cobalt-950 sm:text-base">
                         Bảng Quản Trị BLLSV Thanh Hóa TMU
                       </h3>
                       <div className="flex items-center gap-2">
                         <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-800">
                           <span className="h-1.5 w-1.5 rounded-full bg-emerald-600" />
-                          {currentAdmin ? `${currentAdmin.name} (${currentAdmin.role})` : "Phiên quản trị viên đang mở"}
+                          {currentAdmin ? `${currentAdmin.name} (${currentAdmin.role})` : "Phiên làm việc đang mở"}
                         </span>
                       </div>
                     </div>
                   </div>
 
-                  <button
-                    onClick={() => {
-                      if (currentAdmin) {
-                        recordAuditLog({
-                          adminId: currentAdmin.id,
-                          adminName: currentAdmin.name,
-                          actionType: "LOGOUT",
-                          targetEntity: "auth",
-                          summary: `${currentAdmin.name} đăng xuất khỏi hệ thống`,
-                        });
-                      }
-                      setCurrentAdmin(null);
-                      onLogout();
-                      setShowModal(false);
-                      onToast("Đã thoát phiên làm việc Ban Chấp Hành!");
-                    }}
-                    className="mr-7 rounded-xl border border-red-200 bg-white px-3 py-1.5 text-xs font-bold text-red-600 shadow-2xs transition hover:bg-red-50 sm:mr-8"
-                  >
-                    Đăng xuất
-                  </button>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button
+                      onClick={() => {
+                        if (currentAdmin) {
+                          recordAuditLog({
+                            adminId: currentAdmin.id,
+                            adminName: currentAdmin.name,
+                            actionType: "LOGOUT",
+                            targetEntity: "auth",
+                            summary: `${currentAdmin.name} đăng xuất khỏi hệ thống`,
+                          });
+                        }
+                        setCurrentAdmin(null);
+                        onLogout();
+                        setShowModal(false);
+                        onToast("Đã thoát phiên làm việc Ban Chấp Hành!");
+                      }}
+                      className="rounded-xl border border-red-200 bg-white px-2.5 py-1.5 text-xs font-bold text-red-600 shadow-2xs transition hover:bg-red-50 active:scale-95"
+                      title="Đăng xuất quyền quản trị"
+                    >
+                      Đăng xuất
+                    </button>
+
+                    {/* Nút Đóng cửa sổ quản trị chuẩn target cảm ứng */}
+                    <button
+                      onClick={() => setShowModal(false)}
+                      className="flex h-10 items-center gap-1.5 rounded-xl border border-cobalt-200 bg-white px-3 text-xs font-bold text-cobalt-700 shadow-2xs transition hover:border-red-500 hover:bg-red-500 hover:text-white active:scale-95"
+                      title="Đóng cửa sổ quản trị (ESC)"
+                      aria-label="Đóng cửa sổ quản trị"
+                    >
+                      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={2.4}>
+                        <path d="M6 6l12 12M18 6L6 18" />
+                      </svg>
+                      <span className="hidden sm:inline">Đóng</span>
+                      <kbd className="hidden md:inline rounded bg-black/5 px-1 py-0.5 text-[9px] font-mono text-cobalt-500">
+                        ESC
+                      </kbd>
+                    </button>
+                  </div>
                 </div>
 
                 {/* Danh sách Tabs chức năng */}
@@ -1170,6 +1194,32 @@ export default function AdminPanel({
                       onResetAllData={handleResetAllData}
                     />
                   )}
+                </div>
+
+                {/* Modal Footer: thanh cố định chân trang cho phép đóng nhanh */}
+                <div className="flex items-center justify-between border-t border-cobalt-100 bg-cobalt-50/80 px-4 py-2.5 sm:px-6">
+                  <div className="flex items-center gap-2 text-[11px] text-cobalt-600">
+                    <span className="hidden sm:inline">Phím tắt:</span>
+                    <kbd className="rounded border border-cobalt-200 bg-white px-1.5 py-0.5 text-[10px] font-mono font-bold text-cobalt-700">
+                      ESC
+                    </kbd>
+                    <span>để đóng cửa sổ</span>
+                    <span className="hidden md:inline">•</span>
+                    <span className="hidden md:inline">
+                      <kbd className="rounded border border-cobalt-200 bg-white px-1.5 py-0.5 text-[10px] font-mono font-bold text-cobalt-700">
+                        Ctrl+Shift+A
+                      </kbd>{" "}
+                      để mở lại
+                    </span>
+                  </div>
+
+                  <button
+                    onClick={() => setShowModal(false)}
+                    className="flex h-9 items-center gap-1.5 rounded-xl bg-cobalt-900 px-3.5 text-xs font-bold text-white shadow-soft transition hover:bg-red-600 active:scale-95"
+                  >
+                    <span>Đóng cửa sổ</span>
+                    <span className="text-xs">✕</span>
+                  </button>
                 </div>
               </div>
             )}
