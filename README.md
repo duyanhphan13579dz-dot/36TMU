@@ -87,6 +87,33 @@ Bản build xuất ra tại thư mục `dist/index.html`.
 
 ---
 
+## 🌐 Hướng dẫn Triển khai (Deploy)
+
+Dự án đã được cấu hình tối ưu để sẵn sàng deploy trên cả **Netlify** và **Vercel**:
+
+### A. Triển khai lên Netlify
+1. **Cách 1: Kết nối GitHub Repo (Khuyên dùng)**
+   - Đăng nhập [Netlify](https://app.netlify.com/) ➔ Chọn **Add new site** ➔ **Import an existing project**.
+   - Chọn kho lưu trữ `duyanhphan13579dz-dot/36TMU`.
+   - Netlify sẽ tự động nhận diện file [netlify.toml](file:///d:/Antigravity%20IDE/36TMU/netlify.toml) (Build command: `npm run build`, Publish directory: `dist`).
+   - Bấm **Deploy site**.
+2. **Cách 2: Triển khai nhanh qua Netlify CLI**
+   ```bash
+   npm run build
+   npx netlify-cli deploy --prod --dir=dist
+   ```
+
+### B. Triển khai lên Vercel
+1. **Cách 1: Kết nối GitHub Repo**
+   - Đăng nhập [Vercel](https://vercel.com/) ➔ **Add New Project** ➔ Chọn repo `36TMU`.
+   - Vercel tự động đọc cấu hình từ [vercel.json](file:///d:/Antigravity%20IDE/36TMU/vercel.json).
+2. **Cách 2: Triển khai qua Vercel CLI**
+   ```bash
+   npx vercel --prod
+   ```
+
+---
+
 ## 📂 Cấu trúc thư mục
 
 ```text
