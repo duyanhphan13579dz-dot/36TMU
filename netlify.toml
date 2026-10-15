@@ -3,6 +3,9 @@
 [build]
   command = "npm run build"
   publish = "dist"
+  # Tắt tính năng tự động build & deploy khi có commit mới trên GitHub
+  # (Netlify thực thi ignore: nếu exit code là 0, quá trình build tự động sẽ bị hủy/bỏ qua)
+  ignore = "exit 0"
 
 [build.environment]
   NODE_VERSION = "20"
