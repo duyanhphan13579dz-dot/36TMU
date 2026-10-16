@@ -176,6 +176,12 @@ export function QuickSearchModal({ open, onClose, onSelectMemory }: QuickSearchM
       }
     }
 
+    if (item.category === "dance") {
+      const mediaId = item.id.replace("dance-", "").replace("song-", "");
+      window.dispatchEvent(new CustomEvent("bllsv_open_dance_vault", { detail: { id: mediaId } }));
+      return;
+    }
+
     if (item.actionId) {
       setTimeout(() => {
         const el = document.getElementById(item.actionId!);
