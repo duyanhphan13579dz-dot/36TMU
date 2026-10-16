@@ -1,11 +1,12 @@
 import { neon } from "@neondatabase/serverless";
 
 // Neon PostgreSQL Connection String (bllsv-36tmu-db)
-const DATABASE_URL =
-  import.meta.env.VITE_DATABASE_URL ||
-  "postgresql://neondb_owner:npg_1FXWYB8eoONf@ep-odd-paper-b5ysht9l-pooler.c-7.us-east-2.aws.neon.tech/neondb?sslmode=require";
+const DATABASE_URL = import.meta.env.VITE_DATABASE_URL || "";
 
-export const sql = neon(DATABASE_URL);
+// Safely initialize Neon client if connection URL is set, otherwise use mock rejection that triggers local fallbacks
+export const sql = (DATABASE_URL
+  ? neon(DATABASE_URL)
+  : (() => Promise.reject(new Error("Neon DB is offline or not configured")))) as ReturnType<typeof neon>;
 
 /* ==========================================================================
    TYPES
@@ -76,16 +77,16 @@ export async function authenticateAdmin(
   const trimmed = identifier.trim();
   const trimmedPin = pin.trim();
   try {
-    const rows = await sql`
+    const rows = (await sql`
       SELECT id, username, pin, name, role, department, cohort, avatar_url, is_active, last_login_at, created_at
       FROM admins
       WHERE (LOWER(username) = LOWER(${trimmed}) OR pin = ${trimmedPin})
         AND pin = ${trimmedPin}
         AND is_active = TRUE
       LIMIT 1
-    `;
-    if (rows && rows.length > 0) {
-      const admin = rows[0] as DbAdmin;
+    `) as unknown as DbAdmin[];
+    if (Array.isArray(rows) && rows.length > 0) {
+      const admin = rows[0];
       // Update last login timestamp asynchronously
       sql`
         UPDATE admins
@@ -244,14 +245,14 @@ export async function recordAuditLog(log: {
 
 export async function fetchAuditLogs(limit = 100): Promise<DbAuditLog[]> {
   try {
-    const rows = await sql`
+    const rows = (await sql`
       SELECT id, admin_id, admin_name, action_type, target_entity, target_id, summary, details, created_at
       FROM audit_logs
       ORDER BY created_at DESC
       LIMIT ${limit}
-    `;
-    if (rows && rows.length > 0) {
-      return rows as DbAuditLog[];
+    `) as unknown as DbAuditLog[];
+    if (Array.isArray(rows) && rows.length > 0) {
+      return rows;
     }
   } catch (err) {
     console.warn("Neon DB fetch audit logs failed, reading cache:", err);
@@ -292,14 +293,14 @@ export async function syncAllDataToCloud(
 
 export async function fetchAllDataFromCloud(): Promise<Record<string, unknown> | null> {
   try {
-    const rows = await sql`
+    const rows = (await sql`
       SELECT data, updated_by, updated_at
       FROM site_data
       WHERE key = 'full_site_payload'
       LIMIT 1
-    `;
-    if (rows && rows.length > 0) {
-      const row = rows[0] as { data: Record<string, unknown> };
+    `) as unknown as Array<{ data: Record<string, unknown> | string }>;
+    if (Array.isArray(rows) && rows.length > 0) {
+      const row = rows[0];
       return typeof row.data === "string" ? JSON.parse(row.data) : row.data;
     }
     return null;
