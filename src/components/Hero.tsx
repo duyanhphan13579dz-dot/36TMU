@@ -29,7 +29,7 @@ export default function Hero() {
           </Kicker>
 
           <h1 className="mt-4 text-balance-vn font-display text-[2.1rem] leading-[1.08] font-black tracking-tight text-cobalt-950 sm:text-5xl lg:text-[3.65rem]">
-            Xa nhà 300 cây số,
+            Cách nhà hơn 200 cây số,
             <span className="relative mx-1 inline-block">
               <span className="relative z-10 bg-gradient-to-r from-flame-500 via-flame-600 to-flame-400 bg-clip-text text-transparent">
                 vẫn còn
@@ -38,13 +38,13 @@ export default function Hero() {
                 <path d="M2 10c40-8 90-9 196-4" stroke="currentColor" strokeWidth="5" fill="none" strokeLinecap="round" />
               </svg>
             </span>
-            một mái nhà mang tên <span className="text-tmu-600">xứ Thanh</span>.
+            một mái nhà mang tên <span className="text-tmu-600">Ban Liên Lạc</span>.
           </h1>
 
           <p className="mt-5 max-w-xl text-[15px] leading-relaxed font-medium text-cobalt-800 sm:text-lg">
             Chào bạn! Chúng mình là <strong className="font-semibold text-cobalt-900">Ban Liên Lạc Sinh Viên Thanh Hóa Đại Học Thương Mại</strong> (trực thuộc Hội đồng hương Sinh viên Thanh Hóa tại Hà Nội).
-            Nơi những người con sông Mã gặp nhau tại 79 Hồ Tùng Mậu, cùng đi tình nguyện, cùng tập các bài nhảy truyền thống
-            và cùng gọi nhau bằng hai chữ thân thương: <em className="text-flame-600 not-italic font-semibold">người nhà</em>.
+            Nơi những người con xứ Thanh gặp nhau tại Trường đại học Thương Mại, cùng đi tình nguyện, cùng tham gia các hoạt động đồng hương
+            và cùng gọi nhau bằng hai chữ thân thương: <em className="text-flame-600 not-italic font-semibold">GIA ĐÌNH</em>.
           </p>
 
           {/* Nút CTA – to bản cho mobile */}
