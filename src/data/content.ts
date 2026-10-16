@@ -199,6 +199,7 @@ export const YEARLY_TIMELINE = [
  *  BAN CHẤP HÀNH CÁC THẾ HỆ (CHUẨN TỪ K44 ĐẾN K60)
  * ------------------------------------------------------------------ */
 export type LeaderRecord = {
+  id?: string;
   term: string;
   khoa: string;
   name: string;

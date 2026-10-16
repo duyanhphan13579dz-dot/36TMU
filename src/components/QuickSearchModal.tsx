@@ -97,9 +97,9 @@ export function QuickSearchModal({ open, onClose, onSelectMemory }: QuickSearchM
 
     // 3. Leaders & Ban Chấp Hành
     const leaders = getAllLeaders();
-    leaders.forEach((l) => {
+    leaders.forEach((l, idx) => {
       items.push({
-        id: `leader-${l.id}`,
+        id: `leader-${l.id || `${l.khoa}-${idx}`}`,
         category: "leader",
         categoryLabel: "Ban Chấp Hành",
         title: l.name,
