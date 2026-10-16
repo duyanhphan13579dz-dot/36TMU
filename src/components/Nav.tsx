@@ -52,6 +52,7 @@ const MOBILE_TABS = [
 
 export default function Nav({
   active,
+  isAdmin = false,
 }: {
   active: NavId;
   isAdmin?: boolean;
