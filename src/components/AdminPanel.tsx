@@ -929,7 +929,11 @@ export default function AdminPanel({
                       <div className="flex items-center gap-2">
                         <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-800">
                           <span className="h-1.5 w-1.5 rounded-full bg-emerald-600" />
-                          {currentAdmin ? `${currentAdmin.name} (${currentAdmin.role})` : "Phiên làm việc đang mở"}
+                          {currentAdmin
+                            ? (currentAdmin.id === "admin-root" || currentAdmin.name.includes("Ban Chủ Nhiệm") || (currentAdmin.name === "Ban Chấp Hành" && currentAdmin.role === "BLLSVTHDHTM")
+                                ? "Ban Chấp Hành - BLLSVTHDHTM"
+                                : (currentAdmin.role ? `${currentAdmin.name} - ${currentAdmin.role}` : currentAdmin.name))
+                            : "Ban Chấp Hành - BLLSVTHDHTM"}
                         </span>
                       </div>
                     </div>
