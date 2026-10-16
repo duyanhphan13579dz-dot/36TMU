@@ -89,16 +89,20 @@ export default function Contact({
               <div className="mt-4 grid grid-cols-2 gap-3">
                 {[
                   { label: "Fanpage", sub: "BLLSVTH TMU", href: contact.fanpage || ORG.fanpage, icon: <Icon.facebook className="h-5 w-5" />, tone: "from-tmu-500 to-cobalt-700" },
-                  { label: "Group nội bộ", sub: "Nhà chung 36", href: contact.group || ORG.group, icon: <Icon.users className="h-5 w-5" />, tone: "from-cobalt-600 to-cobalt-900" },
+                  { label: "Kênh YouTube", sub: ORG.youtubeChannel || "TH VCU Media", href: ORG.youtube || "https://www.youtube.com/@THVcuMedia", icon: <Icon.youtube className="h-5 w-5" />, tone: "from-red-600 to-rose-700" },
                   { label: "TikTok", sub: "@bllsvth.tmu", href: contact.tiktok || ORG.tiktok, icon: <Icon.tiktok className="h-5 w-5" />, tone: "from-flame-500 to-flame-700" },
+                  { label: "Group nội bộ", sub: "Nhà chung 36", href: contact.group || ORG.group, icon: <Icon.users className="h-5 w-5" />, tone: "from-cobalt-600 to-cobalt-900" },
                   { label: "Zalo nhóm", sub: "Tân SV K60, K61", href: ORG.zalo, icon: <Icon.chat className="h-5 w-5" />, tone: "from-glow-400 to-flame-500" },
-                ].map((s) => (
+                ].map((s, idx) => (
                   <a
                     key={s.label}
                     href={s.href}
                     target="_blank"
                     rel="noreferrer"
-                    className="group flex min-h-14 items-center gap-3 rounded-2xl border border-cobalt-100 bg-white p-3 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-transparent hover:shadow-soft"
+                    className={cn(
+                      "group flex min-h-14 items-center gap-3 rounded-2xl border border-cobalt-100 bg-white p-3 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-transparent hover:shadow-soft",
+                      idx === 4 && "col-span-2"
+                    )}
                   >
                     <span className={cn("flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br text-white transition-transform duration-300 group-hover:scale-110", s.tone)}>
                       {s.icon}

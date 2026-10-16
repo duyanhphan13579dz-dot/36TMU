@@ -107,25 +107,35 @@ export default function DanceLab({ onToast }: { onToast: (msg: string) => void }
 
       <div className="mx-auto w-full max-w-[1400px] px-4 sm:px-6">
         <div className="max-w-3xl">
-          <span className="inline-flex items-center gap-2 rounded-full border border-cobalt-200 bg-white/95 px-3.5 py-1.5 text-[11px] font-bold tracking-[0.18em] text-cobalt-900 shadow-xs uppercase">
-            🕺 Video chính thức &amp; Giai điệu nhà chung
-          </span>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="inline-flex items-center gap-2 rounded-full border border-cobalt-200 bg-white/95 px-3.5 py-1.5 text-[11px] font-bold tracking-[0.18em] text-cobalt-900 shadow-xs uppercase">
+              🕺 Video chính thức &amp; Giai điệu nhà chung
+            </span>
+            <a
+              href="https://www.youtube.com/@THVcuMedia"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-full border border-red-200 bg-red-50 px-3 py-1 text-[11.5px] font-bold text-red-700 transition hover:bg-red-100 shadow-xs"
+            >
+              <span className="text-red-600">▶</span> Kênh YouTube @THVcuMedia ({DANCES.length + TRADITIONAL_SONGS.length} Video) ↗
+            </a>
+          </div>
           <h2 className="mt-4 text-balance-vn font-display text-2xl leading-tight font-black text-cobalt-950 sm:text-3xl lg:text-[2.9rem]">
-            Vũ Điệu Áo Xanh – <span className="text-flame-600">4 Bài Nhảy &amp; 4 Bài Hát</span>
+            Vũ Điệu Áo Xanh – <span className="text-flame-600">{DANCES.length} Bài Nhảy &amp; {TRADITIONAL_SONGS.length} Giai Điệu</span>
           </h2>
           <p className="mt-3 text-sm leading-relaxed font-medium text-cobalt-800 sm:text-base">
-            Toàn bộ video hướng dẫn chính thống từ Ban Liên Lạc. Bạn có thể xem video YouTube trực tiếp trên web,
+            Toàn bộ video biểu diễn và hướng dẫn chính thức từ kho tư liệu YouTube <strong>TH VCU Media (@THVcuMedia)</strong> của Ban Liên Lạc. Bạn có thể xem video YouTube trực tiếp trên web,
             bật chế độ lật gương để tập theo, hoặc chuyển sang chế độ đếm nhịp 1-2-3-4 để khớp nhịp cùng đội hình!
           </p>
         </div>
 
         {/* ===== BỐ CỤC CHÍNH (KHÔNG DÙNG data-reveal ĐỂ TRÁNH BỊ ẨN TRẮNG TRANG) ===== */}
         <div className="mt-8 grid gap-5 lg:mt-10 lg:grid-cols-[330px_1fr] lg:gap-7" id="dance-workspace">
-          {/* ===== Cột trái: 4 Bài Nhảy & 4 Bài Hát ===== */}
+          {/* ===== Cột trái: Danh sách Bài Nhảy & Bài Hát ===== */}
           <div>
             <div className="flex items-center justify-between mb-3">
               <p className="text-[11px] font-bold tracking-[0.18em] text-cobalt-800 uppercase">
-                4 Bài nhảy truyền thống ({DANCES.length})
+                Điệu nhảy &amp; Flashmob ({DANCES.length})
               </p>
               <span className="rounded-full bg-flame-100 px-2 py-0.5 text-[10px] font-bold text-flame-700">
                 Chính thức
@@ -152,7 +162,7 @@ export default function DanceLab({ onToast }: { onToast: (msg: string) => void }
             </div>
 
             {/* Desktop: danh sách dọc */}
-            <ul className="hidden space-y-2 lg:block">
+            <ul className="hidden max-h-[440px] space-y-2 overflow-y-auto pr-1 scrollbar-thin lg:block">
               {DANCES.map((d) => (
                 <li key={d.id}>
                   <button
@@ -186,17 +196,17 @@ export default function DanceLab({ onToast }: { onToast: (msg: string) => void }
               ))}
             </ul>
 
-            {/* 4 Bài hát truyền thống */}
+            {/* Bài hát & Tiết mục văn nghệ */}
             <div className="mt-4 rounded-2xl border border-cobalt-100 bg-white p-4 shadow-sm">
               <div className="flex items-center justify-between">
                 <p className="text-[11px] font-bold tracking-[0.16em] text-flame-700 uppercase">
-                  4 Bài hát truyền thống
+                  Giai điệu &amp; Văn nghệ ({TRADITIONAL_SONGS.length})
                 </p>
                 <span className="rounded-full bg-red-50 px-2 py-0.5 text-[10px] font-bold text-red-600">
                   Phát trực tiếp
                 </span>
               </div>
-              <ul className="mt-2.5 space-y-2 text-[12.5px]">
+              <ul className="mt-2.5 max-h-[380px] space-y-2 overflow-y-auto pr-1 scrollbar-thin text-[12.5px]">
                 {TRADITIONAL_SONGS.map((song) => (
                   <li
                     key={song.id}
@@ -562,7 +572,7 @@ export default function DanceLab({ onToast }: { onToast: (msg: string) => void }
                       onClick={() => changeDance(DANCES[0].id)}
                       className="inline-flex items-center gap-1 font-bold text-flame-600 hover:text-flame-700"
                     >
-                      Xem hướng dẫn động tác 4 bài nhảy →
+                      Xem hướng dẫn động tác các bài nhảy →
                     </button>
                   </div>
                 </div>

@@ -86,6 +86,7 @@ export function Footer(_props?: { isAdmin?: boolean }) {
             <div className="mt-5 flex gap-2">
               {[
                 { href: contact.fanpage, icon: <Icon.facebook className="h-4 w-4" />, label: "Fanpage" },
+                { href: ORG.youtube || "https://www.youtube.com/@THVcuMedia", icon: <Icon.youtube className="h-4 w-4" />, label: "YouTube TH VCU Media" },
                 { href: contact.tiktok, icon: <Icon.tiktok className="h-4 w-4" />, label: "TikTok" },
                 { href: contact.group, icon: <Icon.users className="h-4 w-4" />, label: "Group" },
               ].map((s) => (
