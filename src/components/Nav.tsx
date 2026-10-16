@@ -75,7 +75,7 @@ export default function Nav({
   return (
     <>
       {/* ===== Thanh tiến trình đọc ===== */}
-      <div className="fixed inset-x-0 top-0 z-[100] h-[3px] bg-transparent">
+      <div className={cn("fixed inset-x-0 z-[100] h-[3px] bg-transparent transition-all duration-300", isAdmin ? "top-10 sm:top-9" : "top-0")}>
         <div
           className="h-full bg-gradient-to-r from-tmu-400 via-flame-500 to-glow-400 transition-[width] duration-150"
           style={{ width: `${progress * 100}%` }}
@@ -85,7 +85,8 @@ export default function Nav({
       {/* ===== Navbar (glassmorphism) ===== */}
       <header
         className={cn(
-          "fixed inset-x-0 top-[3px] z-[95] transition-all duration-300",
+          "fixed inset-x-0 z-[95] transition-all duration-300",
+          isAdmin ? "top-10 sm:top-9" : "top-[3px]",
           scrolled ? "py-1.5" : "py-3",
         )}
       >
@@ -281,7 +282,7 @@ export default function Nav({
             </div>
           </nav>
 
-          <div className="sticky bottom-0 space-y-3 border-t border-cobalt-100 bg-white/90 p-4 backdrop-blur">
+          <div className="sticky bottom-0 space-y-3 border-t border-cobalt-100 bg-white/90 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] backdrop-blur">
             <Button as="a" href="#contact" onClick={() => setOpen(false)} variant="flame" size="lg" className="w-full">
               Góc TNV & Lời nhắn
               <Icon.arrowRight className="h-4 w-4" />

@@ -12,7 +12,7 @@ const MARQUEE = [
 
 export default function Hero() {
   return (
-    <section id="home" className="relative overflow-hidden pt-24 pb-10 sm:pt-28 lg:pt-32 lg:pb-16">
+    <section id="home" className="relative overflow-hidden pt-24 pb-10 sm:pt-28 lg:pt-32 lg:pb-16 scroll-mt-20 md:scroll-mt-24">
       {/* Nền trang trí */}
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute -top-32 -left-24 h-80 w-80 rounded-full bg-tmu-300/35 blur-3xl" />
@@ -21,8 +21,8 @@ export default function Hero() {
       </div>
 
       <div className="mx-auto grid w-full max-w-[1400px] grid-cols-1 items-center gap-10 px-4 sm:px-6 lg:grid-cols-[1.05fr_1fr] lg:gap-14">
-        {/* ---------- Cột trái ---------- */}
-        <div className="order-2 lg:order-1" data-reveal>
+        {/* ---------- Cột trái: Headline & Kêu gọi hành động ---------- */}
+        <div className="order-1 lg:order-1" data-reveal>
           <Kicker className="border border-cobalt-200/80 bg-white/95 font-bold text-cobalt-950 shadow-xs">
             <span className="flex h-2 w-2 rounded-full bg-flame-500" />
             BLLSV Thanh Hóa · Đại học Thương Mại · Thành lập 12/04/2008
@@ -81,7 +81,7 @@ export default function Hero() {
         </div>
 
         {/* ---------- Cột phải: khung video + badge nổi ---------- */}
-        <div className="relative order-1 lg:order-2">
+        <div className="relative order-2 lg:order-2">
           <VideoFeature />
         </div>
       </div>

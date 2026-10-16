@@ -118,7 +118,7 @@ export default function Gallery({ onToast }: { onToast: (msg: string) => void })
   };
 
   return (
-    <section id="memories" className="relative overflow-hidden py-16 sm:py-20 lg:py-28">
+    <section id="memories" className="relative overflow-hidden py-16 sm:py-20 lg:py-28 scroll-mt-20 md:scroll-mt-24">
       <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-white via-flame-50/40 to-white" />
       <div className="pointer-events-none absolute -top-24 right-0 -z-10 h-72 w-72 rounded-full bg-tmu-200/40 blur-3xl" />
 

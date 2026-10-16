@@ -804,7 +804,7 @@ export default function AdminPanel({
   return (
     <>
       {/* NÚT QUYỀN ADMIN THU NHỎ KÍN ĐÁO Ở GÓC MÀN HÌNH */}
-      <div className="fixed bottom-3 right-3 z-40 sm:bottom-4 sm:right-4 print:hidden">
+      <div className="fixed bottom-20 right-3.5 z-[95] sm:bottom-22 sm:right-4 xl:bottom-4 xl:right-4 print:hidden">
         <button
           onClick={() => setShowModal(true)}
           title={isAdmin ? "Bảng Quản Trị Đang Mở (Ctrl+Shift+A)" : "Cổng Ban Chấp Hành (Ctrl+Shift+A)"}

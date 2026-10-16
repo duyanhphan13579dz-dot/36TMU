@@ -76,7 +76,7 @@ export default function Events({ onToast }: { onToast: (msg: string) => void }) 
   );
 
   return (
-    <section id="events" className="relative overflow-hidden py-16 sm:py-20 lg:py-28">
+    <section id="events" className="relative overflow-hidden py-16 sm:py-20 lg:py-28 scroll-mt-20 md:scroll-mt-24">
       <div className="pointer-events-none absolute inset-0 -z-10 bg-white" />
       <div className="pointer-events-none absolute top-1/4 -left-24 -z-10 h-72 w-72 rounded-full bg-flame-200/40 blur-3xl" />
 

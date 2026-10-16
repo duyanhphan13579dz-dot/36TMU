@@ -229,7 +229,7 @@ export function LightboxModal({
       </div>
 
       {/* ===== BOTTOM DETAILS & THUMBNAIL STRIP ===== */}
-      <div className="relative z-20 border-t border-white/10 bg-cobalt-950/80 px-4 py-3 backdrop-blur-lg sm:px-6">
+      <div className="relative z-20 border-t border-white/10 bg-cobalt-950/80 px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur-lg sm:px-6">
         <div className="mx-auto max-w-4xl text-center">
           <h3 className="font-display text-base font-extrabold text-white sm:text-lg">
             {currentItem.title}

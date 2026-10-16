@@ -101,28 +101,32 @@ export default function App() {
     <div className="min-h-dvh overflow-x-hidden bg-sky-paper">
       {/* Banner thông báo chế độ Quản trị viên */}
       {isAdmin && (
-        <div className="sticky top-0 z-[120] flex items-center justify-between gap-3 bg-red-600 px-4 py-2 text-xs font-bold text-white shadow-lift">
-          <div className="flex items-center gap-2">
-            <span className="animate-pulse text-base">⚙️</span>
-            <span>
+        <div className="sticky top-0 z-[120] flex items-center justify-between gap-2 bg-red-600 px-3 py-1.5 text-xs font-bold text-white shadow-lift sm:px-4 sm:py-2">
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="animate-pulse text-sm sm:text-base shrink-0">⚙️</span>
+            <span className="hidden sm:inline truncate">
               PHIÊN BAN CHẤP HÀNH (ADMIN MODE): Bạn có quyền đăng thông báo mới, cập nhật chương trình, đội ngũ BCH, châm ngôn và nội quy mới.
             </span>
+            <span className="sm:hidden text-[11px] font-bold truncate">
+              ADMIN MODE: Ban Chấp Hành
+            </span>
           </div>
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-1.5 shrink-0">
             <button
               onClick={() => window.dispatchEvent(new CustomEvent("bllsv_open_admin"))}
-              className="rounded-lg bg-white px-2.5 py-1 text-[11px] font-bold text-red-700 shadow-xs transition hover:bg-white/90"
+              className="rounded-lg bg-white px-2 py-1 text-[10.5px] font-bold text-red-700 shadow-xs transition hover:bg-white/90 sm:px-2.5 sm:text-[11px]"
             >
-              Mở Bảng Điều Khiển
+              <span className="hidden sm:inline">Mở Bảng Điều Khiển</span>
+              <span className="sm:hidden">Bảng Quản Trị</span>
             </button>
             <button
               onClick={() => {
                 setIsAdmin(false);
                 pushToast("Đã thoát phiên làm việc Ban Chấp Hành");
               }}
-              className="rounded-lg bg-white/20 px-2.5 py-1 text-[11px] font-bold text-white transition hover:bg-white/30"
+              className="rounded-lg bg-white/20 px-2 py-1 text-[10.5px] font-bold text-white transition hover:bg-white/30 sm:px-2.5 sm:text-[11px]"
             >
-              Thoát Admin
+              Thoát
             </button>
           </div>
         </div>
@@ -135,7 +139,7 @@ export default function App() {
         Bỏ qua tới nội dung chính
       </a>
 
-      <Nav active={active} />
+      <Nav active={active} isAdmin={isAdmin} />
 
       <main>
         <Hero />

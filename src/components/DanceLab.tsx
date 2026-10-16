@@ -102,7 +102,7 @@ export default function DanceLab({ onToast }: { onToast: (msg: string) => void }
   const currentTitle = currentSong ? currentSong.title : dance.title;
 
   return (
-    <section id="dance" className="relative overflow-hidden bg-gradient-to-b from-sky-paper via-white to-sky-paper py-16 sm:py-20 lg:py-28">
+    <section id="dance" className="relative overflow-hidden bg-gradient-to-b from-sky-paper via-white to-sky-paper py-16 sm:py-20 lg:py-28 scroll-mt-20 md:scroll-mt-24">
       <div className="pointer-events-none absolute inset-0 -z-10 bg-dots opacity-40" />
 
       <div className="mx-auto w-full max-w-[1400px] px-4 sm:px-6">
@@ -397,44 +397,98 @@ export default function DanceLab({ onToast }: { onToast: (msg: string) => void }
 
               {/* Hàng nút tính năng */}
               <div className="mt-4 grid grid-cols-2 gap-2.5 sm:grid-cols-4 sm:gap-3">
-                <button
-                  onClick={toggleMirror}
-                  className={cn(
-                    "flex min-h-12 flex-col items-center justify-center gap-1 rounded-2xl border px-2 py-2 text-[11.5px] font-bold transition-all active:scale-95 sm:flex-row sm:gap-2 sm:text-xs shadow-xs",
-                    mirror
-                      ? "border-flame-500 bg-flame-500 text-white shadow-soft"
-                      : "border-cobalt-200 bg-white text-cobalt-800 hover:bg-cobalt-50",
-                  )}
-                >
-                  <Icon.mirror className="h-5 w-5" />
-                  Xem gương {mirror ? "BẬT" : "TẮT"}
-                </button>
+                {currentSong ? (
+                  <>
+                    <button
+                      onClick={() => copyLyrics(currentSong)}
+                      className="flex min-h-12 flex-col items-center justify-center gap-1 rounded-2xl border border-cobalt-200 bg-white px-2 py-2 text-[11.5px] font-bold text-cobalt-800 shadow-xs transition-all hover:bg-cobalt-50 active:scale-95 sm:flex-row sm:gap-2 sm:text-xs"
+                    >
+                      <span className="text-base leading-none">📋</span>
+                      Chép lời bài hát
+                    </button>
 
-                <button
-                  onClick={() => setRate((r) => (r === 1 ? 0.75 : r === 0.75 ? 1.25 : 1))}
-                  className="flex min-h-12 flex-col items-center justify-center gap-1 rounded-2xl border border-cobalt-200 bg-white px-2 py-2 text-[11.5px] font-bold text-cobalt-800 shadow-xs transition-all hover:bg-cobalt-50 active:scale-95 sm:flex-row sm:gap-2 sm:text-xs"
-                >
-                  <span className="text-base leading-none">⏱</span>
-                  Nhịp {rate}x
-                </button>
+                    <a
+                      href={currentSong.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex min-h-12 flex-col items-center justify-center gap-1 rounded-2xl border border-red-200 bg-red-50/70 px-2 py-2 text-[11.5px] font-bold text-red-700 shadow-xs transition-all hover:bg-red-100 active:scale-95 sm:flex-row sm:gap-2 sm:text-xs"
+                    >
+                      <span className="text-base leading-none">▶</span>
+                      Mở YouTube
+                    </a>
 
-                <button
-                  onClick={() => downloadMusic(dance)}
-                  className="flex min-h-12 flex-col items-center justify-center gap-1 rounded-2xl border border-amber-300 bg-amber-50 px-2 py-2 text-[11.5px] font-bold text-amber-900 shadow-xs transition-all hover:bg-amber-100 active:scale-95 sm:flex-row sm:gap-2 sm:text-xs"
-                >
-                  <Icon.download className="h-5 w-5" />
-                  Tải nhạc bài
-                </button>
+                    {currentSong.zingUrl ? (
+                      <a
+                        href={currentSong.zingUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex min-h-12 flex-col items-center justify-center gap-1 rounded-2xl border border-emerald-300 bg-emerald-50 px-2 py-2 text-[11.5px] font-bold text-emerald-800 shadow-xs transition-all hover:bg-emerald-100 active:scale-95 sm:flex-row sm:gap-2 sm:text-xs"
+                      >
+                        <span className="text-base leading-none">🎧</span>
+                        Nghe trên Zing
+                      </a>
+                    ) : (
+                      <button
+                        onClick={() => downloadMusic(dance)}
+                        className="flex min-h-12 flex-col items-center justify-center gap-1 rounded-2xl border border-amber-300 bg-amber-50 px-2 py-2 text-[11.5px] font-bold text-amber-900 shadow-xs transition-all hover:bg-amber-100 active:scale-95 sm:flex-row sm:gap-2 sm:text-xs"
+                      >
+                        <Icon.download className="h-5 w-5" />
+                        Tải nhạc bài
+                      </button>
+                    )}
 
-                <Button
-                  as="a"
-                  href="#contact"
-                  variant="flame"
-                  className="min-h-12 flex-col gap-1 px-2 py-2 text-[11.5px] sm:flex-row sm:gap-2 sm:text-xs shadow-xs"
-                >
-                  <Icon.heart className="h-5 w-5" />
-                  Gia nhập Ban Văn hóa
-                </Button>
+                    <Button
+                      as="a"
+                      href="#contact"
+                      variant="flame"
+                      className="min-h-12 flex-col gap-1 px-2 py-2 text-[11.5px] sm:flex-row sm:gap-2 sm:text-xs shadow-xs"
+                    >
+                      <Icon.heart className="h-5 w-5" />
+                      Gia nhập Ban Văn hóa
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      onClick={toggleMirror}
+                      className={cn(
+                        "flex min-h-12 flex-col items-center justify-center gap-1 rounded-2xl border px-2 py-2 text-[11.5px] font-bold transition-all active:scale-95 sm:flex-row sm:gap-2 sm:text-xs shadow-xs",
+                        mirror
+                          ? "border-flame-500 bg-flame-500 text-white shadow-soft"
+                          : "border-cobalt-200 bg-white text-cobalt-800 hover:bg-cobalt-50",
+                      )}
+                    >
+                      <Icon.mirror className="h-5 w-5" />
+                      Xem gương {mirror ? "BẬT" : "TẮT"}
+                    </button>
+
+                    <button
+                      onClick={() => setRate((r) => (r === 1 ? 0.75 : r === 0.75 ? 1.25 : 1))}
+                      className="flex min-h-12 flex-col items-center justify-center gap-1 rounded-2xl border border-cobalt-200 bg-white px-2 py-2 text-[11.5px] font-bold text-cobalt-800 shadow-xs transition-all hover:bg-cobalt-50 active:scale-95 sm:flex-row sm:gap-2 sm:text-xs"
+                    >
+                      <span className="text-base leading-none">⏱</span>
+                      Nhịp {rate}x
+                    </button>
+
+                    <button
+                      onClick={() => downloadMusic(dance)}
+                      className="flex min-h-12 flex-col items-center justify-center gap-1 rounded-2xl border border-amber-300 bg-amber-50 px-2 py-2 text-[11.5px] font-bold text-amber-900 shadow-xs transition-all hover:bg-amber-100 active:scale-95 sm:flex-row sm:gap-2 sm:text-xs"
+                    >
+                      <Icon.download className="h-5 w-5" />
+                      Tải nhạc bài
+                    </button>
+
+                    <Button
+                      as="a"
+                      href="#contact"
+                      variant="flame"
+                      className="min-h-12 flex-col gap-1 px-2 py-2 text-[11.5px] sm:flex-row sm:gap-2 sm:text-xs shadow-xs"
+                    >
+                      <Icon.heart className="h-5 w-5" />
+                      Gia nhập Ban Văn hóa
+                    </Button>
+                  </>
+                )}
               </div>
 
               {/* Thông tin bài đang phát */}
