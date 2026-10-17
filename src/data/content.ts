@@ -851,7 +851,7 @@ export const DANCES: Dance[] = [
   },
 ];
 
-const IMG = {
+export const IMG = {
   volunteers: "https://images.pexels.com/photos/13418669/pexels-photo-13418669.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
   maskTeam: "https://images.pexels.com/photos/8543385/pexels-photo-8543385.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
   support: "https://images.pexels.com/photos/7475127/pexels-photo-7475127.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
@@ -919,10 +919,8 @@ export const PROGRAMS: Program[] = [
     cover: "/images/programs/mua-he-xanh-2026/mhx-back-1.jpg",
     gallery: [
       "/images/programs/mua-he-xanh-2026/mhx-back-1.jpg",
-      "/images/programs/mua-he-xanh-2026/mhx-back-2.jpg",
-      "/images/programs/mua-he-xanh-2026/mhx-cttn-1.jpg",
       "/images/programs/mua-he-xanh-2026/mhx-van-nghe-1.jpg",
-      "/images/programs/mua-he-xanh-2026/mhx-meme-1.jpg",
+      "/images/programs/mua-he-xanh-2026/mhx-cttn-1.jpg",
     ],
     driveLink: "https://drive.google.com/drive/folders/1kZ8TGJfj5N7PO5NVZqQpA2nt30SHuZ0U?usp=drive_link",
     schedule: [
@@ -951,7 +949,9 @@ export const PROGRAMS: Program[] = [
     cover: "/images/programs/dong-am-2026/dong-am-back-1.jpg",
     gallery: [
       "/images/programs/dong-am-2026/dong-am-back-1.jpg",
+      "/images/programs/dong-am-2026/dong-am-san-truong-1.jpg",
       "/images/programs/dong-am-2026/dong-am-phien-cho-1.jpg",
+      "/images/programs/dong-am-2026/dong-am-back-2.jpg",
       "/images/programs/dong-am-2026/dong-am-lua-trai-1.jpg",
     ],
     driveLink: "https://drive.google.com/drive/folders/1KgN-5lNuMjMC9nlyQkn-G63nUCnsqalp?usp=drive_link",
@@ -980,7 +980,7 @@ export const PROGRAMS: Program[] = [
     cover: "/images/programs/sinh-nhat-2026/sinh-nhat-back-1.jpg",
     gallery: [
       "/images/programs/sinh-nhat-2026/sinh-nhat-back-1.jpg",
-      "/images/programs/sinh-nhat-2026/sinh-nhat-gala-1.jpg",
+      "/images/programs/sinh-nhat-2026/sinh-nhat-back-2.jpg",
       "/images/programs/sinh-nhat-2026/sinh-nhat-gala-2.jpg",
     ],
     driveLink: "https://drive.google.com/drive/folders/1bpUGAPI8hk7uHhApBGP0hVrrXUB0ZX6x?usp=drive_link",
@@ -1006,8 +1006,12 @@ export const PROGRAMS: Program[] = [
     status: "Đã kết thúc",
     excerpt:
       "Chương trình lớn nhất quy tụ 20 Ban liên lạc trực thuộc Hội đồng hương Thanh Hóa tại Hà Nội. BLLSV TMU tự hào đạt kỷ lục 4 năm liên tiếp giữ cúp vô địch toàn đoàn!",
-    cover: IMG.dance,
-    gallery: [IMG.dance2, IMG.dance3, IMG.community, IMG.friends],
+    cover: "/images/programs/sinh-nhat-2026/sinh-nhat-back-1.jpg",
+    gallery: [
+      "/images/programs/sinh-nhat-2026/sinh-nhat-back-1.jpg",
+      "/images/programs/mua-he-xanh-2026/mhx-van-nghe-1.jpg",
+      "/images/programs/dong-am-2026/dong-am-lua-trai-1.jpg",
+    ],
     schedule: [
       { time: "08:00", title: "Hội quân 20 đơn vị", note: "Các đội quy tụ, giăng cờ sắc áo chuẩn bị thi đấu." },
       { time: "13:30", title: "Phần thi nhảy truyền thống & nghệ thuật", note: "TMU bùng nổ với các màn trình diễn xuất sắc được chuẩn bị kỹ lưỡng." },
@@ -1030,8 +1034,12 @@ export const PROGRAMS: Program[] = [
     status: "Sắp diễn ra",
     excerpt:
       "Chương trình rèn luyện kỹ năng sinh tồn, làm việc nhóm, kỷ luật tình nguyện và truyền lửa nhiệt huyết cho thế hệ tình nguyện viên mới trước thềm Mùa Hè Xanh.",
-    cover: IMG.walk,
-    gallery: [IMG.volunteers, IMG.support, IMG.park],
+    cover: "/images/programs/dong-am-2026/dong-am-back-1.jpg",
+    gallery: [
+      "/images/programs/dong-am-2026/dong-am-back-1.jpg",
+      "/images/programs/mua-he-xanh-2026/mhx-back-1.jpg",
+      "/images/programs/dong-am-2026/dong-am-back-2.jpg",
+    ],
     schedule: [
       { time: "06:00", title: "Hành quân về địa điểm dã ngoại", note: "Các mùa tập huấn tại Ba Vì, Sóc Sơn, Ứng Hòa." },
       { time: "09:00", title: "Thử thách kỹ năng dã ngoại & teamwork", note: "Dựng lều, nấu ăn dã chiến, sơ cứu thương tích." },
@@ -1054,8 +1062,12 @@ export const PROGRAMS: Program[] = [
     status: "Sắp diễn ra",
     excerpt:
       "Buổi đầu tiên những người con sông Mã bước vào TMU được gọi bằng hai tiếng thân thương: 'người nhà'. Đón tân sinh viên, hướng dẫn học tập và truyền lửa truyền thống 36.",
-    cover: IMG.campus,
-    gallery: [IMG.dance, IMG.friends, IMG.park],
+    cover: "/images/programs/sinh-nhat-2026/sinh-nhat-back-2.jpg",
+    gallery: [
+      "/images/programs/sinh-nhat-2026/sinh-nhat-back-2.jpg",
+      "/images/programs/sinh-nhat-2026/sinh-nhat-back-1.jpg",
+      "/images/programs/dong-am-2026/dong-am-san-truong-1.jpg",
+    ],
     schedule: [
       { time: "08:00", title: "Đón tân sinh viên & tặng quà quê", note: "Phát tài liệu hướng dẫn học tập, chia sẻ kinh nghiệm trọ." },
       { time: "14:00", title: "Dạy nhảy 4 bài truyền thống", note: "Ban Văn hóa – Sự kiện trực tiếp hướng dẫn từng bước." },
@@ -1080,18 +1092,18 @@ export type Memory = {
 };
 
 export const MEMORIES: Memory[] = [
-  { id: "m1", src: "/images/programs/mua-he-xanh-2026/mhx-back-1.jpg", title: "Mùa Hè Xanh 2026", caption: "Đội hình toàn quân kiên cường trước thềm chiến dịch tình nguyện hè.", tag: "Mùa Hè Xanh", category: "mua-he-xanh", height: "h-64 md:h-72" },
-  { id: "m2", src: "/images/programs/dong-am-2026/dong-am-back-1.jpg", title: "Đông Ấm 2026", caption: "Đội hình toàn quân mang hơi ấm và nụ cười tới bà con vùng cao.", tag: "Đông Ấm", category: "dong-am", height: "h-72 md:h-96" },
-  { id: "m3", src: "/images/programs/sinh-nhat-2026/sinh-nhat-back-1.jpg", title: "Sinh nhật 18 tuổi", caption: "Đại lễ 18 năm thành lập quy tụ đông đủ các thế hệ K44 - K60.", tag: "Sinh nhật 18", category: "sinh-nhat", height: "h-56 md:h-64" },
-  { id: "m4", src: "/images/programs/dong-am-2026/dong-am-phien-cho-1.jpg", title: "Phiên chợ 0 đồng", caption: "Đông đảo bà con và các em nhỏ vùng cao quây quần nhận quà tình nghĩa.", tag: "Đông Ấm", category: "dong-am", height: "h-64 md:h-80" },
-  { id: "m5", src: "/images/programs/sinh-nhat-2026/sinh-nhat-gala-2.jpg", title: "Cắt bánh Sinh nhật 18", caption: "Cùng nhau thổi nến chúc mừng mái nhà chung bước sang tuổi 18 rực rỡ.", tag: "Sinh nhật 18", category: "sinh-nhat", height: "h-60 md:h-72" },
-  { id: "m6", src: "/images/programs/mua-he-xanh-2026/mhx-cttn-1.jpg", title: "Công trình thanh niên", caption: "Đổ bê tông đường giao thông và làm đẹp diện mạo bản làng quê hương.", tag: "Mùa Hè Xanh", category: "mua-he-xanh", height: "h-64 md:h-80" },
-  { id: "m7", src: "/images/programs/sinh-nhat-2026/sinh-nhat-gala-1.jpg", title: "Hội trường Gala 18", caption: "Sân khấu rực sáng với tinh thần tuổi trẻ Thương Mại - Xứ Thanh.", tag: "Sinh nhật 18", category: "sinh-nhat", height: "h-56 md:h-72" },
-  { id: "m8", src: "/images/programs/dong-am-2026/dong-am-lua-trai-1.jpg", title: "Lửa trại Đông Ấm", caption: "Vòng tròn gắn kết thắp sáng màn đêm lạnh giá giữa núi rừng miền Tây.", tag: "Đông Ấm", category: "dong-am", height: "h-72 md:h-64" },
-  { id: "m9", src: "/images/programs/mua-he-xanh-2026/mhx-van-nghe-1.jpg", title: "Đêm văn nghệ bản làng", caption: "Tiếng hát, điệu múa trao gửi tình cảm yêu thương tới đồng bào xứ Thanh.", tag: "Mùa Hè Xanh", category: "mua-he-xanh", height: "h-60 md:h-72" },
-  { id: "m10", src: "/images/programs/mua-he-xanh-2026/mhx-meme-1.jpg", title: "Nụ cười chiến sĩ 36", caption: "Những khoảnh khắc hồn nhiên, giản dị làm nên thanh xuân rực rỡ.", tag: "Mùa Hè Xanh", category: "mua-he-xanh", height: "h-56 md:h-64" },
-  { id: "m11", src: IMG.dance, title: "Âm Vang Xứ Thanh", caption: "Khoảnh khắc vinh quang vô địch 4 năm liên tiếp của nhà chung.", tag: "Vô địch", category: "am-vang", height: "h-64 md:h-80" },
-  { id: "m12", src: IMG.community, title: "Vòng tròn Tinh thần 36", caption: "Đứng thành vòng tròn, tay trái đưa về tâm hô vang khẩu hiệu.", tag: "Nghi thức", category: "chung", height: "h-64 md:h-72" },
+  { id: "m1", src: "/images/programs/sinh-nhat-2026/sinh-nhat-back-1.jpg", title: "Đại Lễ Sinh Nhật 18", caption: "Khoảnh khắc lịch sử quy tụ đông đảo các thế hệ cựu thành viên và sinh viên K44 - K60.", tag: "Sinh nhật 18", category: "sinh-nhat", height: "h-72 md:h-96" },
+  { id: "m2", src: "/images/programs/dong-am-2026/dong-am-back-1.jpg", title: "Đông Ấm 2026", caption: "Đội hình toàn quân đông đủ mang hơi ấm và tình thương về với đồng bào vùng cao.", tag: "Đông Ấm", category: "dong-am", height: "h-64 md:h-80" },
+  { id: "m3", src: "/images/programs/mua-he-xanh-2026/mhx-back-1.jpg", title: "Mùa Hè Xanh 2026", caption: "Đội hình toàn quân kiên cường trước thềm chiến dịch tình nguyện hè.", tag: "Mùa Hè Xanh", category: "mua-he-xanh", height: "h-64 md:h-72" },
+  { id: "m4", src: "/images/programs/dong-am-2026/dong-am-san-truong-1.jpg", title: "Sân trường rộn rã", caption: "Hàng trăm em học sinh vùng cao tập trung kín sân trường trong ngày hội thiện nguyện.", tag: "Đông Ấm", category: "dong-am", height: "h-72 md:h-88" },
+  { id: "m5", src: "/images/programs/dong-am-2026/dong-am-phien-cho-1.jpg", title: "Phiên chợ 0 đồng", caption: "Đông đảo bà con và các em nhỏ vùng cao quây quần nhận quà tình nghĩa.", tag: "Đông Ấm", category: "dong-am", height: "h-64 md:h-80" },
+  { id: "m6", src: "/images/programs/sinh-nhat-2026/sinh-nhat-back-2.jpg", title: "Đại gia đình 36TMU", caption: "Các thế hệ anh chị BCH và TNV đứng kín phông nền kỷ niệm 18 năm giữ lửa.", tag: "Sinh nhật 18", category: "sinh-nhat", height: "h-64 md:h-80" },
+  { id: "m7", src: "/images/programs/mua-he-xanh-2026/mhx-van-nghe-1.jpg", title: "Đêm văn nghệ bản làng", caption: "Toàn thể bà con và thanh thiếu nhi bản làng quây quần theo dõi văn nghệ.", tag: "Mùa Hè Xanh", category: "mua-he-xanh", height: "h-56 md:h-72" },
+  { id: "m8", src: "/images/programs/dong-am-2026/dong-am-lua-trai-1.jpg", title: "Đêm hội lửa trại", caption: "Vòng tròn đoàn kết đông đảo thắp sáng màn đêm ấm áp tình quân dân.", tag: "Đông Ấm", category: "dong-am", height: "h-72 md:h-64" },
+  { id: "m9", src: "/images/programs/sinh-nhat-2026/sinh-nhat-gala-2.jpg", title: "Cắt bánh Sinh nhật 18", caption: "Toàn thể thành viên cùng nhau thổi nến chúc mừng sinh nhật nhà chung.", tag: "Sinh nhật 18", category: "sinh-nhat", height: "h-60 md:h-72" },
+  { id: "m10", src: "/images/programs/dong-am-2026/dong-am-back-2.jpg", title: "Đội quân áo xanh", caption: "Đại gia đình tình nguyện viên đoàn kết một lòng vì màu cờ sắc áo.", tag: "Đông Ấm", category: "dong-am", height: "h-64 md:h-80" },
+  { id: "m11", src: "/images/programs/mua-he-xanh-2026/mhx-cttn-1.jpg", title: "Công trình thanh niên", caption: "Đội ngũ chiến sĩ chung tay đổ đường bê tông cho bà con bản nghèo.", tag: "Mùa Hè Xanh", category: "mua-he-xanh", height: "h-60 md:h-72" },
+  { id: "m12", src: "/images/programs/sinh-nhat-2026/sinh-nhat-gala-1.jpg", title: "Hội trường Gala 18", caption: "Sân khấu đại lễ rực sáng với sự hiện diện của hàng trăm người con xứ Thanh.", tag: "Sinh nhật 18", category: "sinh-nhat", height: "h-64 md:h-80" },
 ];
 
 export type Confession = {
