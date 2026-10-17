@@ -206,19 +206,35 @@ export default function Events({ onToast }: { onToast: (msg: string) => void }) 
                 </p>
                 <p className="mt-3 line-clamp-3 text-[13.5px] leading-relaxed text-cobalt-700/80">{p.excerpt}</p>
                 <div className="mt-4 flex items-center justify-between gap-3 border-t border-cobalt-100 pt-4">
-                  <div className="flex -space-x-2">
-                    {p.gallery.slice(0, 3).map((g) => (
-                      <img
-                        key={g}
-                        src={g}
-                        alt=""
-                        loading="lazy"
-                        className="h-8 w-8 rounded-full border-2 border-white object-cover"
-                      />
-                    ))}
-                    <span className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-cobalt-800 text-[10px] font-bold text-white">
-                      +{p.gallery.length - 3}
-                    </span>
+                  <div className="flex items-center gap-2">
+                    <div className="flex -space-x-2">
+                      {p.gallery.slice(0, 3).map((g) => (
+                        <img
+                          key={g}
+                          src={g}
+                          alt=""
+                          loading="lazy"
+                          className="h-8 w-8 rounded-full border-2 border-white object-cover"
+                        />
+                      ))}
+                      {p.gallery.length > 3 && (
+                        <span className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-cobalt-800 text-[10px] font-bold text-white">
+                          +{p.gallery.length - 3}
+                        </span>
+                      )}
+                    </div>
+                    {p.driveLink && (
+                      <a
+                        href={p.driveLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        title="Xem toàn bộ ảnh trên Google Drive"
+                        className="inline-flex items-center gap-1 rounded-full bg-flame-50 border border-flame-200 px-2.5 py-1 text-[11px] font-extrabold text-flame-600 hover:bg-flame-100 transition shadow-2xs"
+                      >
+                        📂 Drive ảnh
+                      </a>
+                    )}
                   </div>
                   <Button variant="soft" onClick={() => setCurrent(p)}>
                     Xem chi tiết
@@ -380,9 +396,9 @@ function ProgramDetail({
               href={p.driveLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-xl bg-flame-50 px-3 py-1.5 text-xs font-bold text-flame-600 transition hover:bg-flame-100 hover:text-flame-700"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-flame-500 to-flame-600 px-3.5 py-2 text-xs font-bold text-white shadow-soft transition hover:from-flame-600 hover:to-flame-700 active:scale-95"
             >
-              📂 Xem trọn bộ ảnh trên Drive
+              📂 Xem trọn bộ ảnh trên Google Drive
               <Icon.arrowRight className="h-3.5 w-3.5" />
             </a>
           )}

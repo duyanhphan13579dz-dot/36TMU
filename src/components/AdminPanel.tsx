@@ -21,6 +21,7 @@ import {
   exportAllAdminData,
   importAllAdminData,
   resetAllAdminDataToDefaults,
+  importDefaultProgramsToAdmin,
   DEFAULT_MOTTO,
   DEFAULT_RULES,
   DEFAULT_CONTACT,
@@ -128,6 +129,7 @@ export default function AdminPanel({
   const [progLocation, setProgLocation] = useState("Thanh Hóa & TMU");
   const [progExcerpt, setProgExcerpt] = useState("");
   const [progCover, setProgCover] = useState("");
+  const [progDriveLink, setProgDriveLink] = useState("");
 
   // --- 3. LEADERS STATE ---
   const [leaders, setLeaders] = useState<AdminLeader[]>([]);
@@ -336,6 +338,7 @@ export default function AdminPanel({
     setProgLocation(p.location);
     setProgExcerpt(p.excerpt);
     setProgCover(p.cover || "");
+    setProgDriveLink(p.driveLink || "");
   };
 
   const handleCancelEditProgram = () => {
@@ -343,6 +346,7 @@ export default function AdminPanel({
     setProgTitle("");
     setProgExcerpt("");
     setProgCover("");
+    setProgDriveLink("");
     setProgDateLabel("");
   };
 
@@ -362,13 +366,22 @@ export default function AdminPanel({
               location: progLocation.trim() || p.location,
               excerpt: progExcerpt.trim(),
               cover: progCover.trim() || p.cover,
+              driveLink: progDriveLink.trim() || undefined,
             }
           : p
       );
       setPrograms(next);
       saveStoredAdminPrograms(next);
+      recordAuditLog({
+        adminId: currentAdmin?.id,
+        adminName: currentAdmin?.name || "BCH",
+        actionType: "UPDATE_PROGRAM",
+        targetEntity: "programs",
+        targetId: editingProgId,
+        summary: `Cập nhật thông tin & link Drive chương trình: ${progTitle.trim()}`,
+      }).catch(() => {});
       handleCancelEditProgram();
-      onToast("Đã cập nhật chương trình thành công! 🎯");
+      onToast("Đã cập nhật chương trình & link Drive thành công! 🎯");
     } else {
       const newProg: AdminProgram = {
         id: "prog-" + Date.now(),
@@ -381,6 +394,7 @@ export default function AdminPanel({
         location: progLocation.trim() || "Thanh Hóa / TMU",
         excerpt: progExcerpt.trim(),
         cover: progCover.trim() || "https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=1200&q=80",
+        driveLink: progDriveLink.trim() || undefined,
         schedule: [{ time: "Kế hoạch", title: progTitle.trim(), note: progExcerpt.trim() }],
         fact: [
           { label: "Chuyên mục", value: progCategory },
@@ -391,12 +405,28 @@ export default function AdminPanel({
       const next = [newProg, ...programs];
       setPrograms(next);
       saveStoredAdminPrograms(next);
+      recordAuditLog({
+        adminId: currentAdmin?.id,
+        adminName: currentAdmin?.name || "BCH",
+        actionType: "CREATE_PROGRAM",
+        targetEntity: "programs",
+        targetId: newProg.id,
+        summary: `Tạo mới chương trình & link Drive: ${newProg.title}`,
+      }).catch(() => {});
       setProgTitle("");
       setProgExcerpt("");
       setProgCover("");
+      setProgDriveLink("");
       setProgDateLabel("");
       onToast("Đã thêm chương trình mới vào website! 🎯");
     }
+    onPostCreated?.();
+  };
+
+  const handleLoadDefaultPrograms = () => {
+    const loaded = importDefaultProgramsToAdmin();
+    setPrograms(loaded);
+    onToast("Đã nạp 4 chương trình chính thức vào bảng quản lý! 🎯");
     onPostCreated?.();
   };
 
@@ -1069,11 +1099,14 @@ export default function AdminPanel({
                       onExcerptChange={setProgExcerpt}
                       progCover={progCover}
                       onCoverChange={setProgCover}
+                      progDriveLink={progDriveLink}
+                      onDriveLinkChange={setProgDriveLink}
                       onSaveProgram={handleSaveProgram}
                       onStartEditProgram={handleStartEditProgram}
                       onCancelEditProgram={handleCancelEditProgram}
                       onDeleteProgram={handleDeleteProgram}
                       onQuickChangeStatus={handleQuickChangeProgramStatus}
+                      onLoadDefaultPrograms={handleLoadDefaultPrograms}
                     />
                   )}
 

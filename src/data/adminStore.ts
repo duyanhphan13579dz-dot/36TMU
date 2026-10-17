@@ -164,7 +164,7 @@ export function saveStoredAdminPrograms(programs: AdminProgram[]) {
   }
 }
 
-// Merge programs with defaults
+// Merge programs with defaults (custom programs override built-in ones with same id)
 export function getAllPrograms(): Program[] {
   const custom = getStoredAdminPrograms();
   const customMapped: Program[] = custom.map((p) => ({
@@ -183,8 +183,34 @@ export function getAllPrograms(): Program[] {
     schedule: p.schedule?.length ? p.schedule : [{ time: "Sự kiện", title: p.title, note: p.excerpt }],
     fact: p.fact?.length ? p.fact : [{ label: "Địa điểm", value: p.location }],
   }));
-  return [...customMapped, ...PROGRAMS];
+  const customIds = new Set(customMapped.map((p) => p.id));
+  return [...customMapped, ...PROGRAMS.filter((p) => !customIds.has(p.id))];
 }
+
+export function importDefaultProgramsToAdmin(): AdminProgram[] {
+  const existing = getStoredAdminPrograms();
+  const existingIds = new Set(existing.map((p) => p.id));
+  const newOnes: AdminProgram[] = PROGRAMS.filter((p) => !existingIds.has(p.id)).map((p) => ({
+    id: p.id,
+    title: p.title,
+    category: p.category,
+    status: p.status,
+    month: p.month,
+    day: p.day,
+    dateLabel: p.dateLabel,
+    location: p.location,
+    excerpt: p.excerpt,
+    cover: p.cover,
+    driveLink: p.driveLink,
+    schedule: p.schedule,
+    fact: p.fact,
+    createdAt: "Chính thức",
+  }));
+  const merged = [...existing, ...newOnes];
+  saveStoredAdminPrograms(merged);
+  return merged;
+}
+
 
 // --- LEADERS / BAN CHẤP HÀNH ---
 export function getStoredAdminLeaders(): AdminLeader[] {
