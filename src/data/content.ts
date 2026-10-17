@@ -899,11 +899,99 @@ export type Program = {
   excerpt: string;
   cover: string;
   gallery: string[];
+  driveLink?: string;
   schedule: { time: string; title: string; note: string }[];
   fact: { label: string; value: string }[];
 };
 
 export const PROGRAMS: Program[] = [
+  {
+    id: "mua-he-xanh",
+    title: "Chiến dịch Mùa Hè Xanh 2026 (13 Mùa Yêu Thương)",
+    category: "Tình nguyện",
+    dateLabel: "Tháng 7 thường niên",
+    month: "07",
+    day: "15",
+    location: "Các xã miền núi khó khăn thuộc Thanh Hóa",
+    status: "Đang mở đăng ký",
+    excerpt:
+      "Hành trình 13 mùa hè đi qua khắp các huyện Tĩnh Gia, Cẩm Thủy, Lang Chánh, Thường Xuân, Thạch Thành, Quan Sơn, Ngọc Lặc, Như Thanh, Quan Hóa... mang tri thức, công trình và tình yêu thương tới bà con.",
+    cover: "/images/programs/mua-he-xanh-2026/mhx-back-1.jpg",
+    gallery: [
+      "/images/programs/mua-he-xanh-2026/mhx-back-1.jpg",
+      "/images/programs/mua-he-xanh-2026/mhx-back-2.jpg",
+      "/images/programs/mua-he-xanh-2026/mhx-cttn-1.jpg",
+    ],
+    driveLink: "https://drive.google.com/drive/folders/1kZ8TGJfj5N7PO5NVZqQpA2nt30SHuZ0U?usp=drive_link",
+    schedule: [
+      { time: "05:00", title: "Xuất quân tại 79 Hồ Tùng Mậu", note: "Lên xe về với các bản làng vùng cao xứ Thanh." },
+      { time: "08:00", title: "Dạy học & sinh hoạt hè cho các em nhỏ", note: "Lớp học tình thương, trao tặng đồ dùng học tập." },
+      { time: "14:00", title: "Thực hiện công trình thanh niên", note: "Đổ bê tông đường giao thông, sửa chữa nhà văn hóa thôn bản." },
+      { time: "19:30", title: "Đêm lửa trại thắt chặt tình quân dân", note: "Nhảy dân vũ cùng bà con và thanh niên địa phương." },
+    ],
+    fact: [
+      { label: "Số mùa đã qua", value: "13 Mùa hè xanh" },
+      { label: "Địa bàn", value: "Các huyện vùng cao Thanh Hóa" },
+      { label: "Lực lượng", value: "Đội SVTN nòng cốt TMU" },
+    ],
+  },
+  {
+    id: "dong-am",
+    title: "Chiến dịch Đông Ấm 2026 (Hơi Ấm Vùng Cao)",
+    category: "Tình nguyện",
+    dateLabel: "Tháng 1 thường niên",
+    month: "01",
+    day: "10",
+    location: "Các bản vùng sâu vùng xa Thanh Hóa",
+    status: "Đã kết thúc",
+    excerpt:
+      "Trải qua 8 mùa Đông Ấm như 'Tết Ấm Bản Em', 'Đông Ấm Yêu Thương' tại Thường Xuân, Thạch Thành, Quan Sơn, Như Thanh, Lang Chánh... mang áo ấm, chăn bông và quà Tết đến các hộ nghèo và học sinh vùng cao.",
+    cover: "/images/programs/dong-am-2026/dong-am-back-1.jpg",
+    gallery: [
+      "/images/programs/dong-am-2026/dong-am-back-1.jpg",
+      "/images/programs/dong-am-2026/dong-am-phien-cho-1.jpg",
+    ],
+    driveLink: "https://drive.google.com/drive/folders/1KgN-5lNuMjMC9nlyQkn-G63nUCnsqalp?usp=drive_link",
+    schedule: [
+      { time: "06:00", title: "Vận chuyển hàng cứu trợ Tết", note: "Chăn ấm, áo khoác, gạo nếp, bánh chưng tới bản vùng sâu." },
+      { time: "10:00", title: "Trao học bổng & quà tặng bà con", note: "Gặp gỡ thăm hỏi từng hộ gia đình khó khăn." },
+      { time: "19:00", title: "Nấu bánh chưng Tết ấm tình đồng hương", note: "Quây quần bên bếp lửa cùng bà con bản làng." },
+    ],
+    fact: [
+      { label: "Số mùa đã qua", value: "8 Mùa Đông Ấm" },
+      { label: "Quà tặng", value: "Hàng nghìn suất quà áo ấm" },
+      { label: "Ý nghĩa", value: "Sống để yêu thương, cống hiến" },
+    ],
+  },
+  {
+    id: "sinh-nhat-bllsv",
+    title: "Đại Lễ Sinh Nhật 18 Tuổi BLLSV TMU (12/04/2008 – 2026)",
+    category: "Hội đồng hương",
+    dateLabel: "Ngày 12/04 hàng năm",
+    month: "04",
+    day: "12",
+    location: "Trường Đại học Thương Mại – 79 Hồ Tùng Mậu",
+    status: "Đã kết thúc",
+    excerpt:
+      "Ngày 12/04/2008 đánh dấu sự ra đời của Ban Liên Lạc Sinh Viên Thanh Hóa Đại Học Thương Mại. Đại lễ kỷ niệm 18 năm thành lập là dịp hội ngộ lịch sử quy tụ đông đảo các thế hệ cựu BCH và thành viên từ K44 đến K60.",
+    cover: "/images/programs/sinh-nhat-2026/sinh-nhat-back-1.jpg",
+    gallery: [
+      "/images/programs/sinh-nhat-2026/sinh-nhat-back-1.jpg",
+      "/images/programs/sinh-nhat-2026/sinh-nhat-gala-1.jpg",
+      "/images/programs/sinh-nhat-2026/sinh-nhat-gala-2.jpg",
+    ],
+    driveLink: "https://drive.google.com/drive/folders/1bpUGAPI8hk7uHhApBGP0hVrrXUB0ZX6x?usp=drive_link",
+    schedule: [
+      { time: "14:00", title: "Hội ngộ các thế hệ anh chị tiền nhiệm", note: "Gặp mặt BCH qua 16 nhiệm kỳ." },
+      { time: "16:00", title: "Hội trại & Flashmob truyền thống", note: "Cháy hết mình cùng 4 bài nhảy truyền thống." },
+      { time: "18:30", title: "Cắt bánh sinh nhật 12/04 & Gala tri ân", note: "Hô vang khẩu hiệu 'Tinh thần 36' quanh vòng tròn." },
+    ],
+    fact: [
+      { label: "Ngày thành lập", value: "12/04/2008" },
+      { label: "Lịch sử", value: "Hơn 18 năm giữ lửa" },
+      { label: "Thế hệ gắn kết", value: "Từ K44 đến K60" },
+    ],
+  },
   {
     id: "am-vang-xu-thanh",
     title: "Âm Vang Xứ Thanh – Kỷ Lục 4 Năm Vô Địch Liên Tiếp",
@@ -926,79 +1014,6 @@ export const PROGRAMS: Program[] = [
       { label: "Quy mô", value: "20 Đơn vị trực thuộc Hội ĐH" },
       { label: "Thành tích", value: "Vô địch 4 năm liên tiếp" },
       { label: "Lịch sử giải", value: "Đã diễn ra hơn 11 năm" },
-    ],
-  },
-  {
-    id: "mua-he-xanh",
-    title: "Chiến dịch Mùa Hè Xanh (13 Mùa Yêu Thương)",
-    category: "Tình nguyện",
-    dateLabel: "Tháng 7 thường niên",
-    month: "07",
-    day: "15",
-    location: "Các xã miền núi khó khăn thuộc Thanh Hóa",
-    status: "Đang mở đăng ký",
-    excerpt:
-      "Hành trình 13 mùa hè đi qua khắp các huyện Tĩnh Gia, Cẩm Thủy, Lang Chánh, Thường Xuân, Thạch Thành, Quan Sơn, Ngọc Lặc, Như Thanh, Quan Hóa... mang tri thức, công trình và tình yêu thương tới bà con.",
-    cover: IMG.volunteers,
-    gallery: [IMG.kids, IMG.community, IMG.walk, IMG.classroom],
-    schedule: [
-      { time: "05:00", title: "Xuất quân tại 79 Hồ Tùng Mậu", note: "Lên xe về với các bản làng vùng cao xứ Thanh." },
-      { time: "08:00", title: "Dạy học & sinh hoạt hè cho các em nhỏ", note: "Lớp học tình thương, trao tặng đồ dùng học tập." },
-      { time: "14:00", title: "Thực hiện công trình thanh niên", note: "Đổ bê tông đường giao thông, sửa chữa nhà văn hóa thôn bản." },
-      { time: "19:30", title: "Đêm lửa trại thắt chặt tình quân dân", note: "Nhảy dân vũ cùng bà con và thanh niên địa phương." },
-    ],
-    fact: [
-      { label: "Số mùa đã qua", value: "13 Mùa hè xanh" },
-      { label: "Địa bàn", value: "Các huyện vùng cao Thanh Hóa" },
-      { label: "Lực lượng", value: "Đội SVTN nòng cốt TMU" },
-    ],
-  },
-  {
-    id: "dong-am",
-    title: "Chiến dịch Đông Ấm (8 Mùa Hơi Ấm Vùng Cao)",
-    category: "Tình nguyện",
-    dateLabel: "Tháng 1 thường niên",
-    month: "01",
-    day: "10",
-    location: "Các bản vùng sâu vùng xa Thanh Hóa",
-    status: "Đã kết thúc",
-    excerpt:
-      "Trải qua 8 mùa Đông Ấm như 'Tết Ấm Bản Em', 'Đông Ấm Yêu Thương' tại Thường Xuân, Thạch Thành, Quan Sơn, Như Thanh, Lang Chánh... mang áo ấm, chăn bông và quà Tết đến các hộ nghèo và học sinh vùng cao.",
-    cover: IMG.kidsRead,
-    gallery: [IMG.support, IMG.classroom, IMG.community, IMG.maskTeam],
-    schedule: [
-      { time: "06:00", title: "Vận chuyển hàng cứu trợ Tết", note: "Chăn ấm, áo khoác, gạo nếp, bánh chưng tới bản vùng sâu." },
-      { time: "10:00", title: "Trao học bổng & quà tặng bà con", note: "Gặp gỡ thăm hỏi từng hộ gia đình khó khăn." },
-      { time: "19:00", title: "Nấu bánh chưng Tết ấm tình đồng hương", note: "Quây quần bên bếp lửa cùng bà con bản làng." },
-    ],
-    fact: [
-      { label: "Số mùa đã qua", value: "8 Mùa Đông Ấm" },
-      { label: "Quà tặng", value: "Hàng nghìn suất quà áo ấm" },
-      { label: "Ý nghĩa", value: "Sống để yêu thương, cống hiến" },
-    ],
-  },
-  {
-    id: "sinh-nhat-bllsv",
-    title: "Kỷ Niệm Ngày Thành Lập BLLSV TMU (12/04)",
-    category: "Hội đồng hương",
-    dateLabel: "Ngày 12/04 hàng năm",
-    month: "04",
-    day: "12",
-    location: "Trường Đại học Thương Mại – 79 Hồ Tùng Mậu",
-    status: "Sắp diễn ra",
-    excerpt:
-      "Ngày 12/04/2008 đánh dấu sự ra đời của Ban Liên Lạc Sinh Viên Thanh Hóa Đại Học Thương Mại. Dịp hội ngộ lịch sử giữa các thế hệ cựu BCH từ K44 đến K60.",
-    cover: IMG.campus,
-    gallery: [IMG.friends, IMG.park, IMG.dance, IMG.beach],
-    schedule: [
-      { time: "14:00", title: "Hội ngộ các thế hệ anh chị tiền nhiệm", note: "Gặp mặt BCH qua 16 nhiệm kỳ." },
-      { time: "16:00", title: "Hội trại & Flashmob truyền thống", note: "Cháy hết mình cùng 4 bài nhảy truyền thống." },
-      { time: "18:30", title: "Cắt bánh sinh nhật 12/04 & Gala tri ân", note: "Hô vang khẩu hiệu 'Tinh thần 36' quanh vòng tròn." },
-    ],
-    fact: [
-      { label: "Ngày thành lập", value: "12/04/2008" },
-      { label: "Lịch sử", value: "Hơn 18 năm giữ lửa" },
-      { label: "Thế hệ gắn kết", value: "Từ K44 đến K60" },
     ],
   },
   {
@@ -1061,14 +1076,14 @@ export type Memory = {
 };
 
 export const MEMORIES: Memory[] = [
-  { id: "m1", src: IMG.volunteers, title: "Mùa Hè Xanh", caption: "13 mùa hè qua các bản làng xa xôi nhất của Thanh Hóa.", tag: "Tình nguyện", height: "h-64 md:h-72" },
-  { id: "m2", src: IMG.dance, title: "Âm Vang Xứ Thanh", caption: "Khoảnh khắc vinh quang vô địch 4 năm liên tiếp.", tag: "Vô địch", height: "h-72 md:h-96" },
-  { id: "m3", src: IMG.kids, title: "Đông Ấm yêu thương", caption: "Mang áo ấm và nụ cười tới các em nhỏ vùng cao.", tag: "Đông Ấm", height: "h-56 md:h-64" },
-  { id: "m4", src: IMG.beach, title: "Sinh nhật 12/04", caption: "Kỷ niệm ngày thành lập với các thế hệ K44 - K60.", tag: "Truyền thống", height: "h-64 md:h-80" },
-  { id: "m5", src: IMG.football, title: "Hội thao gắn kết", caption: "Những trận bóng đá nảy lửa của con em 36 tại TMU.", tag: "Thể thao", height: "h-60 md:h-72" },
-  { id: "m6", src: IMG.campus, title: "Chào Tân sinh viên", caption: "Vòng tay rộng mở đón những người con sông Mã về nhà.", tag: "Tân SV", height: "h-64 md:h-80" },
-  { id: "m7", src: IMG.walk, title: "Tập huấn tình nguyện", caption: "Rèn luyện ý chí và kỷ luật tại Ba Vì, Sóc Sơn.", tag: "Tập huấn", height: "h-56 md:h-72" },
-  { id: "m8", src: IMG.community, title: "Vòng tròn Tinh thần 36", caption: "Đứng thành vòng tròn, tay trái đưa về tâm hô vang khẩu hiệu.", tag: "Nghi thức", height: "h-72 md:h-64" },
+  { id: "m1", src: "/images/programs/mua-he-xanh-2026/mhx-back-1.jpg", title: "Mùa Hè Xanh 2026", caption: "Chiến dịch tình nguyện hè ý nghĩa của những chiến sĩ áo xanh 36TMU.", tag: "Mùa Hè Xanh", height: "h-64 md:h-72" },
+  { id: "m2", src: "/images/programs/dong-am-2026/dong-am-back-1.jpg", title: "Đông Ấm 2026", caption: "Đội hình toàn quân mang hơi ấm và nụ cười tới bà con và các em nhỏ.", tag: "Đông Ấm", height: "h-72 md:h-96" },
+  { id: "m3", src: "/images/programs/sinh-nhat-2026/sinh-nhat-back-1.jpg", title: "Sinh nhật 18 tuổi (12/04)", caption: "Đại lễ 18 năm thành lập quy tụ đông đủ các thế hệ K44 - K60.", tag: "Sinh nhật 18", height: "h-56 md:h-64" },
+  { id: "m4", src: "/images/programs/dong-am-2026/dong-am-phien-cho-1.jpg", title: "Phiên chợ 0 đồng", caption: "Đông đảo bà con và các em nhỏ vùng cao quây quần nhận quà.", tag: "Ấm áp", height: "h-64 md:h-80" },
+  { id: "m5", src: "/images/programs/sinh-nhat-2026/sinh-nhat-gala-2.jpg", title: "Khoảnh khắc cắt bánh 18", caption: "Cùng nhau thổi nến chúc mừng mái nhà chung bước sang tuổi 18.", tag: "Gala 18", height: "h-60 md:h-72" },
+  { id: "m6", src: "/images/programs/mua-he-xanh-2026/mhx-cttn-1.jpg", title: "Công trình thanh niên", caption: "Đổ bê tông đường giao thông và làm đẹp diện mạo bản làng quê hương.", tag: "Cống hiến", height: "h-64 md:h-80" },
+  { id: "m7", src: "/images/programs/sinh-nhat-2026/sinh-nhat-gala-1.jpg", title: "Hội trường Gala 18", caption: "Sân khấu rực sáng với tinh thần tuổi trẻ Thương Mại - Xứ Thanh.", tag: "Tự hào", height: "h-56 md:h-72" },
+  { id: "m8", src: "/images/programs/mua-he-xanh-2026/mhx-back-2.jpg", title: "Nụ cười chiến sĩ 36", caption: "Mỗi nụ cười là một kỷ niệm thanh xuân không thể nào quên.", tag: "Thanh xuân", height: "h-72 md:h-64" },
 ];
 
 export type Confession = {

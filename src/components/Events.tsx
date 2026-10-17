@@ -353,10 +353,23 @@ function ProgramDetail({
         </ol>
 
         {/* Bộ ảnh */}
-        <h4 className="mt-7 flex items-center gap-2 font-display text-base font-extrabold text-cobalt-900 sm:text-lg">
-          <Icon.camera className="h-5 w-5 text-tmu-600" />
-          Ảnh các mùa trước
-        </h4>
+        <div className="mt-7 flex flex-wrap items-center justify-between gap-2">
+          <h4 className="flex items-center gap-2 font-display text-base font-extrabold text-cobalt-900 sm:text-lg">
+            <Icon.camera className="h-5 w-5 text-tmu-600" />
+            Kho ảnh khoảnh khắc
+          </h4>
+          {p.driveLink && (
+            <a
+              href={p.driveLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-flame-50 px-3 py-1.5 text-xs font-bold text-flame-600 transition hover:bg-flame-100 hover:text-flame-700"
+            >
+              📂 Xem trọn bộ ảnh trên Drive
+              <Icon.arrowRight className="h-3.5 w-3.5" />
+            </a>
+          )}
+        </div>
         <div className="scrollbar-none -mx-4 mt-3 flex snap-x gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-4 sm:px-0">
           {p.gallery.map((g, idx) => (
             <button
