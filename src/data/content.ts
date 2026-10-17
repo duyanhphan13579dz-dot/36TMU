@@ -921,6 +921,8 @@ export const PROGRAMS: Program[] = [
       "/images/programs/mua-he-xanh-2026/mhx-back-1.jpg",
       "/images/programs/mua-he-xanh-2026/mhx-back-2.jpg",
       "/images/programs/mua-he-xanh-2026/mhx-cttn-1.jpg",
+      "/images/programs/mua-he-xanh-2026/mhx-van-nghe-1.jpg",
+      "/images/programs/mua-he-xanh-2026/mhx-meme-1.jpg",
     ],
     driveLink: "https://drive.google.com/drive/folders/1kZ8TGJfj5N7PO5NVZqQpA2nt30SHuZ0U?usp=drive_link",
     schedule: [
@@ -950,6 +952,7 @@ export const PROGRAMS: Program[] = [
     gallery: [
       "/images/programs/dong-am-2026/dong-am-back-1.jpg",
       "/images/programs/dong-am-2026/dong-am-phien-cho-1.jpg",
+      "/images/programs/dong-am-2026/dong-am-lua-trai-1.jpg",
     ],
     driveLink: "https://drive.google.com/drive/folders/1KgN-5lNuMjMC9nlyQkn-G63nUCnsqalp?usp=drive_link",
     schedule: [
@@ -1072,18 +1075,23 @@ export type Memory = {
   title: string;
   caption: string;
   tag: string;
+  category?: "mua-he-xanh" | "dong-am" | "sinh-nhat" | "am-vang" | "chung";
   height: string;
 };
 
 export const MEMORIES: Memory[] = [
-  { id: "m1", src: "/images/programs/mua-he-xanh-2026/mhx-back-1.jpg", title: "Mùa Hè Xanh 2026", caption: "Chiến dịch tình nguyện hè ý nghĩa của những chiến sĩ áo xanh 36TMU.", tag: "Mùa Hè Xanh", height: "h-64 md:h-72" },
-  { id: "m2", src: "/images/programs/dong-am-2026/dong-am-back-1.jpg", title: "Đông Ấm 2026", caption: "Đội hình toàn quân mang hơi ấm và nụ cười tới bà con và các em nhỏ.", tag: "Đông Ấm", height: "h-72 md:h-96" },
-  { id: "m3", src: "/images/programs/sinh-nhat-2026/sinh-nhat-back-1.jpg", title: "Sinh nhật 18 tuổi (12/04)", caption: "Đại lễ 18 năm thành lập quy tụ đông đủ các thế hệ K44 - K60.", tag: "Sinh nhật 18", height: "h-56 md:h-64" },
-  { id: "m4", src: "/images/programs/dong-am-2026/dong-am-phien-cho-1.jpg", title: "Phiên chợ 0 đồng", caption: "Đông đảo bà con và các em nhỏ vùng cao quây quần nhận quà.", tag: "Ấm áp", height: "h-64 md:h-80" },
-  { id: "m5", src: "/images/programs/sinh-nhat-2026/sinh-nhat-gala-2.jpg", title: "Khoảnh khắc cắt bánh 18", caption: "Cùng nhau thổi nến chúc mừng mái nhà chung bước sang tuổi 18.", tag: "Gala 18", height: "h-60 md:h-72" },
-  { id: "m6", src: "/images/programs/mua-he-xanh-2026/mhx-cttn-1.jpg", title: "Công trình thanh niên", caption: "Đổ bê tông đường giao thông và làm đẹp diện mạo bản làng quê hương.", tag: "Cống hiến", height: "h-64 md:h-80" },
-  { id: "m7", src: "/images/programs/sinh-nhat-2026/sinh-nhat-gala-1.jpg", title: "Hội trường Gala 18", caption: "Sân khấu rực sáng với tinh thần tuổi trẻ Thương Mại - Xứ Thanh.", tag: "Tự hào", height: "h-56 md:h-72" },
-  { id: "m8", src: "/images/programs/mua-he-xanh-2026/mhx-back-2.jpg", title: "Nụ cười chiến sĩ 36", caption: "Mỗi nụ cười là một kỷ niệm thanh xuân không thể nào quên.", tag: "Thanh xuân", height: "h-72 md:h-64" },
+  { id: "m1", src: "/images/programs/mua-he-xanh-2026/mhx-back-1.jpg", title: "Mùa Hè Xanh 2026", caption: "Đội hình toàn quân kiên cường trước thềm chiến dịch tình nguyện hè.", tag: "Mùa Hè Xanh", category: "mua-he-xanh", height: "h-64 md:h-72" },
+  { id: "m2", src: "/images/programs/dong-am-2026/dong-am-back-1.jpg", title: "Đông Ấm 2026", caption: "Đội hình toàn quân mang hơi ấm và nụ cười tới bà con vùng cao.", tag: "Đông Ấm", category: "dong-am", height: "h-72 md:h-96" },
+  { id: "m3", src: "/images/programs/sinh-nhat-2026/sinh-nhat-back-1.jpg", title: "Sinh nhật 18 tuổi", caption: "Đại lễ 18 năm thành lập quy tụ đông đủ các thế hệ K44 - K60.", tag: "Sinh nhật 18", category: "sinh-nhat", height: "h-56 md:h-64" },
+  { id: "m4", src: "/images/programs/dong-am-2026/dong-am-phien-cho-1.jpg", title: "Phiên chợ 0 đồng", caption: "Đông đảo bà con và các em nhỏ vùng cao quây quần nhận quà tình nghĩa.", tag: "Đông Ấm", category: "dong-am", height: "h-64 md:h-80" },
+  { id: "m5", src: "/images/programs/sinh-nhat-2026/sinh-nhat-gala-2.jpg", title: "Cắt bánh Sinh nhật 18", caption: "Cùng nhau thổi nến chúc mừng mái nhà chung bước sang tuổi 18 rực rỡ.", tag: "Sinh nhật 18", category: "sinh-nhat", height: "h-60 md:h-72" },
+  { id: "m6", src: "/images/programs/mua-he-xanh-2026/mhx-cttn-1.jpg", title: "Công trình thanh niên", caption: "Đổ bê tông đường giao thông và làm đẹp diện mạo bản làng quê hương.", tag: "Mùa Hè Xanh", category: "mua-he-xanh", height: "h-64 md:h-80" },
+  { id: "m7", src: "/images/programs/sinh-nhat-2026/sinh-nhat-gala-1.jpg", title: "Hội trường Gala 18", caption: "Sân khấu rực sáng với tinh thần tuổi trẻ Thương Mại - Xứ Thanh.", tag: "Sinh nhật 18", category: "sinh-nhat", height: "h-56 md:h-72" },
+  { id: "m8", src: "/images/programs/dong-am-2026/dong-am-lua-trai-1.jpg", title: "Lửa trại Đông Ấm", caption: "Vòng tròn gắn kết thắp sáng màn đêm lạnh giá giữa núi rừng miền Tây.", tag: "Đông Ấm", category: "dong-am", height: "h-72 md:h-64" },
+  { id: "m9", src: "/images/programs/mua-he-xanh-2026/mhx-van-nghe-1.jpg", title: "Đêm văn nghệ bản làng", caption: "Tiếng hát, điệu múa trao gửi tình cảm yêu thương tới đồng bào xứ Thanh.", tag: "Mùa Hè Xanh", category: "mua-he-xanh", height: "h-60 md:h-72" },
+  { id: "m10", src: "/images/programs/mua-he-xanh-2026/mhx-meme-1.jpg", title: "Nụ cười chiến sĩ 36", caption: "Những khoảnh khắc hồn nhiên, giản dị làm nên thanh xuân rực rỡ.", tag: "Mùa Hè Xanh", category: "mua-he-xanh", height: "h-56 md:h-64" },
+  { id: "m11", src: IMG.dance, title: "Âm Vang Xứ Thanh", caption: "Khoảnh khắc vinh quang vô địch 4 năm liên tiếp của nhà chung.", tag: "Vô địch", category: "am-vang", height: "h-64 md:h-80" },
+  { id: "m12", src: IMG.community, title: "Vòng tròn Tinh thần 36", caption: "Đứng thành vòng tròn, tay trái đưa về tâm hô vang khẩu hiệu.", tag: "Nghi thức", category: "chung", height: "h-64 md:h-72" },
 ];
 
 export type Confession = {

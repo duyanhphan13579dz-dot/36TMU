@@ -4,6 +4,7 @@ import { Button, Icon, Kicker, SectionHeading, Sheet } from "@/components/ui";
 import { getStoredAdminPosts, getAllPrograms } from "@/data/adminStore";
 import { cn } from "@/utils/cn";
 import { ShimmerImage } from "@/components/ui/ShimmerImage";
+import { LightboxModal } from "@/components/LightboxModal";
 
 const STATUS_STYLE: Record<string, string> = {
   "Mới đăng": "bg-red-600 text-white animate-pulse",
@@ -286,12 +287,28 @@ function ProgramDetail({
   onClose: () => void;
 }) {
   const [hero, setHero] = useState(p.cover);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
   return (
     <div className="flex max-h-[94dvh] flex-col md:max-h-[88vh]">
       {/* Ảnh bìa */}
-      <div className="relative aspect-[16/9] w-full shrink-0 overflow-hidden bg-cobalt-900 md:aspect-[21/9]">
-        <img src={hero} alt={p.title} className="h-full w-full object-cover" />
+      <div className="group relative aspect-[16/9] w-full shrink-0 overflow-hidden bg-cobalt-900 md:aspect-[21/9]">
+        <img src={hero} alt={p.title} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
         <div className="absolute inset-0 bg-gradient-to-t from-cobalt-950/90 via-cobalt-950/25 to-cobalt-950/40" />
+        
+        {/* Nút phóng to ảnh hero */}
+        <button
+          onClick={() => {
+            const found = p.gallery.indexOf(hero);
+            setLightboxIndex(found >= 0 ? found : 0);
+          }}
+          className="absolute top-4 right-4 flex items-center gap-1.5 rounded-full bg-cobalt-950/80 px-3 py-1.5 text-xs font-bold text-white shadow-soft backdrop-blur transition hover:bg-flame-600 hover:scale-105 active:scale-95"
+          title="Xem ảnh toàn màn hình"
+        >
+          <Icon.expand className="h-3.5 w-3.5" />
+          Phóng to
+        </button>
+
         <div className="absolute inset-x-0 bottom-0 p-4 sm:p-6 md:pr-16">
           <div className="flex flex-wrap items-center gap-2">
             <span className={cn("rounded-full px-2.5 py-1 text-[11px] font-bold", STATUS_STYLE[p.status])}>{p.status}</span>
@@ -356,7 +373,7 @@ function ProgramDetail({
         <div className="mt-7 flex flex-wrap items-center justify-between gap-2">
           <h4 className="flex items-center gap-2 font-display text-base font-extrabold text-cobalt-900 sm:text-lg">
             <Icon.camera className="h-5 w-5 text-tmu-600" />
-            Kho ảnh khoảnh khắc
+            Kho ảnh khoảnh khắc ({p.gallery.length} ảnh)
           </h4>
           {p.driveLink && (
             <a
@@ -372,19 +389,33 @@ function ProgramDetail({
         </div>
         <div className="scrollbar-none -mx-4 mt-3 flex snap-x gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-4 sm:px-0">
           {p.gallery.map((g, idx) => (
-            <button
+            <div
               key={g}
-              onClick={() => setHero(g)}
               className={cn(
-                "relative aspect-[4/3] min-w-[45%] shrink-0 snap-start overflow-hidden rounded-2xl border-2 transition-all active:scale-95 sm:min-w-0",
+                "group/thumb relative aspect-[4/3] min-w-[45%] shrink-0 snap-start overflow-hidden rounded-2xl border-2 transition-all sm:min-w-0",
                 hero === g ? "border-flame-500 shadow-soft" : "border-transparent hover:border-tmu-300",
               )}
             >
-              <img src={g} alt={`${p.title} - ảnh ${idx + 1}`} loading="lazy" className="h-full w-full object-cover" />
+              <button
+                type="button"
+                onClick={() => setHero(g)}
+                className="h-full w-full"
+                title="Bấm để chọn làm ảnh xem chính"
+              >
+                <img src={g} alt={`${p.title} - ảnh ${idx + 1}`} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover/thumb:scale-110" />
+              </button>
               {hero === g && (
-                <span className="absolute inset-0 ring-2 ring-flame-500 ring-inset" />
+                <span className="pointer-events-none absolute inset-0 ring-2 ring-flame-500 ring-inset" />
               )}
-            </button>
+              <button
+                type="button"
+                onClick={() => setLightboxIndex(idx)}
+                title="Phóng to toàn màn hình"
+                className="absolute top-2 right-2 flex h-7 w-7 items-center justify-center rounded-lg bg-black/60 text-white opacity-0 backdrop-blur transition-opacity group-hover/thumb:opacity-100 hover:bg-flame-600"
+              >
+                <Icon.expand className="h-3.5 w-3.5" />
+              </button>
+            </div>
           ))}
         </div>
       </div>
@@ -406,6 +437,21 @@ function ProgramDetail({
           Đóng
         </Button>
       </div>
+
+      {/* Modal phóng to ảnh Lightbox */}
+      <LightboxModal
+        open={lightboxIndex !== null}
+        currentIndex={lightboxIndex ?? 0}
+        items={p.gallery.map((src, idx) => ({
+          id: `${p.id}-lightbox-${idx}`,
+          src,
+          title: `${p.title} (${idx + 1}/${p.gallery.length})`,
+          tag: p.category,
+          caption: p.excerpt,
+        }))}
+        onClose={() => setLightboxIndex(null)}
+        onNavigate={(idx) => setLightboxIndex(idx)}
+      />
     </div>
   );
 }

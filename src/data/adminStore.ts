@@ -36,6 +36,7 @@ export type AdminProgram = {
   location: string;
   excerpt: string;
   cover: string;
+  driveLink?: string;
   schedule: { time: string; title: string; note: string }[];
   fact: { label: string; value: string }[];
   createdAt: string;
@@ -178,6 +179,7 @@ export function getAllPrograms(): Program[] {
     excerpt: p.excerpt,
     cover: p.cover || "https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=1200&q=80",
     gallery: [p.cover || "https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=800&q=80"],
+    driveLink: p.driveLink,
     schedule: p.schedule?.length ? p.schedule : [{ time: "Sự kiện", title: p.title, note: p.excerpt }],
     fact: p.fact?.length ? p.fact : [{ label: "Địa điểm", value: p.location }],
   }));

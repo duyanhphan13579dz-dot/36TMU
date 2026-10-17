@@ -117,6 +117,21 @@ export default function Gallery({ onToast }: { onToast: (msg: string) => void })
     onToast("Lời nhắn của bạn đã được dán lên tường nhà chung 💙");
   };
 
+  const [memoryFilter, setMemoryFilter] = useState<string>("all");
+
+  const filteredMemories = useMemo(() => {
+    if (memoryFilter === "all") return MEMORIES;
+    return MEMORIES.filter((m) => m.category === memoryFilter);
+  }, [memoryFilter]);
+
+  const MEMORY_CATEGORIES = [
+    { id: "all", label: "Tất cả khoảnh khắc" },
+    { id: "mua-he-xanh", label: "🌻 Mùa Hè Xanh 2026" },
+    { id: "dong-am", label: "❄️ Đông Ấm 2026" },
+    { id: "sinh-nhat", label: "🎂 Sinh Nhật 18" },
+    { id: "am-vang", label: "🏆 Âm Vang Xứ Thanh" },
+  ];
+
   return (
     <section id="memories" className="relative overflow-hidden py-16 sm:py-20 lg:py-28 scroll-mt-20 md:scroll-mt-24">
       <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-white via-flame-50/40 to-white" />
@@ -133,14 +148,44 @@ export default function Gallery({ onToast }: { onToast: (msg: string) => void })
           desc="Mỗi mùa đi tình nguyện, mỗi đêm lửa trại, mỗi buổi tập flashmob đổ mồ hôi… đều nằm ở đây. Bấm vào ảnh để xem to nhé!"
         />
 
+        {/* ============ BỘ LỌC CHƯƠNG TRÌNH KHO ẢNH ============ */}
+        <div className="scrollbar-none -mx-4 mt-8 flex snap-x items-center justify-start gap-2 overflow-x-auto px-4 pb-2 sm:mx-0 sm:justify-center sm:px-0">
+          {MEMORY_CATEGORIES.map((cat) => {
+            const count = cat.id === "all" ? MEMORIES.length : MEMORIES.filter((m) => m.category === cat.id).length;
+            const active = memoryFilter === cat.id;
+            return (
+              <button
+                key={cat.id}
+                onClick={() => setMemoryFilter(cat.id)}
+                className={cn(
+                  "flex shrink-0 snap-start items-center gap-2 rounded-2xl px-4 py-2 text-xs sm:text-[13px] font-bold transition-all duration-300 active:scale-95",
+                  active
+                    ? "bg-cobalt-800 text-white shadow-soft"
+                    : "border border-cobalt-200/80 bg-white text-cobalt-700 hover:border-tmu-400 hover:text-cobalt-950",
+                )}
+              >
+                {cat.label}
+                <span
+                  className={cn(
+                    "rounded-lg px-1.5 py-0.5 text-[10.5px] font-bold",
+                    active ? "bg-white/20 text-white" : "bg-cobalt-100 text-cobalt-600",
+                  )}
+                >
+                  {count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
         {/* ============ MOBILE: slider snap ============ */}
-        <div className="mt-8 lg:hidden">
+        <div className="mt-6 lg:hidden">
           <div
             ref={trackRef}
             onScroll={onTrackScroll}
             className="scrollbar-none -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-3"
           >
-            {MEMORIES.map((m, i) => (
+            {filteredMemories.map((m, i) => (
               <button
                 key={m.id}
                 data-slide
@@ -165,7 +210,7 @@ export default function Gallery({ onToast }: { onToast: (msg: string) => void })
             ))}
           </div>
           <div className="mt-3 flex items-center justify-center gap-1.5">
-            {MEMORIES.map((m, i) => (
+            {filteredMemories.map((m, i) => (
               <span
                 key={m.id}
                 className={cn(
@@ -178,8 +223,8 @@ export default function Gallery({ onToast }: { onToast: (msg: string) => void })
         </div>
 
         {/* ============ DESKTOP: masonry ============ */}
-        <div className="masonry mt-10 hidden lg:block" data-reveal>
-          {MEMORIES.map((m, i) => (
+        <div className="masonry mt-8 hidden lg:block" data-reveal>
+          {filteredMemories.map((m, i) => (
             <button
               key={m.id}
               onClick={() => setLightbox(i)}
@@ -373,7 +418,7 @@ export default function Gallery({ onToast }: { onToast: (msg: string) => void })
       <LightboxModal
         open={lightbox !== null}
         currentIndex={lightbox ?? 0}
-        items={MEMORIES}
+        items={filteredMemories}
         onClose={() => setLightbox(null)}
         onNavigate={(idx) => setLightbox(idx)}
       />
