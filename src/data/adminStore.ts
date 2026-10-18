@@ -667,6 +667,9 @@ export function deleteFundDonation(id: string): void {
   }
 }
 
+const NOTES_KEY = "bllsv_tnv_notes";
+const CONFESSIONS_KEY = "bllsv_confessions";
+
 // --- BACKUP & RESTORE DỮ LIỆU ---
 export function exportAllAdminData(): string {
   let notes: unknown[] = [];
