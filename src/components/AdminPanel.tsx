@@ -15,6 +15,16 @@ import {
   saveStoredAdminRules,
   getStoredAdminContact,
   saveStoredAdminContact,
+  getStoredAdminBroadcast,
+  saveStoredAdminBroadcast,
+  getStoredRecruitment,
+  saveStoredRecruitment,
+  getStoredApplications,
+  saveStoredApplications,
+  getStoredFundCampaign,
+  saveStoredFundCampaign,
+  getStoredFundDonations,
+  saveStoredFundDonations,
   getStoredAdminPin,
   saveStoredAdminPin,
   resetStoredAdminPin,
@@ -25,12 +35,20 @@ import {
   DEFAULT_MOTTO,
   DEFAULT_RULES,
   DEFAULT_CONTACT,
+  DEFAULT_BROADCAST,
+  DEFAULT_RECRUITMENT,
+  DEFAULT_FUND_CAMPAIGN,
   type AdminPost,
   type AdminProgram,
   type AdminLeader,
   type AdminMotto,
   type AdminRule,
   type AdminContact,
+  type AdminBroadcast,
+  type RecruitmentCampaign,
+  type VolunteerApplication,
+  type FundCampaign,
+  type FundDonation,
 } from "@/data/adminStore";
 import {
   authenticateAdmin,
@@ -45,8 +63,11 @@ import {
   type DbAuditLog,
 } from "@/lib/db";
 
+import AdminBroadcastTab from "./admin/AdminBroadcastTab";
 import AdminPostsTab from "./admin/AdminPostsTab";
 import AdminProgramsTab from "./admin/AdminProgramsTab";
+import AdminRecruitmentTab from "./admin/AdminRecruitmentTab";
+import AdminFundTab from "./admin/AdminFundTab";
 import AdminLeadersTab from "./admin/AdminLeadersTab";
 import AdminMottoTab from "./admin/AdminMottoTab";
 import AdminRulesTab from "./admin/AdminRulesTab";
@@ -80,8 +101,11 @@ export default function AdminPanel({
   useEscape(showModal, () => setShowModal(false));
 
   type TabType =
+    | "broadcast"
     | "posts"
     | "programs"
+    | "recruitment"
+    | "fund"
     | "leaders"
     | "motto"
     | "rules"
@@ -90,7 +114,7 @@ export default function AdminPanel({
     | "admins"
     | "audit"
     | "settings";
-  const [activeTab, setActiveTab] = useState<TabType>("posts");
+  const [activeTab, setActiveTab] = useState<TabType>("broadcast");
 
   // --- NEON POSTGRESQL & AUDIT LOG STATE ---
   const [currentAdmin, setCurrentAdmin] = useState<DbAdmin | null>(null);
@@ -103,9 +127,16 @@ export default function AdminPanel({
   const [newAdminUsername, setNewAdminUsername] = useState("");
   const [newAdminPin, setNewAdminPin] = useState("");
   const [newAdminName, setNewAdminName] = useState("");
-  const [newAdminRole, setNewAdminRole] = useState("Ủy viên BCH BLLSV TMU");
-  const [newAdminDept, setNewAdminDept] = useState("Ban Chấp Hành");
+  const [newAdminRole, setNewAdminRole] = useState("Ủy viên Đội SVTN TMU");
+  const [newAdminDept, setNewAdminDept] = useState("Đội SVTN");
   const [newAdminCohort, setNewAdminCohort] = useState("K60");
+
+  // --- 0. BROADCAST, RECRUITMENT & FUND STATE ---
+  const [broadcast, setBroadcast] = useState<AdminBroadcast>(getStoredAdminBroadcast());
+  const [recruitment, setRecruitment] = useState<RecruitmentCampaign>(getStoredRecruitment());
+  const [applications, setApplications] = useState<VolunteerApplication[]>(getStoredApplications());
+  const [fundCampaign, setFundCampaign] = useState<FundCampaign>(getStoredFundCampaign());
+  const [fundDonations, setFundDonations] = useState<FundDonation[]>(getStoredFundDonations());
 
   // --- 1. POSTS STATE ---
   const [posts, setPosts] = useState<AdminPost[]>([]);
@@ -173,6 +204,11 @@ export default function AdminPanel({
     setRulesData(getStoredAdminRules());
     setNotes(getStoredNotes());
     setContactData(getStoredAdminContact());
+    setBroadcast(getStoredAdminBroadcast());
+    setRecruitment(getStoredRecruitment());
+    setApplications(getStoredApplications());
+    setFundCampaign(getStoredFundCampaign());
+    setFundDonations(getStoredFundDonations());
     fetchDbAdmins().then(setDbAdmins).catch(() => {});
     fetchAuditLogs(50).then(setAuditLogs).catch(() => {});
   };
@@ -956,14 +992,15 @@ export default function AdminPanel({
                       <h3 className="truncate font-display text-sm font-black text-cobalt-950 sm:text-base">
                         Bảng Quản Trị BLLSV Thanh Hóa TMU
                       </h3>
-                      <div className="flex items-center gap-2">
-                        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-800">
+                      <div className="flex flex-wrap items-center gap-2 mt-0.5">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2.5 py-0.5 text-[10.5px] font-bold text-emerald-800">
                           <span className="h-1.5 w-1.5 rounded-full bg-emerald-600" />
                           {currentAdmin
-                            ? (currentAdmin.id === "admin-root" || currentAdmin.name.includes("Ban Chủ Nhiệm") || (currentAdmin.name === "Ban Chấp Hành" && currentAdmin.role === "BLLSVTHDHTM")
-                                ? "Ban Chấp Hành - BLLSVTHDHTM"
-                                : (currentAdmin.role ? `${currentAdmin.name} - ${currentAdmin.role}` : currentAdmin.name))
-                            : "Ban Chấp Hành - BLLSVTHDHTM"}
+                            ? `${currentAdmin.name} • ${currentAdmin.department || "Đội SVTN"} (${currentAdmin.role || "Quản trị viên"})`
+                            : "Đội SVTN (Cấp Quản Lý 3 Ban)"}
+                        </span>
+                        <span className="hidden md:inline rounded-md bg-cobalt-100 px-2 py-0.5 text-[10px] font-semibold text-cobalt-700">
+                          3 Ban chuyên môn: Ban Truyền thông • Ban Văn hóa – Sự kiện • Ban Hậu cần
                         </span>
                       </div>
                     </div>
@@ -1013,16 +1050,19 @@ export default function AdminPanel({
                 {/* Danh sách Tabs chức năng */}
                 <div className="scrollbar-none flex snap-x gap-1.5 overflow-x-auto border-b border-cobalt-100 bg-white px-4 py-2.5 sm:px-6">
                   {[
-                    { id: "posts", label: "📢 Tin tức & Thông báo", count: posts.length },
-                    { id: "programs", label: "🎯 Chương trình & Sự kiện", count: programs.length },
-                    { id: "leaders", label: "👥 Đội ngũ BCH", count: leaders.length },
-                    { id: "motto", label: "🔥 Châm ngôn BCH", count: null },
-                    { id: "rules", label: "📜 Thông báo nội quy", count: rulesData.rules.length },
-                    { id: "notes", label: "📋 Duyệt Note TNV", count: notes.length },
-                    { id: "contact", label: "📞 Kênh liên hệ", count: null },
-                    { id: "admins", label: "👥 Quản lý Admin", count: dbAdmins.length },
-                    { id: "audit", label: "📜 Lịch sử thay đổi", count: auditLogs.length },
-                    { id: "settings", label: "🔐 Cài đặt & Cloud Sync", count: null },
+                    { id: "broadcast", label: "📢 Banner Khẩn", badge: "Truyền thông", count: broadcast.enabled ? "BẬT" : "TẮT" },
+                    { id: "posts", label: "📰 Bài viết", badge: "Truyền thông", count: posts.length },
+                    { id: "programs", label: "🎯 Sự kiện", badge: "Văn hóa - SK", count: programs.length },
+                    { id: "recruitment", label: "📋 Tuyển TNV", badge: "Hậu cần", count: applications.length },
+                    { id: "fund", label: "💰 Quỹ Tình Nguyện", badge: "Hậu cần", count: fundDonations.length },
+                    { id: "leaders", label: "👥 Đội ngũ BCH", badge: "Văn hóa - SK", count: leaders.length },
+                    { id: "motto", label: "🔥 Khẩu hiệu 36", badge: "Văn hóa - SK", count: null },
+                    { id: "rules", label: "📜 Nội quy", badge: "Văn hóa - SK", count: rulesData.rules.length },
+                    { id: "notes", label: "💬 Lời nhắn TNV", badge: "Nhân sự", count: notes.length },
+                    { id: "contact", label: "📞 Kênh liên hệ", badge: "Truyền thông", count: null },
+                    { id: "admins", label: "🛡️ Quản lý Admin", badge: "Đội SVTN", count: dbAdmins.length },
+                    { id: "audit", label: "📜 Nhật ký audit", badge: "Đội SVTN", count: auditLogs.length },
+                    { id: "settings", label: "🔐 Cài đặt & Cloud", badge: "Đội SVTN", count: null },
                   ].map((tab) => (
                     <button
                       key={tab.id}
@@ -1035,11 +1075,21 @@ export default function AdminPanel({
                       )}
                     >
                       <span>{tab.label}</span>
+                      <span
+                        className={cn(
+                          "rounded-md px-1.5 py-0.5 text-[9px] font-semibold",
+                          activeTab === tab.id ? "bg-white/20 text-white" : "bg-cobalt-100 text-cobalt-600"
+                        )}
+                      >
+                        {tab.badge}
+                      </span>
                       {tab.count !== null && (
                         <span
                           className={cn(
                             "rounded-md px-1.5 py-0.2 text-[10px]",
-                            activeTab === tab.id ? "bg-white/20 text-white" : "bg-cobalt-100 text-cobalt-700"
+                            activeTab === tab.id
+                              ? "bg-flame-500 text-white font-extrabold"
+                              : "bg-cobalt-200/70 text-cobalt-800"
                           )}
                         >
                           {tab.count}
@@ -1051,6 +1101,37 @@ export default function AdminPanel({
 
                 {/* Khung nội dung theo từng Tab */}
                 <div className="flex-1 overflow-y-auto p-4 sm:p-6">
+                  {activeTab === "broadcast" && (
+                    <AdminBroadcastTab
+                      broadcast={broadcast}
+                      onBroadcastChange={setBroadcast}
+                      onToast={onToast}
+                      userDept={currentAdmin?.department}
+                    />
+                  )}
+
+                  {activeTab === "recruitment" && (
+                    <AdminRecruitmentTab
+                      recruitment={recruitment}
+                      applications={applications}
+                      onRecruitmentChange={setRecruitment}
+                      onApplicationsChange={setApplications}
+                      onToast={onToast}
+                      userDept={currentAdmin?.department}
+                    />
+                  )}
+
+                  {activeTab === "fund" && (
+                    <AdminFundTab
+                      campaign={fundCampaign}
+                      donations={fundDonations}
+                      onCampaignChange={setFundCampaign}
+                      onDonationsChange={setFundDonations}
+                      onToast={onToast}
+                      userDept={currentAdmin?.department}
+                    />
+                  )}
+
                   {activeTab === "posts" && (
                     <AdminPostsTab
                       posts={posts}

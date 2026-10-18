@@ -48,7 +48,15 @@ export default function Hero() {
           </p>
 
           {/* Nút CTA – to bản cho mobile */}
-          <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+          <div className="mt-7 flex flex-wrap items-center gap-3">
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new CustomEvent("bllsv_open_recruit"))}
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 px-5 text-sm font-black text-white shadow-lift transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft active:scale-95"
+            >
+              <span>✨</span>
+              Đăng Ký Tham Gia Đội SVTN
+            </button>
             <Button as="a" href="#contact" variant="flame" size="lg" className="w-full sm:w-auto">
               Góc TNV & Lời nhắn
               <Icon.arrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />

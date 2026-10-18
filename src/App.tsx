@@ -10,6 +10,8 @@ import Footer from "@/components/Footer";
 import AdminPanel from "@/components/AdminPanel";
 import { Toast } from "@/components/ui";
 import { QuickSearchModal } from "@/components/QuickSearchModal";
+import BroadcastBanner from "@/components/BroadcastBanner";
+import VolunteerRecruitmentModal from "@/components/VolunteerRecruitmentModal";
 import { NAV_ITEMS, type NavId } from "@/data/content";
 import { getStoredAdminMotto } from "@/data/adminStore";
 
@@ -41,12 +43,20 @@ export default function App() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [dataVersion, setDataVersion] = useState(0);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isRecruitOpen, setIsRecruitOpen] = useState(false);
 
   // Lắng nghe sự kiện bật/tắt tìm kiếm nhanh (Ctrl+K)
   useEffect(() => {
     const handleToggleSearch = () => setIsSearchOpen((prev) => !prev);
     window.addEventListener("bllsv_toggle_search", handleToggleSearch);
     return () => window.removeEventListener("bllsv_toggle_search", handleToggleSearch);
+  }, []);
+
+  // Lắng nghe sự kiện mở modal tuyển tình nguyện viên
+  useEffect(() => {
+    const handleOpenRecruit = () => setIsRecruitOpen(true);
+    window.addEventListener("bllsv_open_recruit", handleOpenRecruit);
+    return () => window.removeEventListener("bllsv_open_recruit", handleOpenRecruit);
   }, []);
 
   // Lắng nghe sự kiện đồng bộ dữ liệu admin trên toàn website
@@ -139,6 +149,8 @@ export default function App() {
         Bỏ qua tới nội dung chính
       </a>
 
+      <BroadcastBanner />
+
       <Nav active={active} isAdmin={isAdmin} />
 
       <main>
@@ -166,6 +178,13 @@ export default function App() {
       />
 
       <Toast message={toast} />
+
+      {/* Modal ứng tuyển tình nguyện viên 3 Ban trực thuộc Đội SVTN */}
+      <VolunteerRecruitmentModal
+        open={isRecruitOpen}
+        onClose={() => setIsRecruitOpen(false)}
+        onToast={pushToast}
+      />
 
       {/* Modal tìm kiếm nhanh toàn diện (Spotlight / Ctrl+K) */}
       <QuickSearchModal

@@ -99,17 +99,16 @@ export default function AdminUsersTab({
               />
             </div>
             <div>
-              <label className="mb-1 block text-xs font-bold text-cobalt-800">Ban chuyên môn</label>
+              <label className="mb-1 block text-xs font-bold text-cobalt-800">Bộ phận / Ban chuyên môn *</label>
               <select
                 value={newAdminDept}
                 onChange={(e) => onAdminDeptChange(e.target.value)}
                 className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
               >
-                <option value="Ban Chấp Hành">Ban Chấp Hành</option>
-                <option value="Đội SVTN">Đội Sinh Viên Tình Nguyện</option>
-                <option value="Ban Truyền thông">Ban Truyền thông</option>
-                <option value="Ban Văn hóa – Sự kiện">Ban Văn hóa – Sự kiện</option>
-                <option value="Ban Hậu cần">Ban Hậu cần</option>
+                <option value="Đội SVTN">Đội SVTN (Cấp Điều Hành Quản Lý 3 Ban - Toàn Quyền)</option>
+                <option value="Ban Truyền thông">Ban Truyền thông (Tin tức, Banner Khẩn, Kênh liên hệ)</option>
+                <option value="Ban Văn hóa – Sự kiện">Ban Văn hóa – Sự kiện (Sự kiện, Lịch trình, BCH, Nội quy)</option>
+                <option value="Ban Hậu cần">Ban Hậu cần (Tuyển TNV, Quản lý Hồ sơ, Quỹ tình nguyện)</option>
               </select>
             </div>
             <div>
