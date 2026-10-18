@@ -89,8 +89,8 @@ export function QuickSearchModal({ open, onClose, onSelectMemory }: QuickSearchM
         category: "event",
         categoryLabel: "Tin tức & Sự kiện",
         title: prog.title,
-        subtitle: `${prog.category} • ${prog.location}`,
-        badge: prog.status,
+        subtitle: `${prog.category}${prog.year ? ` • Năm ${prog.year}` : ""} • ${prog.location}`,
+        badge: prog.year ? `Năm ${prog.year}` : prog.status,
         actionId: "events",
       });
     });

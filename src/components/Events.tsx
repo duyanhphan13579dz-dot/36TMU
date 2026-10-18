@@ -13,8 +13,11 @@ const STATUS_STYLE: Record<string, string> = {
   "Đã kết thúc": "bg-cobalt-200 text-cobalt-700",
 };
 
+const YEARS = ["Tất cả", "2026", "2025", "2024"] as const;
+
 export default function Events({ onToast }: { onToast: (msg: string) => void }) {
   const [filter, setFilter] = useState<string>("Tất cả");
+  const [yearFilter, setYearFilter] = useState<string>("Tất cả");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [current, setCurrent] = useState<Program | null>(null);
   const [dataVersion, setDataVersion] = useState(0);
@@ -64,6 +67,7 @@ export default function Events({ onToast }: { onToast: (msg: string) => void }) 
     () =>
       allPrograms.filter((p) => {
         const matchesCategory = matchCategory(p.category, filter);
+        const matchesYear = yearFilter === "Tất cả" || (p.year && p.year.toString() === yearFilter);
         const q = searchQuery.trim().toLowerCase();
         const matchesQuery =
           !q ||
@@ -71,9 +75,9 @@ export default function Events({ onToast }: { onToast: (msg: string) => void }) 
           p.location.toLowerCase().includes(q) ||
           p.excerpt.toLowerCase().includes(q) ||
           p.category.toLowerCase().includes(q);
-        return matchesCategory && matchesQuery;
+        return matchesCategory && matchesYear && matchesQuery;
       }),
-    [filter, searchQuery, allPrograms],
+    [filter, yearFilter, searchQuery, allPrograms],
   );
 
   return (
@@ -125,6 +129,7 @@ export default function Events({ onToast }: { onToast: (msg: string) => void }) 
           </p>
         </div>
 
+        {/* Bộ lọc chuyên mục */}
         <div className="scrollbar-none -mx-4 mt-3 flex snap-x gap-2 overflow-x-auto px-4 pb-1 lg:mx-0 lg:px-0">
           {EVENT_FILTERS.map((f) => {
             const count = allPrograms.filter((p) => matchCategory(p.category, f)).length;
@@ -145,6 +150,41 @@ export default function Events({ onToast }: { onToast: (msg: string) => void }) 
                   className={cn(
                     "rounded-lg px-1.5 py-0.5 text-[11px]",
                     active ? "bg-white/20 text-white" : "bg-cobalt-800/5 text-cobalt-600",
+                  )}
+                >
+                  {count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Bộ lọc Năm tổ chức (2024, 2025, 2026) */}
+        <div className="mt-2.5 flex items-center gap-2 overflow-x-auto scrollbar-none py-1">
+          <span className="text-xs font-black uppercase tracking-wider text-cobalt-500 shrink-0">Năm:</span>
+          {YEARS.map((y) => {
+            const active = yearFilter === y;
+            const count = allPrograms.filter((p) => {
+              const matchCat = matchCategory(p.category, filter);
+              const matchY = y === "Tất cả" || (p.year && p.year.toString() === y);
+              return matchCat && matchY;
+            }).length;
+            return (
+              <button
+                key={y}
+                onClick={() => setYearFilter(y)}
+                className={cn(
+                  "flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-bold transition-all duration-200 active:scale-95",
+                  active
+                    ? "border-flame-500 bg-flame-500 text-white shadow-sm"
+                    : "border-cobalt-200 bg-white text-cobalt-700 hover:border-flame-300 hover:bg-flame-50/50",
+                )}
+              >
+                {y === "Tất cả" ? "Tất cả các năm" : `Năm ${y}`}
+                <span
+                  className={cn(
+                    "rounded-md px-1 py-0.2 text-[10px]",
+                    active ? "bg-white/25 text-white" : "bg-cobalt-100 text-cobalt-600",
                   )}
                 >
                   {count}
@@ -175,14 +215,21 @@ export default function Events({ onToast }: { onToast: (msg: string) => void }) 
                   className="h-full w-full object-cover transition-transform duration-[900ms] group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-cobalt-950/80 via-cobalt-900/10 to-transparent" />
-                <span
-                  className={cn(
-                    "absolute top-3 left-3 rounded-full px-2.5 py-1 text-[11px] font-bold shadow-sm",
-                    STATUS_STYLE[p.status],
+                <div className="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap max-w-[70%]">
+                  <span
+                    className={cn(
+                      "rounded-full px-2.5 py-1 text-[11px] font-bold shadow-sm",
+                      STATUS_STYLE[p.status],
+                    )}
+                  >
+                    {p.status}
+                  </span>
+                  {p.year && (
+                    <span className="rounded-full bg-cobalt-950/80 backdrop-blur px-2.5 py-1 text-[11px] font-black text-white shadow-sm border border-white/20">
+                      Năm {p.year}
+                    </span>
                   )}
-                >
-                  {p.status}
-                </span>
+                </div>
                 <span className="absolute top-3 right-3 rounded-xl bg-white/90 px-2.5 py-1 text-[11px] font-bold text-cobalt-800 backdrop-blur">
                   {p.category}
                 </span>
