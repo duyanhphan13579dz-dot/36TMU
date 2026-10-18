@@ -919,11 +919,10 @@ export const PROGRAMS: Program[] = [
     status: "Đang mở đăng ký",
     excerpt:
       "Hành trình 13 mùa hè đi qua khắp các huyện Tĩnh Gia, Cẩm Thủy, Lang Chánh, Thường Xuân, Thạch Thành, Quan Sơn, Ngọc Lặc, Như Thanh, Quan Hóa... mang tri thức, công trình và tình yêu thương tới bà con.",
-    cover: "/images/programs/mua-he-xanh-2026/mhx-back-1.jpg",
+    cover: "/images/programs/mua-he-xanh-2026/mhx-crowd-cover.jpg",
     gallery: [
-      "/images/programs/mua-he-xanh-2026/mhx-back-1.jpg",
+      "/images/programs/mua-he-xanh-2026/mhx-crowd-cover.jpg",
       "/images/programs/mua-he-xanh-2026/mhx-van-nghe-1.jpg",
-      "/images/programs/mua-he-xanh-2026/mhx-cttn-1.jpg",
     ],
     driveLink: "https://drive.google.com/drive/folders/1kZ8TGJfj5N7PO5NVZqQpA2nt30SHuZ0U?usp=drive_link",
     schedule: [
@@ -951,13 +950,10 @@ export const PROGRAMS: Program[] = [
     status: "Đã kết thúc",
     excerpt:
       "Trải qua 8 mùa Đông Ấm như 'Tết Ấm Bản Em', 'Đông Ấm Yêu Thương' tại Thường Xuân, Thạch Thành, Quan Sơn, Như Thanh, Lang Chánh... mang áo ấm, chăn bông và quà Tết đến các hộ nghèo và học sinh vùng cao.",
-    cover: "/images/programs/dong-am-2026/dong-am-back-1.jpg",
+    cover: "/images/programs/dong-am-2026/dong-am-crowd-cover.jpg",
     gallery: [
-      "/images/programs/dong-am-2026/dong-am-back-1.jpg",
-      "/images/programs/dong-am-2026/dong-am-san-truong-1.jpg",
-      "/images/programs/dong-am-2026/dong-am-phien-cho-1.jpg",
-      "/images/programs/dong-am-2026/dong-am-back-2.jpg",
-      "/images/programs/dong-am-2026/dong-am-lua-trai-1.jpg",
+      "/images/programs/dong-am-2026/dong-am-crowd-cover.jpg",
+      "/images/programs/dong-am-2025/dong-am-2025-cover.jpg",
     ],
     driveLink: "https://drive.google.com/drive/folders/1KgN-5lNuMjMC9nlyQkn-G63nUCnsqalp?usp=drive_link",
     schedule: [
@@ -987,9 +983,6 @@ export const PROGRAMS: Program[] = [
     cover: "/images/programs/sinh-nhat-2026/sinh-nhat-back-1.jpg",
     gallery: [
       "/images/programs/sinh-nhat-2026/sinh-nhat-back-1.jpg",
-      "/images/programs/sinh-nhat-2026/sinh-nhat-back-2.jpg",
-      "/images/programs/sinh-nhat-2026/sinh-nhat-gala-2.jpg",
-      "/images/programs/sinh-nhat-2026/sinh-nhat-gala-1.jpg",
     ],
     driveLink: "https://drive.google.com/drive/folders/1bpUGAPI8hk7uHhApBGP0hVrrXUB0ZX6x?usp=drive_link",
     schedule: [
@@ -1018,10 +1011,9 @@ export const PROGRAMS: Program[] = [
     status: "Đã kết thúc",
     excerpt:
       "Đêm tri ân ấm áp tri ân các anh chị BCH và thế hệ tình nguyện viên K56 đã hoàn thành xuất sắc chặng đường đại học và cống hiến hết mình cho nhà chung 36TMU.",
-    cover: "/images/programs/sinh-nhat-2026/sinh-nhat-back-2.jpg",
+    cover: "/images/programs/sinh-nhat-2026/sinh-nhat-back-1.jpg",
     gallery: [
-      "/images/programs/sinh-nhat-2026/sinh-nhat-back-2.jpg",
-      "/images/programs/sinh-nhat-2026/sinh-nhat-gala-2.jpg",
+      "/images/programs/sinh-nhat-2026/sinh-nhat-back-1.jpg",
     ],
     driveLink: "https://drive.google.com/file/d/1B_5VfFmD7y5LYvVfqmLOjt-8bmoPegb-/view?usp=sharing",
     schedule: [
@@ -1248,10 +1240,9 @@ export const PROGRAMS: Program[] = [
     status: "Đã kết thúc",
     excerpt:
       "Kỷ niệm 16 năm thành lập Ban liên lạc Sinh viên Thanh Hóa TMU, hội ngộ các thế hệ tiền bối và chuyển giao thế hệ giữ vững tinh thần 36 máu chảy trong tim.",
-    cover: "/images/programs/sinh-nhat-2026/sinh-nhat-back-2.jpg",
+    cover: "/images/programs/sinh-nhat-2026/sinh-nhat-back-1.jpg",
     gallery: [
-      "/images/programs/sinh-nhat-2026/sinh-nhat-back-2.jpg",
-      "/images/programs/sinh-nhat-2026/sinh-nhat-gala-2.jpg",
+      "/images/programs/sinh-nhat-2026/sinh-nhat-back-1.jpg",
     ],
     driveLink: "https://drive.google.com/drive/folders/1FfqLLSEN5ktfWDjHadfWSFbDXEX7M-xu",
     schedule: [
@@ -1277,24 +1268,24 @@ export type Memory = {
 };
 
 export const MEMORIES: Memory[] = [
-  { id: "m1", src: "/images/programs/sinh-nhat-2026/sinh-nhat-back-1.jpg", title: "Đại Lễ Sinh Nhật 18", caption: "Khoảnh khắc lịch sử quy tụ đông đảo các thế hệ cựu thành viên và sinh viên K44 - K60.", tag: "Sinh nhật 18", category: "sinh-nhat", height: "h-72 md:h-96" },
-  { id: "m2", src: "/images/programs/dong-am-2026/dong-am-back-1.jpg", title: "Đông Ấm 2026", caption: "Đội hình toàn quân đông đủ mang hơi ấm và tình thương về với đồng bào vùng cao.", tag: "Đông Ấm", category: "dong-am", height: "h-64 md:h-80" },
-  { id: "m3", src: "/images/programs/mua-he-xanh-2026/mhx-back-1.jpg", title: "Mùa Hè Xanh 2026", caption: "Đội hình toàn quân kiên cường trước thềm chiến dịch tình nguyện hè.", tag: "Mùa Hè Xanh", category: "mua-he-xanh", height: "h-64 md:h-72" },
-  { id: "m4", src: "/images/programs/dong-am-2026/dong-am-san-truong-1.jpg", title: "Sân trường rộn rã", caption: "Hàng trăm em học sinh vùng cao tập trung kín sân trường trong ngày hội thiện nguyện.", tag: "Đông Ấm", category: "dong-am", height: "h-72 md:h-88" },
-  { id: "m5", src: "/images/programs/dong-am-2026/dong-am-phien-cho-1.jpg", title: "Phiên chợ 0 đồng", caption: "Đông đảo bà con và các em nhỏ vùng cao quây quần nhận quà tình nghĩa.", tag: "Đông Ấm", category: "dong-am", height: "h-64 md:h-80" },
-  { id: "m6", src: "/images/programs/sinh-nhat-2026/sinh-nhat-back-2.jpg", title: "Đại gia đình 36TMU", caption: "Các thế hệ anh chị BCH và TNV đứng kín phông nền kỷ niệm 18 năm giữ lửa.", tag: "Sinh nhật 18", category: "sinh-nhat", height: "h-64 md:h-80" },
-  { id: "m7", src: "/images/programs/mua-he-xanh-2026/mhx-van-nghe-1.jpg", title: "Đêm văn nghệ bản làng", caption: "Toàn thể bà con và thanh thiếu nhi bản làng quây quần theo dõi văn nghệ.", tag: "Mùa Hè Xanh", category: "mua-he-xanh", height: "h-56 md:h-72" },
-  { id: "m8", src: "/images/programs/dong-am-2026/dong-am-lua-trai-1.jpg", title: "Đêm hội lửa trại", caption: "Vòng tròn đoàn kết đông đảo thắp sáng màn đêm ấm áp tình quân dân.", tag: "Đông Ấm", category: "dong-am", height: "h-72 md:h-64" },
-  { id: "m9", src: "/images/programs/sinh-nhat-2026/sinh-nhat-gala-2.jpg", title: "Cắt bánh Sinh nhật 18", caption: "Toàn thể thành viên cùng nhau thổi nến chúc mừng sinh nhật nhà chung.", tag: "Sinh nhật 18", category: "sinh-nhat", height: "h-60 md:h-72" },
-  { id: "m10", src: "/images/programs/dong-am-2026/dong-am-back-2.jpg", title: "Đội quân áo xanh", caption: "Đại gia đình tình nguyện viên đoàn kết một lòng vì màu cờ sắc áo.", tag: "Đông Ấm", category: "dong-am", height: "h-64 md:h-80" },
-  { id: "m11", src: "/images/programs/mua-he-xanh-2026/mhx-cttn-1.jpg", title: "Công trình thanh niên", caption: "Đội ngũ chiến sĩ chung tay đổ đường bê tông cho bà con bản nghèo.", tag: "Mùa Hè Xanh", category: "mua-he-xanh", height: "h-60 md:h-72" },
-  { id: "m12", src: "/images/programs/sinh-nhat-2026/sinh-nhat-gala-1.jpg", title: "Hội trường Gala 18", caption: "Sân khấu đại lễ rực sáng với sự hiện diện của hàng trăm người con xứ Thanh.", tag: "Sinh nhật 18", category: "sinh-nhat", height: "h-64 md:h-80" },
+  { id: "m1", src: "/images/programs/sinh-nhat-2026/sinh-nhat-back-1.jpg", title: "Đại Lễ Sinh Nhật 18", caption: "Khoảnh khắc lịch sử quy tụ hơn 80 thành viên, cựu BCH và sinh viên K44 - K60 trên sân khấu.", tag: "Sinh nhật 18", category: "sinh-nhat", height: "h-72 md:h-96" },
+  { id: "m2", src: "/images/programs/dong-am-2026/dong-am-crowd-cover.jpg", title: "Đông Ấm 2026 Lửa Trại", caption: "Đội hình tình nguyện viên áo ấm và khăn rằn quây quần bên đốm lửa ấm tình quân dân.", tag: "Đông Ấm", category: "dong-am", height: "h-64 md:h-80" },
+  { id: "m3", src: "/images/programs/mua-he-xanh-2026/mhx-crowd-cover.jpg", title: "Mùa Hè Xanh Xuất Quân", caption: "Hơn 20 chiến sĩ áo xanh mang cờ Tổ quốc và cờ BLL trước cổng trường ĐH Thương Mại.", tag: "Mùa Hè Xanh", category: "mua-he-xanh", height: "h-64 md:h-72" },
+  { id: "m4", src: "/images/programs/dong-am-2025/dong-am-2025-cover.jpg", title: "Đông Ấm Xuất Bến Mai Dịch", caption: "Toàn đội hình tập hợp trong đêm bên xe khách chuẩn bị hành quân về bản vùng cao.", tag: "Đông Ấm", category: "dong-am", height: "h-72 md:h-88" },
+  { id: "m5", src: "/images/programs/chao-tan-k60-2024/chao-tan-k60-cover.jpg", title: "Vòng Tròn Chào Tân K60", caption: "Hơn 30 tân sinh viên quây quần thành vòng tròn dưới hàng cọ TMU trong đêm ấm áp.", tag: "Chào Tân K60", category: "chung", height: "h-64 md:h-80" },
+  { id: "m6", src: "/images/programs/sinh-nhat-2026/sinh-nhat-back-1.jpg", title: "Đại Gia Đình 36TMU", caption: "Đại hội ngộ các thế hệ anh chị BCH và TNV đứng kín phông nền kỷ niệm 18 năm giữ lửa.", tag: "Sinh nhật 18", category: "sinh-nhat", height: "h-64 md:h-80" },
+  { id: "m7", src: "/images/programs/mua-he-xanh-2026/mhx-van-nghe-1.jpg", title: "Hội Nghị & Giao Lưu Văn Nghệ", caption: "Hơn 20 đại biểu và chiến sĩ tình nguyện tề tựu trong hội trường văn hóa bản làng.", tag: "Mùa Hè Xanh", category: "mua-he-xanh", height: "h-56 md:h-72" },
+  { id: "m8", src: "/images/programs/dong-am-2026/dong-am-crowd-cover.jpg", title: "Đêm Hội Lửa Trại Đồng Bào", caption: "Vòng tròn đoàn kết đông đảo thắp sáng màn đêm ấm áp tình quân dân biên giới.", tag: "Đông Ấm", category: "dong-am", height: "h-72 md:h-64" },
+  { id: "m9", src: "/images/programs/tap-huan-2024/thtn-2024-cover.jpg", title: "Tập Huấn Tình Nguyện TMU", caption: "18 chiến sĩ ưu tú tề tựu trang nghiêm trước đài phun nước rèn luyện tác phong.", tag: "Tập huấn", category: "chung", height: "h-60 md:h-72" },
+  { id: "m10", src: "/images/programs/dong-am-2025/dong-am-2025-cover.jpg", title: "Đội Quân Áo Xanh Lên Đường", caption: "Đại gia đình tình nguyện viên đoàn kết một lòng vì màu cờ sắc áo và đồng bào xứ Thanh.", tag: "Đông Ấm", category: "dong-am", height: "h-64 md:h-80" },
+  { id: "m11", src: "/images/programs/mua-he-xanh-2024/mhx-2024-cover.jpg", title: "Mùa Hè Xanh TMU Khí Thế", caption: "Đội ngũ chiến sĩ chung tay xung kích vì cộng đồng, thắp sáng các nẻo đường quê hương.", tag: "Mùa Hè Xanh", category: "mua-he-xanh", height: "h-60 md:h-72" },
+  { id: "m12", src: "/images/programs/biggame-k60-2024/biggame-2024-cover.jpg", title: "Xếp Hàng Vượt Thử Thách", caption: "Đông đảo bạn trẻ xếp hàng dài trước cổng đá TMU sẵn sàng cho chặng Biggame gay cấn.", tag: "Biggame K60", category: "chung", height: "h-64 md:h-80" },
   { id: "m13", src: "/images/programs/dong-am-2025/dong-am-2025-cover.jpg", title: "Đông Ấm 2025 Xuất Quân", caption: "Đội hình xuất quân trong đêm tại Mai Dịch hướng về bản Tân Sơn, Quan Sơn.", tag: "Đông Ấm 2025", category: "dong-am", height: "h-64 md:h-80" },
-  { id: "m14", src: "/images/programs/dong-am-2025/dong-am-2025-activities.jpg", title: "Giã bánh ngày xuân", caption: "Tình nguyện viên 36TMU cùng bà con vùng cao giã bánh giầy đón mùa xuân ấm.", tag: "Đông Ấm 2025", category: "dong-am", height: "h-72 md:h-88" },
+  { id: "m14", src: "/images/programs/tap-huan-2024/thtn-2024-cover.jpg", title: "Đội Ngũ THTN Khóa Mới", caption: "Đội hình rèn quân rực lửa tại khuôn viên Trường Đại học Thương Mại.", tag: "Tập huấn", category: "chung", height: "h-72 md:h-88" },
   { id: "m15", src: "/images/programs/mua-he-xanh-2024/mhx-2024-cover.jpg", title: "Mùa Hè Xanh 2024", caption: "Đội hình chiến sĩ áo xanh TMU kiên cường trước giờ xuất quân về bản làng.", tag: "Mùa Hè Xanh 2024", category: "mua-he-xanh", height: "h-64 md:h-72" },
   { id: "m16", src: "/images/programs/tap-huan-2024/thtn-2024-cover.jpg", title: "Tập Huấn Tình Nguyện 2024", caption: "Đội hình rèn quân rực lửa tại đài phun nước khuôn viên Trường Đại học Thương Mại.", tag: "Tập huấn", category: "chung", height: "h-72 md:h-88" },
-  { id: "m17", src: "/images/programs/biggame-k60-2024/biggame-2024-cover.jpg", title: "Biggame K60 Rực Rỡ", caption: "Hàng trăm tân sinh viên K60 xếp hàng bước vào thử thách Teamwork Biggame bùng nổ.", tag: "Biggame K60", category: "chung", height: "h-64 md:h-80" },
-  { id: "m18", src: "/images/programs/chao-tan-k60-2024/chao-tan-k60-cover.jpg", title: "Vòng Tròn Chào Tân K60", caption: "Vòng tròn gắn kết của những người con xứ Thanh dưới hàng cọ TMU trong đêm chào tân.", tag: "Chào Tân K60", category: "chung", height: "h-64 md:h-80" },
+  { id: "m17", src: "/images/programs/biggame-k60-2024/biggame-2024-cover.jpg", title: "Biggame K60 Rực Rỡ", caption: "Hàng chục tân sinh viên K60 xếp hàng bước vào thử thách Teamwork Biggame bùng nổ.", tag: "Biggame K60", category: "chung", height: "h-64 md:h-80" },
+  { id: "m18", src: "/images/programs/chao-tan-k60-2024/chao-tan-k60-cover.jpg", title: "Vòng Tròn Đoàn Kết Chào Tân", caption: "Vòng tròn gắn kết của những người con xứ Thanh dưới hàng cọ TMU trong đêm chào tân.", tag: "Chào Tân K60", category: "chung", height: "h-64 md:h-80" },
 ];
 
 export type Confession = {
