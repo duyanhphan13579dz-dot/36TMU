@@ -3,12 +3,15 @@ import { neon } from "@neondatabase/serverless";
 // Neon PostgreSQL Connection String (bllsv-36tmu-db)
 const DEFAULT_NEON_URL =
   "postgresql://neondb_owner:npg_1FXWYB8eoONf@ep-odd-paper-b5ysht9l-pooler.c-7.us-east-2.aws.neon.tech/neondb?sslmode=require";
-const DATABASE_URL = import.meta.env.VITE_DATABASE_URL || DEFAULT_NEON_URL;
 
-// Safely initialize Neon client if connection URL is set, otherwise use mock rejection that triggers local fallbacks
-export const sql = (DATABASE_URL
-  ? neon(DATABASE_URL)
-  : (() => Promise.reject(new Error("Neon DB is offline or not configured")))) as ReturnType<typeof neon>;
+const envUrl = import.meta.env.VITE_DATABASE_URL;
+const DATABASE_URL =
+  typeof envUrl === "string" && envUrl.trim().length > 10
+    ? envUrl.trim()
+    : DEFAULT_NEON_URL;
+
+// Always initialize live Neon serverless client with guaranteed connection string
+export const sql = neon(DATABASE_URL);
 
 /* ==========================================================================
    TYPES
