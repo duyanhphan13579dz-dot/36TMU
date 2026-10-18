@@ -1,5 +1,6 @@
 import { ORG, PROGRAMS, LEADERSHIP_HISTORY, type Program, type EventCategory, type ProgramStatus, type LeaderRecord } from "@/data/content";
 import { safeLocalStorageSet } from "@/utils/storage";
+import { syncAllDataToCloud, fetchAllDataFromCloud } from "@/lib/db";
 
 function notifyQuotaError() {
   window.dispatchEvent(
@@ -753,4 +754,65 @@ export function resetAllAdminDataToDefaults(): void {
     localStorage.removeItem(CONFESSIONS_KEY);
     window.dispatchEvent(new CustomEvent("bllsv_data_updated", { detail: { type: "all" } }));
   } catch {}
+}
+
+/* ==========================================================================
+   4. NEON DATABASE AUTOMATIC PERSISTENCE & HYDRATION
+   ========================================================================== */
+
+let syncTimer: number | null = null;
+let isHydrating = false;
+
+export function triggerAutoSyncToCloud(adminName = "Ban Chấp Hành"): void {
+  if (typeof window === "undefined" || isHydrating) return;
+  if (syncTimer) window.clearTimeout(syncTimer);
+  syncTimer = window.setTimeout(async () => {
+    try {
+      const payloadStr = exportAllAdminData();
+      const payload = JSON.parse(payloadStr);
+      await syncAllDataToCloud(payload, adminName);
+      console.info("☁️ [Neon PostgreSQL] Dữ liệu thay đổi đã được tự động lưu vào cơ sở dữ liệu cloud!");
+    } catch (err) {
+      console.warn("⚠️ Không thể đồng bộ tự động lên Neon DB:", err);
+    }
+  }, 400);
+}
+
+// Khởi chạy listener tự động đồng bộ mỗi khi có bất kỳ thay đổi nào
+if (typeof window !== "undefined") {
+  window.addEventListener("bllsv_data_updated", (e) => {
+    const detail = (e as CustomEvent)?.detail;
+    if (detail?.source === "cloud_hydration") return;
+    triggerAutoSyncToCloud();
+  });
+}
+
+// Hàm nạp dữ liệu từ Neon DB khi khởi động website
+export async function hydrateSiteDataFromDb(): Promise<boolean> {
+  try {
+    const cloudData = await fetchAllDataFromCloud();
+    if (cloudData && typeof cloudData === "object" && Object.keys(cloudData).length > 0) {
+      isHydrating = true;
+      try {
+        const success = importAllAdminData(JSON.stringify(cloudData));
+        if (success) {
+          window.dispatchEvent(
+            new CustomEvent("bllsv_data_updated", { detail: { type: "all", source: "cloud_hydration" } })
+          );
+          console.info("⚡ Đã nạp thành công dữ liệu Ban Chấp Hành từ Neon PostgreSQL Database!");
+          return true;
+        }
+      } finally {
+        isHydrating = false;
+      }
+    } else {
+      // Nếu cloud chưa có dữ liệu, tự động đẩy dữ liệu chuẩn ban đầu lên database!
+      const initialPayload = JSON.parse(exportAllAdminData());
+      await syncAllDataToCloud(initialPayload, "Khởi tạo hệ thống (Init)");
+      console.info("🚀 Đã tải lên dữ liệu khởi tạo đầu tiên vào Neon PostgreSQL Database!");
+    }
+  } catch (err) {
+    console.warn("⚠️ Chưa thể kết nối nạp dữ liệu từ Neon DB, đang dùng dữ liệu bộ nhớ đệm:", err);
+  }
+  return false;
 }

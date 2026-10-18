@@ -13,7 +13,7 @@ import { QuickSearchModal } from "@/components/QuickSearchModal";
 import BroadcastBanner from "@/components/BroadcastBanner";
 import VolunteerRecruitmentModal from "@/components/VolunteerRecruitmentModal";
 import { NAV_ITEMS, type NavId } from "@/data/content";
-import { getStoredAdminMotto } from "@/data/adminStore";
+import { getStoredAdminMotto, hydrateSiteDataFromDb } from "@/data/adminStore";
 
 const SECTION_IDS: NavId[] = NAV_ITEMS.map((n) => n.id);
 
@@ -44,6 +44,11 @@ export default function App() {
   const [dataVersion, setDataVersion] = useState(0);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isRecruitOpen, setIsRecruitOpen] = useState(false);
+
+  // Tự động kết nối và nạp dữ liệu Ban Chấp Hành mới nhất từ Neon PostgreSQL Database
+  useEffect(() => {
+    hydrateSiteDataFromDb();
+  }, []);
 
   // Lắng nghe sự kiện bật/tắt tìm kiếm nhanh (Ctrl+K)
   useEffect(() => {

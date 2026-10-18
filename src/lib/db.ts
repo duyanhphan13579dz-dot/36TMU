@@ -1,7 +1,9 @@
 import { neon } from "@neondatabase/serverless";
 
 // Neon PostgreSQL Connection String (bllsv-36tmu-db)
-const DATABASE_URL = import.meta.env.VITE_DATABASE_URL || "";
+const DEFAULT_NEON_URL =
+  "postgresql://neondb_owner:npg_1FXWYB8eoONf@ep-odd-paper-b5ysht9l-pooler.c-7.us-east-2.aws.neon.tech/neondb?sslmode=require";
+const DATABASE_URL = import.meta.env.VITE_DATABASE_URL || DEFAULT_NEON_URL;
 
 // Safely initialize Neon client if connection URL is set, otherwise use mock rejection that triggers local fallbacks
 export const sql = (DATABASE_URL
