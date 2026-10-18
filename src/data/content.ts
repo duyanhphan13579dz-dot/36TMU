@@ -9,8 +9,9 @@ export const ORG = {
   school: "Trường Đại học Thương Mại",
   address: "79 Hồ Tùng Mậu, Mai Dịch, Cầu Giấy, Hà Nội",
   mapQuery: "Trường Đại học Thương Mại, 79 Hồ Tùng Mậu, Cầu Giấy, Hà Nội",
-  email: "bllsvthanhhoa.tmu@gmail.com",
-  phone: "0987 654 321",
+  email: "svthanhhoatmu@gmail.com",
+  phone: "0343246446 - Trịnh Huy",
+  hotlineRaw: "0343246446",
   slogan: "Tinh thần 36, máu chảy trong tim, sống để yêu thương, sống để cống hiến",
   sloganRitual: "Mỗi khi hô slogan, các TNV sẽ đứng thành vòng tròn, đưa tay trái ra trước hướng về phía tâm của vòng tròn ấy.",
   mealCheer: "Đã không ăn thì thôi, đã ăn rồi là phải trăm phần trăm, trăm phần trăm, trăm phần trăm, ... ngon nguyên chất trăm phần trăm, cả nhà mời ..., cảm ơn ...",
@@ -25,10 +26,8 @@ export const ORG = {
   parentOrgPresident: "Anh Đỗ Trung Tiến",
   parentOrgMembersCount: 20, // 20 đơn vị của các đoàn, đội trực thuộc Hội đồng hương
   parentOrgRenameDate: "03/04/2023", // Trước đó có tên là Ban liên lạc Sinh viên Thanh Hóa tại Hà Nội
-  fanpage: "https://facebook.com",
-  group: "https://facebook.com",
-  tiktok: "https://tiktok.com",
-  zalo: "https://zalo.me",
+  fanpage: "https://www.facebook.com/SinhVienThanhHoaTMU/",
+  tiktok: "https://vt.tiktok.com/ZSdBAU7hk/",
   youtube: "https://www.youtube.com/@THVcuMedia",
   youtubeChannel: "TH VCU Media",
 };

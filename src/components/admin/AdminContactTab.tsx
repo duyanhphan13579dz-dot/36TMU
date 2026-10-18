@@ -29,12 +29,12 @@ export default function AdminContactTab({
       <form onSubmit={onSaveContact} className="mt-4 space-y-3.5">
         <div className="grid gap-3 sm:grid-cols-2">
           <div>
-            <label className="mb-1 block text-xs font-bold text-cobalt-800">Hotline Ban Nhân sự *</label>
+            <label className="mb-1 block text-xs font-bold text-cobalt-800">Hotline Ban Liên Lạc *</label>
             <input
               required
               value={contactData.phone}
               onChange={(e) => onContactDataChange({ ...contactData, phone: e.target.value })}
-              placeholder="0987 654 321"
+              placeholder="0343246446 - Trịnh Huy"
               className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
             />
           </div>
@@ -46,7 +46,7 @@ export default function AdminContactTab({
               type="email"
               value={contactData.email}
               onChange={(e) => onContactDataChange({ ...contactData, email: e.target.value })}
-              placeholder="bllsvthanhhoa.tmu@gmail.com"
+              placeholder="svthanhhoatmu@gmail.com"
               className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs font-semibold text-cobalt-950 outline-none focus:border-flame-500"
             />
           </div>
@@ -73,23 +73,13 @@ export default function AdminContactTab({
           />
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-3">
+        <div className="grid gap-3 sm:grid-cols-2">
           <div>
             <label className="mb-1 block text-xs font-bold text-cobalt-800">Link Facebook Fanpage</label>
             <input
               value={contactData.fanpage}
               onChange={(e) => onContactDataChange({ ...contactData, fanpage: e.target.value })}
-              placeholder="https://facebook.com/..."
-              className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs text-cobalt-950 outline-none focus:border-flame-500"
-            />
-          </div>
-
-          <div>
-            <label className="mb-1 block text-xs font-bold text-cobalt-800">Link Group Cộng Đồng</label>
-            <input
-              value={contactData.group}
-              onChange={(e) => onContactDataChange({ ...contactData, group: e.target.value })}
-              placeholder="https://facebook.com/groups/..."
+              placeholder="https://www.facebook.com/SinhVienThanhHoaTMU/"
               className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs text-cobalt-950 outline-none focus:border-flame-500"
             />
           </div>
@@ -99,7 +89,7 @@ export default function AdminContactTab({
             <input
               value={contactData.tiktok}
               onChange={(e) => onContactDataChange({ ...contactData, tiktok: e.target.value })}
-              placeholder="https://tiktok.com/@..."
+              placeholder="https://vt.tiktok.com/ZSdBAU7hk/"
               className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-2 text-xs text-cobalt-950 outline-none focus:border-flame-500"
             />
           </div>

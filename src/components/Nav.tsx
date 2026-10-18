@@ -291,8 +291,8 @@ export default function Nav({
             <div className="grid grid-cols-3 gap-2">
               {[
                 { label: "Fanpage", href: ORG.fanpage },
-                { label: "Group", href: ORG.group },
                 { label: "TikTok", href: ORG.tiktok },
+                { label: "YouTube", href: ORG.youtube },
               ].map((s) => (
                 <a
                   key={s.label}

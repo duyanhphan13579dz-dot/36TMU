@@ -69,8 +69,8 @@ export type AdminContact = {
   phone: string;
   address: string;
   fanpage: string;
-  group: string;
   tiktok: string;
+  group?: string;
   scheduleInfo: string;
   updatedAt: string;
 };
@@ -94,7 +94,6 @@ export const DEFAULT_CONTACT: AdminContact = {
   phone: ORG.phone,
   address: ORG.address,
   fanpage: ORG.fanpage,
-  group: ORG.group,
   tiktok: ORG.tiktok,
   scheduleInfo: "19:00 – 21:00 tối thứ Ba hàng tuần",
   updatedAt: "12/04/2026",
@@ -328,7 +327,15 @@ export function getStoredAdminContact(): AdminContact {
     const raw = localStorage.getItem(CONTACT_KEY);
     if (!raw) return DEFAULT_CONTACT;
     const parsed = JSON.parse(raw);
-    return parsed?.email ? { ...DEFAULT_CONTACT, ...parsed } : DEFAULT_CONTACT;
+    if (
+      !parsed ||
+      parsed.email === "bllsvthanhhoa.tmu@gmail.com" ||
+      parsed.fanpage === "https://facebook.com" ||
+      parsed.phone === "0987 654 321"
+    ) {
+      return DEFAULT_CONTACT;
+    }
+    return { ...DEFAULT_CONTACT, ...parsed };
   } catch {
     return DEFAULT_CONTACT;
   }

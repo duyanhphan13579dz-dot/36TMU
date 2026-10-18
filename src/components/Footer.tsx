@@ -79,16 +79,16 @@ export function Footer(_props?: { isAdmin?: boolean }) {
                 {contact.email}
               </li>
               <li className="flex items-start gap-2.5">
-                <Icon.chat className="mt-0.5 h-4 w-4 shrink-0 text-flame-400" />
+                <Icon.phone className="mt-0.5 h-4 w-4 shrink-0 text-flame-400" />
                 {contact.phone}
               </li>
             </ul>
             <div className="mt-5 flex gap-2">
               {[
-                { href: contact.fanpage, icon: <Icon.facebook className="h-4 w-4" />, label: "Fanpage" },
+                { href: contact.fanpage || ORG.fanpage, icon: <Icon.facebook className="h-4 w-4" />, label: "Fanpage" },
+                { href: contact.tiktok || ORG.tiktok, icon: <Icon.tiktok className="h-4 w-4" />, label: "TikTok" },
                 { href: ORG.youtube || "https://www.youtube.com/@THVcuMedia", icon: <Icon.youtube className="h-4 w-4" />, label: "YouTube TH VCU Media" },
-                { href: contact.tiktok, icon: <Icon.tiktok className="h-4 w-4" />, label: "TikTok" },
-                { href: contact.group, icon: <Icon.users className="h-4 w-4" />, label: "Group" },
+                { href: `mailto:${contact.email || ORG.email}`, icon: <Icon.mail className="h-4 w-4" />, label: "Gmail" },
               ].map((s) => (
                 <a
                   key={s.label}
