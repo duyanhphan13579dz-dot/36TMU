@@ -311,7 +311,7 @@ export default function EventsVaultModal({
             </div>
 
             {/* Danh sách cuộn */}
-            <div className="flex-1 overflow-y-auto p-3 space-y-2.5 scrollbar-none">
+            <div className="flex-1 overflow-y-auto p-3 space-y-2.5 scrollbar-none pb-24 sm:pb-4">
               {filteredPrograms.length === 0 ? (
                 <div className="p-8 text-center text-cobalt-400">
                   <p className="text-3xl">🔍</p>
@@ -334,7 +334,7 @@ export default function EventsVaultModal({
                           : "bg-white/5 border-white/5 hover:bg-white/10 hover:border-white/20"
                       )}
                     >
-                      <div className="relative h-20 w-24 shrink-0 overflow-hidden rounded-xl bg-cobalt-900 border border-white/10">
+                      <div className="relative h-20 w-24 shrink-0 overflow-hidden rounded-xl bg-cobalt-950 border border-white/10">
                         <img src={p.cover} alt={p.title} className="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
                         <span className="absolute bottom-1 right-1 rounded bg-black/70 px-1 py-0.2 text-[9px] font-bold text-white">
                           {p.day}/{p.month}
@@ -375,7 +375,7 @@ export default function EventsVaultModal({
             )}
           >
             {selectedProgram ? (
-              <div className="max-w-4xl mx-auto w-full p-4 sm:p-6 lg:p-8 space-y-6">
+              <div className="max-w-4xl mx-auto w-full p-4 sm:p-6 lg:p-8 space-y-6 pb-28 sm:pb-8">
                 {/* Nút quay lại trên mobile - sticky top */}
                 <div className="md:hidden sticky top-0 z-20 -mx-4 -mt-4 px-4 py-2.5 bg-sky-paper/95 backdrop-blur border-b border-cobalt-200/80 flex items-center justify-between shadow-xs">
                   <button
