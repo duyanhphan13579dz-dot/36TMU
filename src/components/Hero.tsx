@@ -2,6 +2,7 @@ import { HERO_BADGES, HERO_STATS } from "@/data/content";
 import { Button, Icon, Kicker } from "@/components/ui";
 import { LogoBadge } from "@/components/Logo";
 import { ShimmerImage } from "@/components/ui/ShimmerImage";
+import heroCampfireImg from "@/assets/hero-campfire.jpg";
 
 const MARQUEE = [
   "TINH THẦN 36",
@@ -130,8 +131,8 @@ function VideoFeature() {
       {/* Khung video */}
       <div className="group relative aspect-video w-full overflow-hidden rounded-3xl border-4 border-white bg-cobalt-900 shadow-lift">
         <ShimmerImage
-          src="https://images.pexels.com/photos/17589607/pexels-photo-17589607.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200"
-          alt="Đêm diễn flashmob của BLLSV Thanh Hóa TMU"
+          src={heroCampfireImg}
+          alt="Đội hình Mùa Hè Xanh BLLSV Thanh Hóa TMU bên ánh lửa trại truyền thống"
           containerClassName="h-full w-full"
           className="h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-105"
         />
@@ -155,9 +156,9 @@ function VideoFeature() {
         {/* Chú thích dưới */}
         <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-3 sm:p-4">
           <div className="min-w-0">
-            <p className="truncate font-display text-sm font-bold text-white sm:text-lg">Tinh Thần 36 – Flashmob nhà chung</p>
+            <p className="truncate font-display text-sm font-bold text-white sm:text-lg">Tinh Thần 36 – Đêm Lửa Trại Truyền Thống</p>
             <p className="mt-0.5 flex items-center gap-1.5 text-[11px] text-white/75 sm:text-xs">
-              <Icon.pin className="h-3.5 w-3.5" /> Hội trường A · 79 Hồ Tùng Mậu
+              <Icon.pin className="h-3.5 w-3.5" /> Chiến dịch Tình nguyện Mùa Hè Xanh
             </p>
           </div>
           <LogoBadge className="hidden h-12 w-12 shrink-0 rounded-full bg-white/90 p-1 sm:block" />
