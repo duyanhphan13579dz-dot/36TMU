@@ -40,6 +40,7 @@ export default function Gallery({ onToast }: { onToast: (msg: string) => void })
   const [notes, setNotes] = useState<Confession[]>(() => getStoredConfessions());
   const [draft, setDraft] = useState("");
   const [author, setAuthor] = useState("");
+  const [selectedTone, setSelectedTone] = useState<Confession["tone"]>("paper");
 
   const [leaderSearch, setLeaderSearch] = useState("");
   const [selectedKhoa, setSelectedKhoa] = useState<string>("all");
@@ -99,14 +100,13 @@ export default function Gallery({ onToast }: { onToast: (msg: string) => void })
       onToast("Bạn viết thêm chút nữa để mọi người đọc nhé 🙂");
       return;
     }
-    const tones: Confession["tone"][] = ["blue", "orange", "paper", "mint"];
-    const rotates = ["-2deg", "1.6deg", "-1.2deg", "2.2deg"];
+    const rotates = ["-1.5deg", "1.2deg", "-1deg", "1.8deg"];
     const newNote: Confession = {
       id: `me-${Date.now()}`,
       text: draft.trim(),
       author: author.trim() || "Bạn ẩn danh",
-      role: "Tân thành viên K60",
-      tone: tones[Math.floor(Math.random() * tones.length)],
+      role: "Thành viên BLLSV",
+      tone: selectedTone,
       rotate: rotates[Math.floor(Math.random() * rotates.length)],
     };
     const next = [newNote, ...notes];
@@ -342,73 +342,121 @@ export default function Gallery({ onToast }: { onToast: (msg: string) => void })
         </div>
 
         {/* ============ CONFESSIONS ============ */}
-        <div className="mt-16 lg:mt-24">
-          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-            <div className="max-w-2xl space-y-3">
+        {/* ============ CONFESSIONS CỦA NHÀ CHUNG ============ */}
+        <div className="mt-14 sm:mt-16 lg:mt-24">
+          <div className="flex flex-col gap-3 sm:gap-4 md:flex-row md:items-end md:justify-between">
+            <div className="max-w-2xl space-y-2 sm:space-y-3">
               <Kicker className="bg-white/70">Confessions của nhà chung</Kicker>
               <h3 className="text-balance-vn font-display text-2xl leading-tight font-extrabold text-cobalt-900 sm:text-3xl">
                 Mẩu giấy nhỏ, tình thương to 💛
               </h3>
-              <p className="text-sm leading-relaxed text-cobalt-700/80">
+              <p className="text-xs sm:text-sm leading-relaxed text-cobalt-700/80">
                 Những dòng nhắn từ anh chị cựu thành viên và các bạn tân sinh viên K60, K61. Bạn cũng có thể dán thêm một
                 mẩu giấy lên tường ngay dưới đây!
               </p>
             </div>
-            <div className="rounded-2xl border border-cobalt-100 bg-white/80 px-4 py-3 text-[12.5px] font-semibold text-cobalt-700 shadow-sm">
-              📌 {notes.length} mẩu giấy đã được dán
+            <div className="inline-flex self-start md:self-auto items-center gap-1.5 rounded-2xl border border-cobalt-100 bg-white/90 px-3.5 py-2 text-xs font-bold text-cobalt-700 shadow-sm">
+              <span>📌</span> {notes.length} mẩu giấy đã được dán
             </div>
           </div>
 
-          {/* Mobile: carousel / Desktop: grid */}
-          <div className="scrollbar-none -mx-4 mt-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-3 md:mx-0 md:grid md:grid-cols-2 md:px-0 md:overflow-visible xl:grid-cols-3">
+          {/* Danh sách thẻ Confession: Mobile carousel lướt mượt / Desktop grid */}
+          <div className="scrollbar-none -mx-4 mt-6 flex snap-x snap-mandatory gap-3.5 sm:gap-4 overflow-x-auto px-4 pb-4 md:mx-0 md:grid md:grid-cols-2 md:px-0 md:overflow-visible xl:grid-cols-3 md:gap-5">
             {notes.map((c) => (
               <article
                 key={c.id}
                 style={{ rotate: c.rotate }}
                 className={cn(
-                  "flex min-w-[80%] shrink-0 snap-center flex-col justify-between gap-4 rounded-2xl border-2 p-5 shadow-soft transition-all duration-300 hover:rotate-0 hover:shadow-lift md:min-w-0",
+                  "group relative flex w-[80vw] xs:w-[285px] sm:w-[320px] md:w-auto shrink-0 snap-center flex-col justify-between gap-3.5 rounded-3xl border-2 p-4 sm:p-5 shadow-soft transition-all duration-300 hover:rotate-0 hover:shadow-lift",
                   TONES[c.tone],
                 )}
               >
-                <div>
-                  <span className="font-display text-3xl leading-none text-flame-500/50">“</span>
-                  <p className="-mt-2 text-[13.5px] leading-relaxed">{c.text}</p>
-                </div>
-                <footer className="flex items-center gap-3 border-t border-black/5 pt-3">
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/80 font-display text-sm font-extrabold text-cobalt-800 shadow-sm">
-                    {c.author.slice(0, 1)}
+                {/* Ghim giấy trang trí */}
+                <div className="flex items-center justify-between">
+                  <span className="flex items-center gap-1 text-[11px] font-bold text-cobalt-600/80">
+                    <span>📌</span> Nhắn gửi
                   </span>
-                  <div className="min-w-0">
-                    <p className="truncate text-[13px] font-bold">{c.author}</p>
-                    <p className="truncate text-[11.5px] opacity-70">{c.role}</p>
+                  <span className="h-2 w-10 rounded-full bg-black/5" />
+                </div>
+
+                <div className="relative">
+                  <span className="font-display text-2xl sm:text-3xl leading-none text-flame-500/40">“</span>
+                  <p className="-mt-1 text-[13px] sm:text-[13.5px] leading-relaxed font-medium text-cobalt-950">
+                    {c.text}
+                  </p>
+                </div>
+
+                <footer className="flex items-center justify-between border-t border-black/10 pt-3">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <span className="flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-full bg-white/90 font-display text-xs font-black text-cobalt-900 shadow-xs border border-black/5">
+                      {c.author.slice(0, 1)}
+                    </span>
+                    <div className="min-w-0">
+                      <p className="truncate text-xs sm:text-[13px] font-bold text-cobalt-950">{c.author}</p>
+                      <p className="truncate text-[10.5px] font-semibold text-cobalt-600/80">{c.role}</p>
+                    </div>
                   </div>
+                  <span className="text-[11px] font-bold text-flame-600 shrink-0">💙 36 TMU</span>
                 </footer>
               </article>
             ))}
           </div>
+          <p className="md:hidden text-center text-xs text-cobalt-500 mt-1">
+            👆 Vuốt ngang để đọc thêm các mẩu giấy confession
+          </p>
 
-          {/* Form dán giấy */}
-          <div className="mt-8 rounded-3xl border border-cobalt-100 bg-white/85 p-5 shadow-sm backdrop-blur sm:p-6">
-            <p className="font-display text-base font-extrabold text-cobalt-900">Dán một mẩu giấy của bạn</p>
-            <p className="mt-1 text-[13px] text-cobalt-600/80">Cảm nhận của bạn về nhà chung, hoặc lời động viên gửi tân sinh viên K60, K61.</p>
-            <div className="mt-4 grid gap-3 sm:grid-cols-[1fr_1fr_auto]">
+          {/* Form dán giấy tương thích mobile */}
+          <div className="mt-8 rounded-3xl border border-cobalt-100 bg-white/90 p-4 sm:p-6 shadow-sm backdrop-blur">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 border-b border-cobalt-100 pb-3">
+              <div>
+                <p className="font-display text-base font-extrabold text-cobalt-900">Dán một mẩu giấy của bạn</p>
+                <p className="mt-0.5 text-xs text-cobalt-600/80">Cảm nhận của bạn về nhà chung hoặc lời nhắn gửi tân sinh viên.</p>
+              </div>
+
+              {/* Lựa chọn màu giấy */}
+              <div className="flex items-center gap-1.5 self-start sm:self-auto">
+                <span className="text-[11px] font-bold text-cobalt-500 mr-1">Màu giấy:</span>
+                {[
+                  { id: "paper" as const, bg: "bg-amber-100 border-amber-300", label: "Vàng" },
+                  { id: "orange" as const, bg: "bg-flame-100 border-flame-300", label: "Cam" },
+                  { id: "blue" as const, bg: "bg-tmu-100 border-tmu-300", label: "Xanh" },
+                  { id: "mint" as const, bg: "bg-emerald-100 border-emerald-300", label: "Bạc hà" },
+                ].map((c) => (
+                  <button
+                    key={c.id}
+                    type="button"
+                    onClick={() => setSelectedTone(c.id)}
+                    aria-label={`Chọn màu giấy ${c.label}`}
+                    className={cn(
+                      "h-6 w-6 rounded-full border-2 transition-transform",
+                      c.bg,
+                      selectedTone === c.id ? "scale-110 ring-2 ring-cobalt-800" : "opacity-80 hover:scale-105"
+                    )}
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-4 flex flex-col gap-3">
               <input
                 value={author}
                 onChange={(e) => setAuthor(e.target.value)}
-                placeholder="Tên của bạn (VD: Minh Trí – K60)"
-                className="min-h-12 w-full rounded-2xl border border-cobalt-200 bg-white px-4 text-[14px] text-cobalt-900 outline-none transition placeholder:text-cobalt-400 focus:border-tmu-400 focus:ring-4 focus:ring-tmu-100"
+                placeholder="Tên của bạn (VD: Minh Trí – K60, Thu Hà – K59...)"
+                className="min-h-11 w-full rounded-2xl border border-cobalt-200 bg-white px-3.5 sm:px-4 text-[13.5px] sm:text-[14px] text-cobalt-900 outline-none transition placeholder:text-cobalt-400 focus:border-tmu-400 focus:ring-4 focus:ring-tmu-100"
               />
               <textarea
                 value={draft}
                 onChange={(e) => setDraft(e.target.value)}
-                rows={1}
-                placeholder="Lời nhắn của bạn..."
-                className="min-h-12 w-full resize-none rounded-2xl border border-cobalt-200 bg-white px-4 py-3 text-[14px] text-cobalt-900 outline-none transition placeholder:text-cobalt-400 focus:border-tmu-400 focus:ring-4 focus:ring-tmu-100 sm:col-span-2"
+                rows={3}
+                placeholder="Lời nhắn nhủ của bạn gửi tới nhà chung 36..."
+                className="w-full resize-none rounded-2xl border border-cobalt-200 bg-white p-3.5 sm:p-4 text-[13.5px] sm:text-[14px] text-cobalt-900 outline-none transition placeholder:text-cobalt-400 focus:border-tmu-400 focus:ring-4 focus:ring-tmu-100"
               />
-              <Button variant="flame" onClick={addNote} className="sm:col-span-3 md:col-span-1">
-                Dán lên tường
-                <Icon.heart className="h-4 w-4" />
-              </Button>
+              <div className="flex justify-end pt-1">
+                <Button variant="flame" onClick={addNote} className="w-full sm:w-auto">
+                  Dán lên tường ngay
+                  <Icon.heart className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
           </div>
         </div>
