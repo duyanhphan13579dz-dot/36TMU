@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useLockScroll, useEscape } from "@/components/ui";
-import { NAV_ITEMS, DANCES, MEMORIES, TRADITIONAL_SONGS } from "@/data/content";
+import { NAV_ITEMS, DANCES, MEMORIES, TRADITIONAL_SONGS, BANS } from "@/data/content";
 import { getAllLeaders, getAllPrograms, getStoredAdminPosts } from "@/data/adminStore";
 import { cn } from "@/utils/cn";
 
@@ -147,6 +147,39 @@ export function QuickSearchModal({ open, onClose, onSelectMemory }: QuickSearchM
       });
     });
 
+    // 6. Organization & 3 Bans
+    BANS.forEach((b) => {
+      items.push({
+        id: `ban-${b.id}`,
+        category: "section",
+        categoryLabel: "Cơ cấu tổ chức",
+        title: b.name,
+        subtitle: `${b.tagline} • Quản lý bởi Đội SVTN`,
+        badge: "Ban chuyên môn",
+        actionId: "about",
+      });
+    });
+
+    items.push({
+      id: "org-volunteer-team",
+      category: "section",
+      categoryLabel: "Cơ cấu tổ chức",
+      title: "Đội Sinh Viên Tình Nguyện 36",
+      subtitle: "Cơ quan điều phối và quản lý trực tiếp 3 ban chuyên môn",
+      badge: "Cơ quan chỉ đạo",
+      actionId: "about",
+    });
+
+    items.push({
+      id: "org-rules",
+      category: "section",
+      categoryLabel: "Cơ cấu tổ chức",
+      title: "Bảng Nội Quy & Quy Chế Hoạt Động",
+      subtitle: "Toàn văn 10+ điều khoản kỷ luật và quy định nhà chung",
+      badge: "Quy chế",
+      actionId: "about",
+    });
+
     return items;
   }, [open]);
 
@@ -204,6 +237,16 @@ export function QuickSearchModal({ open, onClose, onSelectMemory }: QuickSearchM
           detail: { tab: "memories", memoryIndex: isNaN(idx) ? 0 : idx },
         })
       );
+      return;
+    }
+
+    if (item.id.startsWith("ban-") || item.id === "org-volunteer-team") {
+      window.dispatchEvent(new CustomEvent("bllsv_open_about_vault", { detail: { tab: "org" } }));
+      return;
+    }
+
+    if (item.id === "org-rules") {
+      window.dispatchEvent(new CustomEvent("bllsv_open_about_vault", { detail: { tab: "rules" } }));
       return;
     }
 
