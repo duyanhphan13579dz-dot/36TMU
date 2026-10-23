@@ -244,7 +244,7 @@ export default function AdminFundTab({
           </div>
 
           <div className="flex justify-end pt-1">
-            <Button variant="cobalt" size="sm" type="submit">
+            <Button variant="primary" size="sm" type="submit">
               💾 Lưu Mục Tiêu
             </Button>
           </div>

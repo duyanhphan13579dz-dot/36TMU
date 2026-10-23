@@ -364,7 +364,7 @@ export default function AdminRecruitmentTab({
               <span className="text-xs font-semibold text-cobalt-500">
                 Trạng thái: <strong>{selectedApp.status}</strong>
               </span>
-              <Button size="sm" variant="cobalt" onClick={() => setSelectedApp(null)}>
+              <Button size="sm" variant="primary" onClick={() => setSelectedApp(null)}>
                 Đóng
               </Button>
             </div>
