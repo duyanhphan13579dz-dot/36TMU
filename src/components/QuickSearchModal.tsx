@@ -182,6 +182,12 @@ export function QuickSearchModal({ open, onClose, onSelectMemory }: QuickSearchM
       return;
     }
 
+    if (item.category === "event") {
+      const progId = item.id.replace("post-", "").replace("prog-", "");
+      window.dispatchEvent(new CustomEvent("bllsv_open_events_vault", { detail: { id: progId } }));
+      return;
+    }
+
     if (item.actionId) {
       setTimeout(() => {
         const el = document.getElementById(item.actionId!);
