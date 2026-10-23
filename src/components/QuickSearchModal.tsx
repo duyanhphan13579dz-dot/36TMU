@@ -188,6 +188,25 @@ export function QuickSearchModal({ open, onClose, onSelectMemory }: QuickSearchM
       return;
     }
 
+    if (item.category === "leader") {
+      window.dispatchEvent(
+        new CustomEvent("bllsv_open_memories_vault", {
+          detail: { tab: "leaders", leaderSearch: item.title },
+        })
+      );
+      return;
+    }
+
+    if (item.category === "memory") {
+      const idx = parseInt(item.actionId || "0", 10);
+      window.dispatchEvent(
+        new CustomEvent("bllsv_open_memories_vault", {
+          detail: { tab: "memories", memoryIndex: isNaN(idx) ? 0 : idx },
+        })
+      );
+      return;
+    }
+
     if (item.actionId) {
       setTimeout(() => {
         const el = document.getElementById(item.actionId!);
