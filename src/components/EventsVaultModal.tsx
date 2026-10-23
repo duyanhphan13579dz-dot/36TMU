@@ -165,32 +165,33 @@ export default function EventsVaultModal({
         </div>
 
         {/* Chuyển đổi tab & Nút đóng */}
-        <div className="flex items-center gap-2">
-          <div className="hidden sm:flex items-center rounded-2xl bg-white/10 p-1 border border-white/10">
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <div className="flex items-center rounded-xl sm:rounded-2xl bg-white/10 p-0.5 sm:p-1 border border-white/10">
             <button
               onClick={() => setActiveTab("programs")}
               className={cn(
-                "rounded-xl px-3 py-1.5 text-xs font-bold transition",
+                "rounded-lg sm:rounded-xl px-2.5 sm:px-3 py-1 sm:py-1.5 text-[11px] sm:text-xs font-bold transition",
                 activeTab === "programs" ? "bg-flame-500 text-white shadow-sm" : "text-white/80 hover:text-white"
               )}
             >
-              Chương trình ({allPrograms.length})
+              <span>Chương trình</span>
+              <span className="hidden xs:inline"> ({allPrograms.length})</span>
             </button>
             <button
               onClick={() => setActiveTab("timeline")}
               className={cn(
-                "rounded-xl px-3 py-1.5 text-xs font-bold transition",
+                "rounded-lg sm:rounded-xl px-2.5 sm:px-3 py-1 sm:py-1.5 text-[11px] sm:text-xs font-bold transition",
                 activeTab === "timeline" ? "bg-flame-500 text-white shadow-sm" : "text-white/80 hover:text-white"
               )}
             >
-              Vòng quay 12 tháng
+              12 Tháng
             </button>
           </div>
 
           <button
             onClick={onClose}
             aria-label="Đóng kho"
-            className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-white transition hover:bg-white/20 active:scale-95"
+            className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl sm:rounded-2xl bg-white/10 text-white transition hover:bg-white/20 active:scale-95 shrink-0"
           >
             <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2.4}>
               <path d="M18 6L6 18M6 6l12 12" />
@@ -375,15 +376,15 @@ export default function EventsVaultModal({
           >
             {selectedProgram ? (
               <div className="max-w-4xl mx-auto w-full p-4 sm:p-6 lg:p-8 space-y-6">
-                {/* Nút quay lại trên mobile */}
-                <div className="md:hidden flex items-center justify-between border-b border-cobalt-100 pb-3">
+                {/* Nút quay lại trên mobile - sticky top */}
+                <div className="md:hidden sticky top-0 z-20 -mx-4 -mt-4 px-4 py-2.5 bg-sky-paper/95 backdrop-blur border-b border-cobalt-200/80 flex items-center justify-between shadow-xs">
                   <button
                     onClick={() => setMobileView("list")}
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-cobalt-700 hover:text-cobalt-950 py-1"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-cobalt-950 bg-white border border-cobalt-200 px-3 py-1.5 rounded-xl shadow-xs active:scale-95 transition"
                   >
-                    ← Quay lại danh sách ({filteredPrograms.length})
+                    ← Danh sách ({filteredPrograms.length})
                   </button>
-                  <span className={cn("rounded-full px-2.5 py-0.5 text-[10.5px] font-bold", STATUS_STYLE[selectedProgram.status])}>
+                  <span className={cn("rounded-full px-2.5 py-0.5 text-[10.5px] font-bold shadow-2xs", STATUS_STYLE[selectedProgram.status])}>
                     {selectedProgram.status}
                   </span>
                 </div>

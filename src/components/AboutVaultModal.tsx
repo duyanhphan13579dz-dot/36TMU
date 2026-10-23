@@ -80,54 +80,54 @@ export default function AboutVaultModal({
       </header>
 
       {/* Thanh điều hướng 3 Tab Kho */}
-      <div className="sticky top-[57px] z-20 flex shrink-0 items-center justify-between border-b border-white/10 bg-cobalt-900/90 px-4 py-2 sm:px-6 backdrop-blur">
-        <div className="flex items-center gap-2 overflow-x-auto scrollbar-none py-0.5 w-full sm:w-auto">
+      <div className="shrink-0 flex items-center justify-between border-b border-white/10 bg-cobalt-900/95 px-3 py-2 sm:px-6 backdrop-blur">
+        <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto scrollbar-none py-0.5 w-full sm:w-auto">
           <button
             type="button"
             onClick={() => setActiveTab("org")}
             className={cn(
-              "flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs sm:text-[13px] font-bold transition-all shrink-0 active:scale-95",
+              "flex items-center gap-1.5 sm:gap-2 rounded-xl px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-[13px] font-bold transition-all shrink-0 active:scale-95",
               activeTab === "org"
                 ? "bg-flame-500 text-white shadow-soft"
                 : "bg-white/5 text-cobalt-300 hover:bg-white/10 hover:text-white",
             )}
           >
             <span>🛡️</span>
-            <span>Cơ Cấu &amp; 3 Ban Chuyên Môn</span>
+            <span>Cơ Cấu (3 Ban)</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab("culture")}
             className={cn(
-              "flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs sm:text-[13px] font-bold transition-all shrink-0 active:scale-95",
+              "flex items-center gap-1.5 sm:gap-2 rounded-xl px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-[13px] font-bold transition-all shrink-0 active:scale-95",
               activeTab === "culture"
                 ? "bg-tmu-500 text-white shadow-soft"
                 : "bg-white/5 text-cobalt-300 hover:bg-white/10 hover:text-white",
             )}
           >
             <span>⭕</span>
-            <span>Nghi Thức &amp; Tinh Thần 36</span>
+            <span>Nghi Thức 36</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab("rules")}
             className={cn(
-              "flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs sm:text-[13px] font-bold transition-all shrink-0 active:scale-95",
+              "flex items-center gap-1.5 sm:gap-2 rounded-xl px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-[13px] font-bold transition-all shrink-0 active:scale-95",
               activeTab === "rules"
                 ? "bg-emerald-600 text-white shadow-soft"
                 : "bg-white/5 text-cobalt-300 hover:bg-white/10 hover:text-white",
             )}
           >
             <span>📜</span>
-            <span>Nội Quy &amp; Quy Chế Hoạt Động</span>
+            <span>Nội Quy ({rules.rules.length})</span>
           </button>
         </div>
       </div>
 
       {/* Nội dung chính cuộn theo Tab */}
-      <div className="flex-1 overflow-y-auto overscroll-contain bg-sky-paper p-4 sm:p-6 lg:p-8">
+      <div className="flex-1 overflow-y-auto overscroll-contain bg-sky-paper p-3 sm:p-6 lg:p-8">
         <div className="mx-auto w-full max-w-[1200px]">
           {/* ================= TAB 1: CƠ CẤU & 3 BAN ================= */}
           {activeTab === "org" && (
@@ -188,19 +188,19 @@ export default function AboutVaultModal({
                       3 Ban Chuyên Môn Trực Thuộc
                     </h3>
                   </div>
-                  <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none">
+                  <div className="grid grid-cols-3 sm:flex sm:items-center gap-1.5 w-full sm:w-auto">
                     {BANS.map((ban) => (
                       <button
                         key={ban.id}
                         onClick={() => setSelectedBan(ban.id)}
                         className={cn(
-                          "flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-bold transition active:scale-95 shrink-0",
+                          "flex items-center justify-center gap-1 rounded-xl px-2 sm:px-3 py-1.5 text-[11px] sm:text-xs font-bold transition active:scale-95 text-center",
                           selectedBan === ban.id
                             ? "bg-cobalt-800 text-white shadow-soft"
                             : "border border-cobalt-200 bg-white text-cobalt-700 hover:border-flame-400",
                         )}
                       >
-                        <span>{ban.emoji}</span>
+                        <span className="text-sm">{ban.emoji}</span>
                         <span>{ban.name.replace("Ban ", "")}</span>
                       </button>
                     ))}

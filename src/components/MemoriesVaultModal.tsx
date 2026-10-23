@@ -209,20 +209,20 @@ export default function MemoriesVaultModal({
       </header>
 
       {/* Thanh điều hướng 3 Tab Kho */}
-      <div className="sticky top-[57px] z-20 flex shrink-0 items-center justify-between border-b border-white/10 bg-cobalt-900/90 px-4 py-2 sm:px-6 backdrop-blur">
-        <div className="flex items-center gap-2 overflow-x-auto scrollbar-none py-0.5 w-full sm:w-auto">
+      <div className="shrink-0 flex items-center justify-between border-b border-white/10 bg-cobalt-900/95 px-3 py-2 sm:px-6 backdrop-blur">
+        <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto scrollbar-none py-0.5 w-full sm:w-auto">
           <button
             type="button"
             onClick={() => setActiveTab("memories")}
             className={cn(
-              "flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs sm:text-[13px] font-bold transition-all shrink-0 active:scale-95",
+              "flex items-center gap-1.5 sm:gap-2 rounded-xl px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-[13px] font-bold transition-all shrink-0 active:scale-95",
               activeTab === "memories"
                 ? "bg-tmu-500 text-white shadow-soft"
                 : "bg-white/5 text-cobalt-300 hover:bg-white/10 hover:text-white",
             )}
           >
-            <Icon.camera className="h-4 w-4" />
-            <span>Kho Ảnh &amp; Khoảnh Khắc</span>
+            <Icon.camera className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+            <span>Kho Ảnh</span>
             <span className="rounded-md bg-black/20 px-1.5 py-0.2 text-[10px]">
               {MEMORIES.length}
             </span>
@@ -232,46 +232,40 @@ export default function MemoriesVaultModal({
             type="button"
             onClick={() => setActiveTab("leaders")}
             className={cn(
-              "flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs sm:text-[13px] font-bold transition-all shrink-0 active:scale-95",
+              "flex items-center gap-1.5 sm:gap-2 rounded-xl px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-[13px] font-bold transition-all shrink-0 active:scale-95",
               activeTab === "leaders"
                 ? "bg-flame-500 text-white shadow-soft"
                 : "bg-white/5 text-cobalt-300 hover:bg-white/10 hover:text-white",
             )}
           >
             <span>⭐</span>
-            <span>Thế Hệ Giữ Lửa (BCH)</span>
-            <span className="rounded-md bg-black/20 px-1.5 py-0.2 text-[10px]">
-              {allLeaders.length}
-            </span>
+            <span>BCH ({allLeaders.length})</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveTab("confessions")}
             className={cn(
-              "flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs sm:text-[13px] font-bold transition-all shrink-0 active:scale-95",
+              "flex items-center gap-1.5 sm:gap-2 rounded-xl px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-[11px] sm:text-[13px] font-bold transition-all shrink-0 active:scale-95",
               activeTab === "confessions"
                 ? "bg-amber-400 text-cobalt-950 shadow-soft"
                 : "bg-white/5 text-cobalt-300 hover:bg-white/10 hover:text-white",
             )}
           >
             <span>💌</span>
-            <span>Hòm Thư Confessions</span>
-            <span className="rounded-md bg-black/20 px-1.5 py-0.2 text-[10px]">
-              {notes.length}
-            </span>
+            <span>Confessions ({notes.length})</span>
           </button>
         </div>
       </div>
 
       {/* Nội dung chính cuộn theo Tab */}
-      <div className="flex-1 overflow-y-auto overscroll-contain bg-sky-paper p-4 sm:p-6 lg:p-8">
+      <div className="flex-1 overflow-y-auto overscroll-contain bg-sky-paper p-3 sm:p-6 lg:p-8">
         <div className="mx-auto w-full max-w-[1400px]">
           {/* ================= TAB 1: KHO ẢNH & KHOẢNH KHẮC ================= */}
           {activeTab === "memories" && (
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               {/* Thanh tìm kiếm & bộ lọc */}
-              <div className="flex flex-col gap-3 rounded-2xl border border-cobalt-100 bg-white p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex flex-col gap-3 rounded-2xl border border-cobalt-100 bg-white p-3.5 sm:p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
                 <div className="relative flex-1 max-w-md">
                   <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm text-cobalt-400">🔍</span>
                   <input
@@ -300,7 +294,7 @@ export default function MemoriesVaultModal({
                         key={cat.id}
                         onClick={() => setMemoryFilter(cat.id)}
                         className={cn(
-                          "flex shrink-0 items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-bold transition active:scale-95",
+                          "flex shrink-0 items-center gap-1.5 rounded-xl px-2.5 sm:px-3 py-1.5 text-xs font-bold transition active:scale-95",
                           active
                             ? "bg-cobalt-800 text-white shadow-xs"
                             : "border border-cobalt-200 bg-white text-cobalt-700 hover:border-tmu-400",
@@ -316,9 +310,9 @@ export default function MemoriesVaultModal({
                 </div>
               </div>
 
-              {/* Lưới ảnh khoảnh khắc */}
+              {/* Lưới ảnh khoảnh khắc: 2 cột trên mobile */}
               {filteredMemories.length === 0 ? (
-                <div className="rounded-3xl border border-cobalt-100 bg-white p-12 text-center shadow-sm">
+                <div className="rounded-3xl border border-cobalt-100 bg-white p-8 sm:p-12 text-center shadow-sm">
                   <div className="text-4xl">📸</div>
                   <h3 className="mt-2 font-display text-base font-bold text-cobalt-950">
                     Không tìm thấy khung hình phù hợp
@@ -328,7 +322,7 @@ export default function MemoriesVaultModal({
                   </p>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-4">
                   {filteredMemories.map((m) => (
                     <button
                       key={m.id}
@@ -343,24 +337,24 @@ export default function MemoriesVaultModal({
                           className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-cobalt-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                        <span className="absolute top-2.5 left-2.5 rounded-full bg-white/95 px-2.5 py-0.5 text-[10.5px] font-bold text-cobalt-800 shadow-2xs backdrop-blur">
+                        <span className="absolute top-2 left-2 rounded-full bg-white/95 px-2 py-0.5 text-[9.5px] sm:text-[10.5px] font-bold text-cobalt-800 shadow-2xs backdrop-blur">
                           {m.tag}
                         </span>
-                        <span className="absolute bottom-2.5 right-2.5 flex h-7 w-7 items-center justify-center rounded-lg bg-black/60 text-white opacity-0 group-hover:opacity-100 transition-opacity">
-                          <Icon.expand className="h-3.5 w-3.5" />
+                        <span className="absolute bottom-2 right-2 flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-lg bg-black/60 text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                          <Icon.expand className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                         </span>
                       </div>
-                      <div className="p-3.5 flex flex-1 flex-col justify-between">
+                      <div className="p-2 sm:p-3.5 flex flex-1 flex-col justify-between">
                         <div>
-                          <h4 className="font-display text-sm font-extrabold text-cobalt-950 group-hover:text-tmu-700 transition-colors line-clamp-1">
+                          <h4 className="font-display text-xs sm:text-sm font-extrabold text-cobalt-950 group-hover:text-tmu-700 transition-colors line-clamp-1">
                             {m.title}
                           </h4>
-                          <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-cobalt-600">
+                          <p className="mt-0.5 sm:mt-1 line-clamp-1 sm:line-clamp-2 text-[11px] sm:text-xs leading-relaxed text-cobalt-600">
                             {m.caption}
                           </p>
                         </div>
-                        <div className="mt-3 flex items-center justify-between border-t border-cobalt-100 pt-2 text-[11px] font-semibold text-tmu-600">
-                          <span>Phóng to xem ảnh</span>
+                        <div className="mt-2 sm:mt-3 flex items-center justify-between border-t border-cobalt-100 pt-1.5 text-[10.5px] sm:text-[11px] font-semibold text-tmu-600">
+                          <span>Xem ảnh</span>
                           <span>🔍</span>
                         </div>
                       </div>

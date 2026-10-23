@@ -35,6 +35,7 @@ export default function DanceVaultModal({
   const [filterCat, setFilterCat] = useState<"all" | "flashmob" | "dan-vu" | "song">("all");
   const [mirror, setMirror] = useState(false);
   const [viewMode, setViewMode] = useState<"video" | "metronome">("video");
+  const [mobileTab, setMobileTab] = useState<"player" | "playlist">("player");
   const [playingMetro, setPlayingMetro] = useState(false);
   const [beat, setBeat] = useState(0);
   const [progress, setProgress] = useState(0);
@@ -151,6 +152,7 @@ export default function DanceVaultModal({
     setProgress(0);
     setActiveMedia({ type, id });
     setViewMode("video");
+    setMobileTab("player");
   };
 
   const toggleMirror = () => {
@@ -290,10 +292,37 @@ export default function DanceVaultModal({
           </div>
         </div>
 
+        {/* Mobile Segmented Tab Switcher (Hiển thị riêng trên mobile) */}
+        <div className="flex lg:hidden border-b border-cobalt-800 bg-cobalt-900/80 p-1.5 shrink-0">
+          <button
+            onClick={() => setMobileTab("player")}
+            className={cn(
+              "flex-1 rounded-xl py-2 text-xs font-bold transition flex items-center justify-center gap-1.5",
+              mobileTab === "player" ? "bg-flame-500 text-white shadow-soft" : "text-cobalt-300 hover:text-white"
+            )}
+          >
+            <span>🎬</span> Video &amp; Chi tiết
+          </button>
+          <button
+            onClick={() => setMobileTab("playlist")}
+            className={cn(
+              "flex-1 rounded-xl py-2 text-xs font-bold transition flex items-center justify-center gap-1.5",
+              mobileTab === "playlist" ? "bg-flame-500 text-white shadow-soft" : "text-cobalt-300 hover:text-white"
+            )}
+          >
+            <span>📋</span> Danh sách ({filteredItems.length})
+          </button>
+        </div>
+
         {/* ===== BODY CONTENT: 2 CỘT (PLAYER & CHOREO / PLAYLIST) ===== */}
         <div className="grid flex-1 overflow-y-auto lg:grid-cols-[1.5fr_1fr] xl:grid-cols-[1.65fr_1fr]">
           {/* CỘT TRÁI: YOUTUBE CINEMA PLAYER & HƯỚNG DẪN ĐỘNG TÁC / LỜI BÀI HÁT */}
-          <div className="flex flex-col border-b border-cobalt-800/80 p-4 sm:p-6 lg:border-r lg:border-b-0">
+          <div
+            className={cn(
+              "flex flex-col border-b border-cobalt-800/80 p-3 sm:p-6 lg:border-r lg:border-b-0",
+              mobileTab === "playlist" && "hidden lg:flex"
+            )}
+          >
             {/* Thanh điều khiển phụ của player */}
             <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
               <div className="flex items-center gap-1.5">
@@ -522,11 +551,31 @@ export default function DanceVaultModal({
                   </div>
                 </div>
               ) : null}
+
+              {/* Quick switch to playlist button for mobile */}
+              <div className="lg:hidden mt-5 pt-3 border-t border-cobalt-800/80">
+                <button
+                  type="button"
+                  onClick={() => setMobileTab("playlist")}
+                  className="w-full flex items-center justify-between rounded-2xl border border-flame-500/40 bg-flame-950/40 p-3.5 text-xs font-bold text-flame-300 hover:bg-flame-900/50 active:scale-95 transition"
+                >
+                  <span className="flex items-center gap-2">
+                    <span>📋</span>
+                    <span>Chọn bài khác trong danh sách ({filteredItems.length})</span>
+                  </span>
+                  <span>➔</span>
+                </button>
+              </div>
             </div>
           </div>
 
           {/* CỘT PHẢI: TOÀN BỘ DANH SÁCH TIẾT MỤC (PLAYLIST GALLERY) */}
-          <div className="flex flex-col p-4 sm:p-6">
+          <div
+            className={cn(
+              "flex flex-col p-3 sm:p-6 bg-cobalt-950/60",
+              mobileTab === "player" && "hidden lg:flex"
+            )}
+          >
             <div className="mb-3 flex items-center justify-between">
               <span className="text-xs font-bold tracking-wider text-cobalt-300 uppercase">
                 Danh Sách Tiết Mục ({filteredItems.length})
