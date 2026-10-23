@@ -94,13 +94,21 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: 6rem;
+    scroll-padding-top: 5.5rem;
     -webkit-tap-highlight-color: transparent;
+    text-size-adjust: 100%;
   }
 
   body {
     @apply bg-sky-paper font-sans text-cobalt-900 antialiased;
     overflow-x: hidden;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  button, a {
+    touch-action: manipulation;
   }
 
   ::selection {
@@ -113,6 +121,11 @@
   h4 {
     @apply font-display;
   }
+}
+
+@utility content-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 700px;
 }
 
 @utility scrollbar-none {
@@ -165,26 +178,24 @@
   margin-bottom: 1rem;
 }
 
-/* Hiệu ứng xuất hiện khi cuộn (dùng thuộc tính `translate` riêng biệt
-   để không xung đột với các utility transform của Tailwind khi hover) */
+/* Hiệu ứng xuất hiện khi cuộn – GPU Accelerated translate3d & Apple standard easing */
 [data-reveal] {
   opacity: 0;
-  translate: 0 26px;
+  transform: translate3d(0, 18px, 0);
   transition:
-    opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
-    translate 0.75s cubic-bezier(0.22, 1, 0.36, 1);
-  will-change: opacity, translate;
+    opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 [data-reveal].is-visible {
   opacity: 1;
-  translate: 0 0;
+  transform: translate3d(0, 0, 0);
 }
 
 @media (prefers-reduced-motion: reduce) {
   [data-reveal] {
     opacity: 1;
-    translate: none;
+    transform: none;
   }
 }
 

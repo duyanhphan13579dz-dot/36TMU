@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { NAV_ITEMS, ORG, type NavId } from "@/data/content";
 import { LogoLockup } from "@/components/Logo";
 import { Button, Icon, useEscape, useLockScroll } from "@/components/ui";
@@ -7,40 +7,41 @@ import { cn } from "@/utils/cn";
 export function useActiveSection<T extends string>(ids: readonly T[]): T {
   const [active, setActive] = useState<T>(ids[0]);
   useEffect(() => {
-    const onScroll = () => {
+    let ticking = false;
+    let currentActive = ids[0];
+
+    const calculateActive = () => {
       const probe = window.innerHeight * 0.35;
       let current = ids[0];
       for (const id of ids) {
         const el = document.getElementById(id);
-        if (el && el.getBoundingClientRect().top <= probe) current = id;
+        if (el && el.getBoundingClientRect().top <= probe) {
+          current = id;
+        }
       }
-      setActive(current);
+      if (current !== currentActive) {
+        currentActive = current;
+        setActive(current);
+      }
+      ticking = false;
     };
+
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        window.requestAnimationFrame(calculateActive);
+      }
+    };
+
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
+    window.addEventListener("resize", onScroll, { passive: true });
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
     };
   }, [ids]);
   return active;
-}
-
-function useScrollProgress() {
-  const [progress, setProgress] = useState(0);
-  const [scrolled, setScrolled] = useState(false);
-  useEffect(() => {
-    const onScroll = () => {
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      setProgress(max > 0 ? Math.min(1, window.scrollY / max) : 0);
-      setScrolled(window.scrollY > 24);
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-  return { progress, scrolled };
 }
 
 const MOBILE_TABS = [
@@ -62,9 +63,48 @@ export default function Nav({
   onPostCreated?: () => void;
 }) {
   const [open, setOpen] = useState(false);
-  const { progress, scrolled } = useScrollProgress();
+  const [scrolled, setScrolled] = useState(false);
+  const progressBarRef = useRef<HTMLDivElement>(null);
+
   useLockScroll(open);
   useEscape(open, () => setOpen(false));
+
+  // Tối ưu thanh tiến trình đọc bằng GPU compositor (scaleX) & rAF tránh re-render liên tục
+  useEffect(() => {
+    let ticking = false;
+    let lastScrolled = false;
+
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const isScrolled = scrollY > 24;
+      if (isScrolled !== lastScrolled) {
+        lastScrolled = isScrolled;
+        setScrolled(isScrolled);
+      }
+
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = max > 0 ? Math.min(1, Math.max(0, scrollY / max)) : 0;
+      if (progressBarRef.current) {
+        progressBarRef.current.style.transform = `scaleX(${progress})`;
+      }
+      ticking = false;
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        window.requestAnimationFrame(handleScroll);
+      }
+    };
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
 
   const go = (id: string) => {
     setOpen(false);
@@ -75,11 +115,12 @@ export default function Nav({
 
   return (
     <>
-      {/* ===== Thanh tiến trình đọc ===== */}
-      <div className={cn("fixed inset-x-0 z-[100] h-[3px] bg-transparent transition-all duration-300", isAdmin ? "top-10 sm:top-9" : "top-0")}>
+      {/* ===== Thanh tiến trình đọc (GPU Accelerated scaleX) ===== */}
+      <div className={cn("fixed inset-x-0 z-[100] h-[3px] bg-transparent pointer-events-none transition-all duration-300", isAdmin ? "top-10 sm:top-9" : "top-0")}>
         <div
-          className="h-full bg-gradient-to-r from-tmu-400 via-flame-500 to-glow-400 transition-[width] duration-150"
-          style={{ width: `${progress * 100}%` }}
+          ref={progressBarRef}
+          className="h-full w-full origin-left bg-gradient-to-r from-tmu-400 via-flame-500 to-glow-400 will-change-transform"
+          style={{ transform: "scaleX(0)" }}
         />
       </div>
 

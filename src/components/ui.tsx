@@ -3,14 +3,23 @@ import { cn } from "@/utils/cn";
 
 /* ------------------------------------------------------------------ *
  *  Khóa scroll nền khi Drawer / Modal mở (cả mobile & desktop)
+ *  Tự động bù paddingRight ngăn chặn layout jump do thanh cuộn biến mất
  * ------------------------------------------------------------------ */
 export function useLockScroll(active: boolean) {
   useEffect(() => {
     if (!active) return;
-    const original = document.body.style.overflow;
+    const originalOverflow = document.body.style.overflow;
+    const originalPaddingRight = document.body.style.paddingRight;
+    const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+
+    if (scrollBarWidth > 0) {
+      document.body.style.paddingRight = `${scrollBarWidth}px`;
+    }
     document.body.style.overflow = "hidden";
+
     return () => {
-      document.body.style.overflow = original;
+      document.body.style.overflow = originalOverflow;
+      document.body.style.paddingRight = originalPaddingRight;
     };
   }, [active]);
 }
@@ -78,7 +87,7 @@ export function SectionHeading({
 }
 
 /* ------------------------------------------------------------------ *
- *  Nút chuẩn – target cảm ứng tối thiểu 44px
+ *  Nút chuẩn – target cảm ứng tối thiểu 44px, phản hồi tức thì
  * ------------------------------------------------------------------ */
 type BtnProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
   React.AnchorHTMLAttributes<HTMLAnchorElement> & {
@@ -97,7 +106,7 @@ export function Button({
   ...rest
 }: BtnProps) {
   const base =
-    "group relative inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl px-5 text-sm font-semibold transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-tmu-500 active:scale-[0.97] sm:min-h-12";
+    "group relative inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl px-5 text-sm font-semibold transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-tmu-500 active:scale-[0.97] touch-manipulation select-none sm:min-h-12";
   const sizes = {
     sm: "min-h-9 sm:min-h-9 px-3.5 py-1.5 text-xs rounded-xl",
     md: "px-5",

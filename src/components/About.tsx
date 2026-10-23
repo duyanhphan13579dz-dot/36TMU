@@ -48,7 +48,7 @@ export default function About({ onToast }: AboutProps) {
   };
 
   return (
-    <section id="about" className="relative overflow-hidden py-14 sm:py-18 lg:py-24 scroll-mt-20 md:scroll-mt-24">
+    <section id="about" className="relative overflow-hidden py-14 sm:py-18 lg:py-24 scroll-mt-20 md:scroll-mt-24 content-auto">
       <div className="pointer-events-none absolute inset-0 -z-10 bg-white" />
       <div className="pointer-events-none absolute top-1/4 -left-24 -z-10 h-72 w-72 rounded-full bg-flame-200/40 blur-3xl" />
       <div className="pointer-events-none absolute bottom-1/4 -right-24 -z-10 h-80 w-80 rounded-full bg-tmu-200/30 blur-3xl" />

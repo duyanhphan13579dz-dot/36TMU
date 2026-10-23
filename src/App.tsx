@@ -74,9 +74,11 @@ export default function App() {
     return () => window.removeEventListener("bllsv_data_updated", handleDataUpdated);
   }, []);
 
-  /* Micro-interaction: các khối [data-reveal] hiện dần khi cuộn tới */
+  /* Micro-interaction: các khối [data-reveal] hiện mượt mà khi cuộn tới */
   useEffect(() => {
-    const els = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"));
+    const els = document.querySelectorAll<HTMLElement>("[data-reveal]:not(.is-visible)");
+    if (els.length === 0) return;
+
     if (!("IntersectionObserver" in window)) {
       els.forEach((el) => el.classList.add("is-visible"));
       return;
@@ -90,28 +92,16 @@ export default function App() {
           }
         });
       },
-      { threshold: 0.01, rootMargin: "60px 0px 60px 0px" },
+      { threshold: 0.05, rootMargin: "0px 0px 80px 0px" },
     );
-    els.forEach((el, i) => {
-      if (!el.classList.contains("is-visible")) {
-        el.style.transitionDelay = `${Math.min(i % 4, 3) * 60}ms`;
-        io.observe(el);
-      }
-    });
 
-    // Fallback: đảm bảo các element hiển thị sau khi load trang
-    const timerId = window.setTimeout(() => {
-      els.forEach((el) => {
-        const rect = el.getBoundingClientRect();
-        if (rect.top < window.innerHeight + 100) {
-          el.classList.add("is-visible");
-        }
-      });
-    }, 500);
+    els.forEach((el, i) => {
+      el.style.transitionDelay = `${Math.min(i % 3, 2) * 45}ms`;
+      io.observe(el);
+    });
 
     return () => {
       io.disconnect();
-      window.clearTimeout(timerId);
     };
   }, [dataVersion]);
 

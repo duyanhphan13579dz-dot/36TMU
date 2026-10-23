@@ -134,6 +134,8 @@ function VideoFeature() {
         <ShimmerImage
           src={heroCampfireImg}
           alt="Đội hình Mùa Hè Xanh BLLSV Thanh Hóa TMU bên ánh lửa trại truyền thống"
+          loading="eager"
+          fetchPriority="high"
           containerClassName="h-full w-full"
           className="h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-105"
         />

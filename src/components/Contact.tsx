@@ -22,7 +22,7 @@ export default function Contact({
 
   const contact = useMemo(() => getStoredAdminContact(), [dataVersion]);
   return (
-    <section id="contact" className="relative overflow-hidden py-16 sm:py-20 lg:py-28 scroll-mt-20 md:scroll-mt-24">
+    <section id="contact" className="relative overflow-hidden py-16 sm:py-20 lg:py-28 scroll-mt-20 md:scroll-mt-24 content-auto">
       <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-tmu-50/70 to-white" />
 
       <div className="mx-auto w-full max-w-[1400px] px-4 sm:px-6">

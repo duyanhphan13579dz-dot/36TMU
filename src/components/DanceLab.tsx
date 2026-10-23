@@ -68,7 +68,7 @@ export default function DanceLab({ onToast }: DanceLabProps) {
   ];
 
   return (
-    <section id="dance" className="relative overflow-hidden bg-gradient-to-b from-sky-paper via-white to-sky-paper py-14 sm:py-16 lg:py-20 scroll-mt-20 md:scroll-mt-24">
+    <section id="dance" className="relative overflow-hidden bg-gradient-to-b from-sky-paper via-white to-sky-paper py-14 sm:py-16 lg:py-20 scroll-mt-20 md:scroll-mt-24 content-auto">
       <div className="pointer-events-none absolute inset-0 -z-10 bg-dots opacity-40" />
 
       <div className="mx-auto w-full max-w-[1400px] px-4 sm:px-6">

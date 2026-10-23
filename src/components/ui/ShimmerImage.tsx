@@ -15,6 +15,7 @@ export function ShimmerImage({
   fallbackSrc = "https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=800&q=80",
   showSkeleton = true,
   loading = "lazy",
+  decoding = "async",
   ...props
 }: ShimmerImageProps) {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -34,6 +35,7 @@ export function ShimmerImage({
         src={currentSrc}
         alt={alt || ""}
         loading={loading}
+        decoding={decoding}
         onLoad={() => setIsLoaded(true)}
         onError={() => {
           if (!hasError) {
@@ -42,7 +44,7 @@ export function ShimmerImage({
           setIsLoaded(true);
         }}
         className={cn(
-          "transition-opacity duration-500",
+          "transition-opacity duration-300",
           isLoaded ? "opacity-100" : "opacity-0",
           className,
         )}
