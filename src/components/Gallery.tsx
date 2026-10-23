@@ -145,27 +145,27 @@ export default function Gallery({ onToast }: GalleryProps) {
               </div>
             </div>
 
-            {/* Showcase 4 khung hình tiêu biểu: Vuốt mượt trên mobile / Grid 4 cột trên desktop */}
-            <div className="mt-8">
-              <div className="flex items-center justify-between pb-3">
+            {/* Showcase 4 khung hình tiêu biểu: Grid 2x2 trọn vẹn trên mobile (không cần lướt ngang) / Grid 4 cột trên desktop */}
+            <div className="mt-6 sm:mt-8">
+              <div className="flex items-center justify-between pb-2.5 sm:pb-3">
                 <p className="text-xs font-bold tracking-wider text-cobalt-300 uppercase">
-                  📸 Khoảnh khắc tiêu biểu được chọn lọc
+                  📸 Khoảnh khắc tiêu biểu ({spotlightMemories.length})
                 </p>
                 <button
                   type="button"
                   onClick={() => openVault("memories")}
-                  className="hidden text-xs font-bold text-tmu-400 hover:text-tmu-300 sm:inline-flex items-center gap-1 transition"
+                  className="text-[11px] sm:text-xs font-bold text-tmu-400 hover:text-tmu-300 inline-flex items-center gap-1 transition"
                 >
-                  Mở toàn bộ kho ảnh ({MEMORIES.length}) <span>➔</span>
+                  Mở kho ảnh ({MEMORIES.length}) <span>➔</span>
                 </button>
               </div>
 
-              <div className="scrollbar-none -mx-2 flex snap-x snap-mandatory gap-3.5 overflow-x-auto px-2 pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 lg:grid-cols-4">
+              <div className="grid grid-cols-2 gap-2.5 sm:gap-3.5 lg:grid-cols-4">
                 {spotlightMemories.map((m, idx) => (
                   <div
                     key={m.id}
                     onClick={() => openVault("memories", idx)}
-                    className="group relative flex min-w-[78%] sm:min-w-0 shrink-0 snap-center cursor-pointer flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/10 p-3 shadow-soft backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-tmu-400/50 hover:bg-white/15"
+                    className="group relative flex cursor-pointer flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/10 p-2 sm:p-3 shadow-soft backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-tmu-400/50 hover:bg-white/15"
                   >
                     <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-cobalt-950">
                       <ShimmerImage
@@ -175,35 +175,32 @@ export default function Gallery({ onToast }: GalleryProps) {
                         className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-cobalt-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                      <span className="absolute top-2 left-2 rounded-full bg-black/60 px-2 py-0.5 text-[10px] font-bold text-white backdrop-blur">
+                      <span className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 rounded-full bg-black/70 px-2 py-0.5 text-[9px] sm:text-[10px] font-bold text-white backdrop-blur">
                         {m.tag}
                       </span>
-                      <span className="absolute bottom-2 right-2 flex h-7 w-7 items-center justify-center rounded-lg bg-black/60 text-white backdrop-blur opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Icon.expand className="h-3.5 w-3.5" />
+                      <span className="absolute bottom-1.5 right-1.5 sm:bottom-2 sm:right-2 flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-lg bg-black/60 text-white backdrop-blur opacity-0 group-hover:opacity-100 transition-opacity">
+                        <Icon.expand className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                       </span>
                     </div>
 
-                    <div className="mt-3 flex flex-1 flex-col justify-between">
+                    <div className="mt-2 sm:mt-3 flex flex-1 flex-col justify-between">
                       <div>
-                        <h3 className="line-clamp-1 text-sm font-bold text-white group-hover:text-tmu-300 transition-colors">
+                        <h3 className="line-clamp-1 text-xs sm:text-sm font-bold text-white group-hover:text-tmu-300 transition-colors">
                           {m.title}
                         </h3>
-                        <p className="mt-1 line-clamp-2 text-[11.5px] leading-relaxed text-cobalt-300">
+                        <p className="mt-0.5 sm:mt-1 line-clamp-1 text-[10.5px] sm:text-[11.5px] leading-relaxed text-cobalt-300">
                           {m.caption}
                         </p>
                       </div>
 
-                      <div className="mt-3 flex items-center justify-between border-t border-white/10 pt-2 text-[11px] font-bold text-tmu-300">
-                        <span>Phóng to &amp; Xem thêm</span>
+                      <div className="mt-2 flex items-center justify-between border-t border-white/10 pt-1.5 text-[10.5px] sm:text-[11px] font-bold text-tmu-300">
+                        <span>Phóng to</span>
                         <span className="transition-transform group-hover:translate-x-1">➔</span>
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
-              <p className="sm:hidden text-center text-[11px] text-cobalt-400 mt-2">
-                👆 Vuốt ngang để xem thêm khung hình
-              </p>
             </div>
 
             {/* ===== CTA CHÍNH ĐỂ MỞ KHO KỶ NIỆM ===== */}
