@@ -278,12 +278,12 @@ export default function About() {
                     <p className="mt-3 text-[13px] leading-relaxed text-white/75">
                       🏛️ <strong>Tổ chức trực thuộc:</strong> {ORG.parentOrg} ({ORG.parentOrgMembersCount} đơn vị, Chủ tịch: {ORG.parentOrgPresident}).
                     </p>
-                    <div className="mt-6 flex flex-wrap gap-3">
-                      <Button as="a" href="#contact" variant="flame">
+                    <div className="mt-6 flex flex-col sm:flex-row sm:flex-wrap gap-3">
+                      <Button as="a" href="#contact" variant="flame" className="w-full sm:w-auto">
                         Gia nhập gia đình 36
                         <Icon.arrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                       </Button>
-                      <Button as="a" href="#dance" variant="ghost" className="bg-white/10 text-white hover:bg-white/20">
+                      <Button as="a" href="#dance" variant="ghost" className="w-full sm:w-auto bg-white/10 text-white hover:bg-white/20">
                         <Icon.mirror className="h-4 w-4" />
                         4 Bài nhảy truyền thống
                       </Button>

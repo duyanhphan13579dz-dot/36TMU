@@ -195,98 +195,81 @@ export default function Events({ onToast }: { onToast: (msg: string) => void }) 
         </div>
 
         {/* ===== Danh sách: mobile snap carousel / desktop grid 3 cột ===== */}
-        {/* ===== Danh sách: Khung hình mobile tỷ lệ 9:16 (Story/Mockup layout) ===== */}
+        {/* ===== Danh sách: Carousel vuốt mượt trên mobile / Grid chuẩn trên desktop ===== */}
         <div
-          className="scrollbar-none -mx-4 mt-8 flex snap-x snap-mandatory gap-5 overflow-x-auto px-4 pb-6 sm:mx-0 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 sm:overflow-visible sm:px-0 sm:gap-6"
+          className="scrollbar-none -mx-4 mt-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 md:mx-0 md:grid md:grid-cols-2 md:overflow-visible md:px-0 xl:grid-cols-3 xl:gap-6"
           data-reveal
         >
-          {list.map((p) => (
+          {list.map((p, i) => (
             <article
               key={p.id}
-              onClick={() => setCurrent(p)}
-              className="group relative flex w-[285px] xs:w-[300px] sm:w-auto shrink-0 snap-center cursor-pointer flex-col overflow-hidden rounded-[2.5rem] border-[4px] border-slate-900/10 bg-slate-950 text-white shadow-lift ring-1 ring-black/5 transition-all duration-500 hover:-translate-y-2 hover:border-tmu-400/80 hover:shadow-2xl aspect-[9/16] select-none"
+              className={cn(
+                "group relative flex min-w-[85%] sm:min-w-[340px] md:min-w-0 shrink-0 snap-center flex-col overflow-hidden rounded-3xl border border-cobalt-100 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-tmu-200 hover:shadow-lift",
+                i % 3 === 1 && "xl:translate-y-4",
+              )}
             >
-              {/* Dynamic Island / Tai thỏ mobile mock */}
-              <div className="pointer-events-none absolute top-2.5 inset-x-0 z-30 flex justify-center">
-                <div className="flex h-3.5 w-20 items-center justify-end px-2 rounded-full bg-black/60 backdrop-blur-md border border-white/10">
-                  <div className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                </div>
-              </div>
-
-              {/* Ảnh nền Full-bleed theo tỷ lệ 9:16 */}
-              <div className="absolute inset-0 z-0 overflow-hidden">
+              <div className="relative aspect-[16/10] overflow-hidden">
                 <ShimmerImage
                   src={p.cover}
                   alt={p.title}
                   containerClassName="h-full w-full"
-                  className="h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-105"
+                  className="h-full w-full object-cover transition-transform duration-[900ms] group-hover:scale-110"
                 />
-                {/* Lớp phủ gradient tạo chiều sâu và độ tương phản cao */}
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent" />
-                <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/60 via-black/20 to-transparent" />
-              </div>
-
-              {/* Thanh trạng thái phía trên (Top Bar bên trong mobile frame) */}
-              <div className="relative z-10 flex items-start justify-between p-4 pt-7 gap-2">
-                <div className="flex flex-wrap items-center gap-1.5 max-w-[70%]">
+                <div className="absolute inset-0 bg-gradient-to-t from-cobalt-950/80 via-cobalt-900/10 to-transparent" />
+                <div className="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap max-w-[70%]">
                   <span
                     className={cn(
-                      "rounded-full px-2.5 py-0.5 text-[10px] font-bold shadow-xs backdrop-blur",
+                      "rounded-full px-2.5 py-1 text-[11px] font-bold shadow-sm",
                       STATUS_STYLE[p.status],
                     )}
                   >
                     {p.status}
                   </span>
                   {p.year && (
-                    <span className="rounded-full bg-black/50 backdrop-blur px-2 py-0.5 text-[10px] font-black text-white border border-white/20">
-                      '{p.year.toString().slice(-2)}
+                    <span className="rounded-full bg-cobalt-950/80 backdrop-blur px-2.5 py-1 text-[11px] font-black text-white shadow-sm border border-white/20">
+                      Năm {p.year}
                     </span>
                   )}
                 </div>
-                <span className="rounded-xl bg-white/20 backdrop-blur-md px-2.5 py-0.5 text-[10px] font-bold text-white border border-white/15">
+                <span className="absolute top-3 right-3 rounded-xl bg-white/90 px-2.5 py-1 text-[11px] font-bold text-cobalt-800 backdrop-blur">
                   {p.category}
                 </span>
-              </div>
-
-              {/* Tag ngày tháng nổi bật ở giữa */}
-              <div className="relative z-10 px-4 mt-auto">
-                <div className="inline-flex items-center gap-2 rounded-2xl bg-white/95 px-3 py-1.5 shadow-lift backdrop-blur text-cobalt-950">
-                  <span className="flex h-8 w-8 flex-col items-center justify-center rounded-xl bg-flame-500 leading-none text-white">
-                    <span className="font-display text-sm font-extrabold">{p.day}</span>
-                    <span className="text-[8px] font-bold uppercase">TH {p.month}</span>
+                {/* Tag ngày tháng */}
+                <div className="absolute bottom-3 left-3 flex items-center gap-2 rounded-2xl bg-white/95 px-3 py-2 shadow-soft backdrop-blur">
+                  <span className="flex h-10 w-10 flex-col items-center justify-center rounded-xl bg-flame-500 leading-none text-white">
+                    <span className="font-display text-lg font-extrabold">{p.day}</span>
+                    <span className="text-[9px] font-bold">TH {p.month}</span>
                   </span>
-                  <span className="text-[11.5px] leading-tight font-bold text-cobalt-900">{p.dateLabel}</span>
+                  <span className="text-[11.5px] leading-tight font-semibold text-cobalt-800">{p.dateLabel}</span>
                 </div>
               </div>
 
-              {/* Phần thông tin dưới đáy màn hình điện thoại */}
-              <div className="relative z-10 flex flex-col p-4 pt-2.5">
-                <h3 className="font-display text-base sm:text-lg leading-snug font-extrabold text-white transition-colors group-hover:text-glow-300 line-clamp-2">
+              <div className="flex flex-1 flex-col p-4 sm:p-5">
+                <h3 className="text-balance-vn font-display text-base sm:text-lg leading-snug font-extrabold text-cobalt-900 transition-colors group-hover:text-tmu-700">
                   {p.title}
                 </h3>
-                
-                <p className="mt-1 flex items-center gap-1.5 text-[11.5px] text-white/80">
-                  <Icon.pin className="h-3.5 w-3.5 shrink-0 text-flame-400" />
-                  <span className="truncate">{p.location}</span>
+                <p className="mt-1.5 flex items-start gap-1.5 text-[12px] sm:text-[12.5px] text-cobalt-600/80">
+                  <Icon.pin className="mt-0.5 h-4 w-4 shrink-0 text-flame-500" />
+                  <span className="line-clamp-1">{p.location}</span>
                 </p>
-
-                <p className="mt-1.5 line-clamp-2 text-[12px] leading-relaxed text-white/70 font-medium">
-                  {p.excerpt}
-                </p>
-
-                {/* Footer card trong khung mobile */}
-                <div className="mt-3 flex items-center justify-between gap-2 border-t border-white/15 pt-2.5">
-                  <div className="flex items-center gap-1.5">
-                    <div className="flex -space-x-1.5">
+                <p className="mt-2.5 line-clamp-2 sm:line-clamp-3 text-[13px] sm:text-[13.5px] leading-relaxed text-cobalt-700/80">{p.excerpt}</p>
+                <div className="mt-4 flex items-center justify-between gap-3 border-t border-cobalt-100 pt-3.5 sm:pt-4">
+                  <div className="flex items-center gap-2">
+                    <div className="flex -space-x-2">
                       {p.gallery.slice(0, 3).map((g, gIdx) => (
                         <img
                           key={gIdx}
                           src={g}
                           alt=""
                           loading="lazy"
-                          className="h-6 w-6 rounded-full border border-white/80 object-cover"
+                          className="h-7 w-7 sm:h-8 sm:w-8 rounded-full border-2 border-white object-cover"
                         />
                       ))}
+                      {p.gallery.length > 3 && (
+                        <span className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full border-2 border-white bg-cobalt-800 text-[9px] sm:text-[10px] font-bold text-white">
+                          +{p.gallery.length - 3}
+                        </span>
+                      )}
                     </div>
                     {p.driveLink && (
                       <a
@@ -295,32 +278,22 @@ export default function Events({ onToast }: { onToast: (msg: string) => void }) 
                         rel="noopener noreferrer"
                         onClick={(e) => e.stopPropagation()}
                         title="Xem toàn bộ ảnh trên Google Drive"
-                        className="rounded-full bg-white/15 hover:bg-white/25 border border-white/20 px-2 py-0.5 text-[10px] font-extrabold text-glow-300 transition"
+                        className="inline-flex items-center gap-1 rounded-full bg-flame-50 border border-flame-200 px-2.5 py-1 text-[10.5px] sm:text-[11px] font-extrabold text-flame-600 hover:bg-flame-100 transition shadow-2xs"
                       >
-                        📂 Drive
+                        📂 Drive ảnh
                       </a>
                     )}
                   </div>
-
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setCurrent(p);
-                    }}
-                    className="inline-flex items-center gap-1 rounded-xl bg-gradient-to-r from-flame-500 to-flame-600 px-2.5 py-1.5 text-[11px] font-bold text-white shadow-soft transition hover:from-flame-600 hover:to-flame-700 active:scale-95"
-                  >
-                    Chi tiết
-                    <Icon.arrowRight className="h-3.5 w-3.5" />
-                  </button>
+                  <Button variant="soft" size="sm" onClick={() => setCurrent(p)}>
+                    Xem chi tiết
+                    <Icon.arrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                  </Button>
                 </div>
               </div>
             </article>
           ))}
         </div>
-        <p className="sm:hidden text-center text-xs font-semibold text-cobalt-500 mt-2">
-          👆 Vuốt ngang để lướt qua các khung hình chương trình
-        </p>
+        <p className="md:hidden text-center text-xs text-cobalt-500 mt-2">👆 Vuốt ngang để xem thêm chương trình</p>
 
         {/* ===== VÒNG QUAY 12 THÁNG: HOẠT ĐỘNG THƯỜNG NIÊN CHUẨN XÁC ===== */}
         <div className="mt-16 rounded-3xl border border-cobalt-100 bg-gradient-to-br from-white via-tmu-50/40 to-white p-6 shadow-soft sm:p-8 lg:p-10" data-reveal>

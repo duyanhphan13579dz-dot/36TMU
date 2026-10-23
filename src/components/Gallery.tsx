@@ -195,7 +195,7 @@ export default function Gallery({ onToast }: { onToast: (msg: string) => void })
                 <ShimmerImage
                   src={m.src}
                   alt={m.title}
-                  containerClassName="h-64 w-full sm:h-80"
+                  containerClassName="aspect-[4/5] w-full"
                   className="h-full w-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-cobalt-950/90 via-transparent to-transparent" />

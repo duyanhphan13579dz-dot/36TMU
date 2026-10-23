@@ -26,10 +26,11 @@ export default function Hero() {
         <div className="order-1 lg:order-1" data-reveal>
           <Kicker className="border border-cobalt-200/80 bg-white/95 font-bold text-cobalt-950 shadow-xs">
             <span className="flex h-2 w-2 rounded-full bg-flame-500" />
-            BLLSV Thanh Hóa · Đại học Thương Mại · Thành lập 12/04/2008
+            <span className="hidden sm:inline">BLLSV Thanh Hóa · Đại học Thương Mại · Thành lập 12/04/2008</span>
+            <span className="sm:hidden">BLLSV Thanh Hóa · ĐH Thương Mại · Est. 2008</span>
           </Kicker>
 
-          <h1 className="mt-4 text-balance-vn font-display text-[2.1rem] leading-[1.08] font-black tracking-tight text-cobalt-950 sm:text-5xl lg:text-[3.65rem]">
+          <h1 className="mt-4 text-balance-vn font-display text-[1.85rem] leading-[1.12] xs:text-[2.1rem] font-black tracking-tight text-cobalt-950 sm:text-5xl lg:text-[3.65rem]">
             Cách nhà hơn 200 cây số,
             <span className="relative mx-1 inline-block">
               <span className="relative z-10 bg-gradient-to-r from-flame-500 via-flame-600 to-flame-400 bg-clip-text text-transparent">
@@ -42,18 +43,18 @@ export default function Hero() {
             một mái nhà mang tên <span className="text-tmu-600">Ban Liên Lạc</span>.
           </h1>
 
-          <p className="mt-5 max-w-xl text-[15px] leading-relaxed font-medium text-cobalt-800 sm:text-lg">
+          <p className="mt-4 max-w-xl text-[14.5px] leading-relaxed font-medium text-cobalt-800 sm:mt-5 sm:text-lg">
             Chào bạn! Chúng mình là <strong className="font-semibold text-cobalt-900">Ban Liên Lạc Sinh Viên Thanh Hóa Đại Học Thương Mại</strong> (trực thuộc Hội đồng hương Sinh viên Thanh Hóa tại Hà Nội).
             Nơi những người con xứ Thanh gặp nhau tại Trường đại học Thương Mại, cùng đi tình nguyện, cùng tham gia các hoạt động đồng hương
             và cùng gọi nhau bằng hai chữ thân thương: <em className="text-flame-600 not-italic font-semibold">GIA ĐÌNH</em>.
           </p>
 
-          {/* Nút CTA – to bản cho mobile */}
-          <div className="mt-7 flex flex-wrap items-center gap-3">
+          {/* Nút CTA – full-width trên mobile, auto trên desktop */}
+          <div className="mt-6 flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3">
             <button
               type="button"
               onClick={() => window.dispatchEvent(new CustomEvent("bllsv_open_recruit"))}
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 px-5 text-sm font-black text-white shadow-lift transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft active:scale-95"
+              className="inline-flex min-h-12 w-full sm:w-auto items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 px-5 text-sm font-black text-white shadow-lift transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft active:scale-95"
             >
               <span>✨</span>
               Đăng Ký Tham Gia Đội SVTN
@@ -69,10 +70,10 @@ export default function Hero() {
           </div>
 
           {/* Slogan – dải chữ chạy (desktop) / wrap (mobile) */}
-          <div className="mt-8 overflow-hidden rounded-2xl border border-cobalt-100 bg-white/70 py-3 backdrop-blur">
-            <div className="flex w-max animate-marquee gap-8 pr-8 sm:hidden">
+          <div className="mt-6 sm:mt-8 overflow-hidden rounded-2xl border border-cobalt-100 bg-white/70 py-2.5 sm:py-3 backdrop-blur">
+            <div className="flex w-max animate-marquee gap-6 sm:gap-8 pr-6 sm:pr-8 sm:hidden">
               {[...MARQUEE, ...MARQUEE].map((t, i) => (
-                <span key={i} className="flex items-center gap-3 text-xs font-bold tracking-[0.16em] text-cobalt-700 uppercase">
+                <span key={i} className="flex items-center gap-2.5 text-[11px] font-bold tracking-[0.14em] text-cobalt-700 uppercase">
                   <span className="text-flame-500">✦</span>
                   {t}
                 </span>
@@ -95,21 +96,21 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Badge số liệu: mobile trượt ngang, desktop grid */}
-      <div className="mx-auto mt-10 w-full max-w-[1400px] px-4 sm:px-6 lg:mt-14">
-        <div className="scrollbar-none fade-x -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:[mask-image:none] sm:[-webkit-mask-image:none] lg:grid-cols-4">
+      {/* Badge số liệu: grid 2x2 trên mobile, 4 cột trên desktop */}
+      <div className="mx-auto mt-8 w-full max-w-[1400px] px-4 sm:px-6 lg:mt-14">
+        <div className="grid grid-cols-2 gap-2.5 sm:gap-4 lg:grid-cols-4">
           {HERO_STATS.map((s, i) => (
             <div
               key={s.label}
-              className="group relative min-w-[62%] shrink-0 snap-center rounded-3xl border border-white/80 bg-white/80 p-4 shadow-sm backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:shadow-soft sm:min-w-0 lg:p-5"
+              className="group relative rounded-2xl sm:rounded-3xl border border-white/80 bg-white/85 p-3.5 sm:p-4 shadow-sm backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:shadow-soft lg:p-5"
               style={{ animationDelay: `${i * 90}ms` }}
             >
               <div className="flex items-start justify-between">
-                <p className="font-display text-3xl font-extrabold text-cobalt-900 lg:text-4xl">
+                <p className="font-display text-2xl font-extrabold text-cobalt-900 sm:text-3xl lg:text-4xl">
                   {s.value}
                   <span className="ml-0.5 text-flame-500">.</span>
                 </p>
-                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-tmu-50 text-lg transition group-hover:scale-110">
+                <span className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-xl bg-tmu-50 text-base sm:text-lg transition group-hover:scale-110">
                   {s.icon}
                 </span>
               </div>
