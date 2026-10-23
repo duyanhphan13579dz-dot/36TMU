@@ -2,7 +2,6 @@ import { useState, type FormEvent } from "react";
 import { Button } from "@/components/ui";
 import {
   saveStoredRecruitment,
-  saveStoredApplications,
   updateApplicationStatus,
   deleteVolunteerApplication,
   type RecruitmentCampaign,

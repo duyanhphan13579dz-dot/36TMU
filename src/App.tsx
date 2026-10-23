@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
 import Nav, { useActiveSection } from "@/components/Nav";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
@@ -7,13 +7,16 @@ import DanceLab from "@/components/DanceLab";
 import Gallery from "@/components/Gallery";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
-import AdminPanel from "@/components/AdminPanel";
 import { Toast } from "@/components/ui";
-import { QuickSearchModal } from "@/components/QuickSearchModal";
 import BroadcastBanner from "@/components/BroadcastBanner";
-import VolunteerRecruitmentModal from "@/components/VolunteerRecruitmentModal";
 import { NAV_ITEMS, type NavId } from "@/data/content";
 import { getStoredAdminMotto, hydrateSiteDataFromDb } from "@/data/adminStore";
+
+const AdminPanel = lazy(() => import("@/components/AdminPanel"));
+const QuickSearchModal = lazy(() =>
+  import("@/components/QuickSearchModal").then((m) => ({ default: m.QuickSearchModal }))
+);
+const VolunteerRecruitmentModal = lazy(() => import("@/components/VolunteerRecruitmentModal"));
 
 const SECTION_IDS: NavId[] = NAV_ITEMS.map((n) => n.id);
 
@@ -173,34 +176,40 @@ export default function App() {
 
       <Footer isAdmin={isAdmin} />
       
-      {/* Cổng Quản Trị Viên thu nhỏ ở góc màn hình */}
-      <AdminPanel
-        isAdmin={isAdmin}
-        onLogin={() => setIsAdmin(true)}
-        onLogout={() => setIsAdmin(false)}
-        onToast={pushToast}
-        onPostCreated={() => setDataVersion((v) => v + 1)}
-      />
+      {/* Cổng Quản Trị Viên & các Modal lazy-loaded */}
+      <Suspense fallback={null}>
+        <AdminPanel
+          isAdmin={isAdmin}
+          onLogin={() => setIsAdmin(true)}
+          onLogout={() => setIsAdmin(false)}
+          onToast={pushToast}
+          onPostCreated={() => setDataVersion((v) => v + 1)}
+        />
+
+        {/* Modal ứng tuyển tình nguyện viên 3 Ban trực thuộc Đội SVTN */}
+        {isRecruitOpen && (
+          <VolunteerRecruitmentModal
+            open={isRecruitOpen}
+            onClose={() => setIsRecruitOpen(false)}
+            onToast={pushToast}
+          />
+        )}
+
+        {/* Modal tìm kiếm nhanh toàn diện (Spotlight / Ctrl+K) */}
+        {isSearchOpen && (
+          <QuickSearchModal
+            open={isSearchOpen}
+            onClose={() => setIsSearchOpen(false)}
+            onSelectMemory={(index) => {
+              window.dispatchEvent(new CustomEvent("bllsv_open_memory_lightbox", { detail: { index } }));
+              const el = document.getElementById("memories");
+              el?.scrollIntoView({ behavior: "smooth" });
+            }}
+          />
+        )}
+      </Suspense>
 
       <Toast message={toast} />
-
-      {/* Modal ứng tuyển tình nguyện viên 3 Ban trực thuộc Đội SVTN */}
-      <VolunteerRecruitmentModal
-        open={isRecruitOpen}
-        onClose={() => setIsRecruitOpen(false)}
-        onToast={pushToast}
-      />
-
-      {/* Modal tìm kiếm nhanh toàn diện (Spotlight / Ctrl+K) */}
-      <QuickSearchModal
-        open={isSearchOpen}
-        onClose={() => setIsSearchOpen(false)}
-        onSelectMemory={(index) => {
-          window.dispatchEvent(new CustomEvent("bllsv_open_memory_lightbox", { detail: { index } }));
-          const el = document.getElementById("memories");
-          el?.scrollIntoView({ behavior: "smooth" });
-        }}
-      />
     </div>
   );
 }

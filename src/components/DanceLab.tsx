@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { DANCES, TRADITIONAL_SONGS } from "@/data/content";
 import { Button, Icon } from "@/components/ui";
-import DanceVaultModal from "@/components/DanceVaultModal";
+
+const DanceVaultModal = lazy(() => import("@/components/DanceVaultModal"));
 
 interface DanceLabProps {
   onToast: (msg: string) => void;
@@ -202,12 +203,16 @@ export default function DanceLab({ onToast }: DanceLabProps) {
       </div>
 
       {/* ===== LANDING PAGE NỔI (MODAL TOÀN MÀN HÌNH CHỨA TẤT CẢ TIẾT MỤC) ===== */}
-      <DanceVaultModal
-        open={vaultOpen}
-        onClose={() => setVaultOpen(false)}
-        initialId={selectedInitialId}
-        onToast={onToast}
-      />
+      {vaultOpen && (
+        <Suspense fallback={null}>
+          <DanceVaultModal
+            open={vaultOpen}
+            onClose={() => setVaultOpen(false)}
+            initialId={selectedInitialId}
+            onToast={onToast}
+          />
+        </Suspense>
+      )}
     </section>
   );
 }
