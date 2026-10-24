@@ -215,6 +215,12 @@ export function Toast({ message }: { message: string | null }) {
  *  Icon set nhỏ (SVG stroke) – không cần thêm dependency
  * ------------------------------------------------------------------ */
 export const Icon = {
+  search: (p: { className?: string }) => (
+    <svg viewBox="0 0 24 24" className={p.className} fill="none" stroke="currentColor" strokeWidth={1.9} strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="11" cy="11" r="7" />
+      <path d="m21 21-4.35-4.35" />
+    </svg>
+  ),
   home: (p: { className?: string }) => (
     <svg viewBox="0 0 24 24" className={p.className} fill="none" stroke="currentColor" strokeWidth={1.9} strokeLinecap="round" strokeLinejoin="round">
       <path d="M3 10.5 12 3l9 7.5" />

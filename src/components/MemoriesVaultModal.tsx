@@ -53,7 +53,7 @@ const TONES: Record<
 
 
 
-const CONFESSION_SEARCH_TAGS = [
+export const CONFESSION_SEARCH_TAGS = [
   "Âm Vang Xứ Thanh",
   "Mùa Hè Xanh",
   "Đông Ấm",
