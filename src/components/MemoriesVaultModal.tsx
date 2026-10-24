@@ -53,6 +53,20 @@ const TONES: Record<
 
 
 
+const CONFESSION_SEARCH_TAGS = [
+  "Âm Vang Xứ Thanh",
+  "Mùa Hè Xanh",
+  "Đông Ấm",
+  "K60",
+  "K59",
+  "K58",
+  "K56",
+  "K44",
+  "Slogan 36",
+  "Loan",
+  "Thương Mại",
+];
+
 const MEMORY_CATEGORIES = [
   { id: "all", label: "Tất cả khoảnh khắc" },
   { id: "mua-he-xanh", label: "🌻 Mùa Hè Xanh" },
@@ -627,85 +641,150 @@ export default function MemoriesVaultModal({
                 )}
               </div>
 
-              {/* BỘ LỌC TONE MÀU & THANH TÌM KIẾM */}
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-cobalt-100 pb-3">
-                {/* Tone filter tabs */}
-                <div className="scrollbar-none -mx-2 flex snap-x gap-1.5 overflow-x-auto px-2 pb-1 sm:mx-0 sm:px-0">
-                  <button
-                    type="button"
-                    onClick={() => setConfessionToneFilter("all")}
-                    className={cn(
-                      "shrink-0 snap-start rounded-xl px-3 py-1.5 text-xs font-bold transition",
-                      confessionToneFilter === "all"
-                        ? "bg-cobalt-900 text-white shadow-2xs"
-                        : "bg-cobalt-50 text-cobalt-700 hover:bg-cobalt-100"
+              {/* CHẾ ĐỘ TÌM KIẾM & BỘ LỌC TONE MÀU NÂNG CAO */}
+              <div className="space-y-2.5 border-b border-cobalt-100 pb-3">
+                {/* Hàng tìm kiếm và lọc tone */}
+                <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
+                  {/* Ô tìm kiếm Confession trực quan */}
+                  <div className="relative flex-1">
+                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-cobalt-400">
+                      <Icon.search className="h-4 w-4" />
+                    </div>
+                    <input
+                      type="text"
+                      value={confessionSearch}
+                      onChange={(e) => setConfessionSearch(e.target.value)}
+                      placeholder="Tìm kiếm lời nhắn, tác giả, khóa K (VD: K60, Đông Ấm, Nhớ nhà...)..."
+                      className="w-full rounded-xl border border-cobalt-200 bg-white py-2 pl-9 pr-8 text-xs text-cobalt-950 outline-none transition placeholder:text-cobalt-400 focus:border-flame-400 focus:ring-2 focus:ring-flame-100 shadow-2xs"
+                    />
+                    {confessionSearch && (
+                      <button
+                        type="button"
+                        onClick={() => setConfessionSearch("")}
+                        className="absolute inset-y-0 right-0 flex items-center pr-2.5 text-cobalt-400 hover:text-cobalt-700"
+                        title="Xóa tìm kiếm"
+                      >
+                        <span className="flex h-4 w-4 items-center justify-center rounded-full bg-cobalt-100 text-[10px] font-bold">
+                          ✕
+                        </span>
+                      </button>
                     )}
-                  >
-                    Tất cả ({toneCounts.all})
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setConfessionToneFilter("paper")}
-                    className={cn(
-                      "shrink-0 snap-start rounded-xl px-3 py-1.5 text-xs font-bold transition border",
-                      confessionToneFilter === "paper"
-                        ? "bg-amber-400 text-amber-950 border-amber-500 shadow-2xs"
-                        : "bg-amber-50/80 text-amber-900 border-amber-200/80 hover:bg-amber-100"
-                    )}
-                  >
-                    📜 Vintage ({toneCounts.paper})
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setConfessionToneFilter("orange")}
-                    className={cn(
-                      "shrink-0 snap-start rounded-xl px-3 py-1.5 text-xs font-bold transition border",
-                      confessionToneFilter === "orange"
-                        ? "bg-flame-500 text-white border-flame-600 shadow-2xs"
-                        : "bg-orange-50/80 text-orange-900 border-orange-200/80 hover:bg-orange-100"
-                    )}
-                  >
-                    🔥 Nhiệt huyết ({toneCounts.orange})
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setConfessionToneFilter("blue")}
-                    className={cn(
-                      "shrink-0 snap-start rounded-xl px-3 py-1.5 text-xs font-bold transition border",
-                      confessionToneFilter === "blue"
-                        ? "bg-tmu-600 text-white border-tmu-700 shadow-2xs"
-                        : "bg-sky-50/80 text-sky-900 border-sky-200/80 hover:bg-sky-100"
-                    )}
-                  >
-                    💙 Hy vọng ({toneCounts.blue})
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setConfessionToneFilter("mint")}
-                    className={cn(
-                      "shrink-0 snap-start rounded-xl px-3 py-1.5 text-xs font-bold transition border",
-                      confessionToneFilter === "mint"
-                        ? "bg-emerald-600 text-white border-emerald-700 shadow-2xs"
-                        : "bg-emerald-50/80 text-emerald-900 border-emerald-200/80 hover:bg-emerald-100"
-                    )}
-                  >
-                    🍃 Thanh xuân ({toneCounts.mint})
-                  </button>
+                  </div>
+
+                  {/* Tone filter tabs */}
+                  <div className="scrollbar-none -mx-1 flex snap-x gap-1 overflow-x-auto px-1 pb-0.5 sm:mx-0 sm:px-0">
+                    <button
+                      type="button"
+                      onClick={() => setConfessionToneFilter("all")}
+                      className={cn(
+                        "shrink-0 snap-start rounded-lg px-2.5 py-1.5 text-[11px] sm:text-xs font-bold transition",
+                        confessionToneFilter === "all"
+                          ? "bg-cobalt-900 text-white shadow-2xs"
+                          : "bg-cobalt-50 text-cobalt-700 hover:bg-cobalt-100"
+                      )}
+                    >
+                      Tất cả ({toneCounts.all})
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setConfessionToneFilter("paper")}
+                      className={cn(
+                        "shrink-0 snap-start rounded-lg px-2.5 py-1.5 text-[11px] sm:text-xs font-bold transition border",
+                        confessionToneFilter === "paper"
+                          ? "bg-amber-400 text-amber-950 border-amber-500 shadow-2xs"
+                          : "bg-amber-50/80 text-amber-900 border-amber-200/80 hover:bg-amber-100"
+                      )}
+                    >
+                      📜 Vintage ({toneCounts.paper})
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setConfessionToneFilter("orange")}
+                      className={cn(
+                        "shrink-0 snap-start rounded-lg px-2.5 py-1.5 text-[11px] sm:text-xs font-bold transition border",
+                        confessionToneFilter === "orange"
+                          ? "bg-flame-500 text-white border-flame-600 shadow-2xs"
+                          : "bg-orange-50/80 text-orange-900 border-orange-200/80 hover:bg-orange-100"
+                      )}
+                    >
+                      🔥 Lửa ({toneCounts.orange})
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setConfessionToneFilter("blue")}
+                      className={cn(
+                        "shrink-0 snap-start rounded-lg px-2.5 py-1.5 text-[11px] sm:text-xs font-bold transition border",
+                        confessionToneFilter === "blue"
+                          ? "bg-tmu-600 text-white border-tmu-700 shadow-2xs"
+                          : "bg-sky-50/80 text-sky-900 border-sky-200/80 hover:bg-sky-100"
+                      )}
+                    >
+                      💙 Lam ({toneCounts.blue})
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setConfessionToneFilter("mint")}
+                      className={cn(
+                        "shrink-0 snap-start rounded-lg px-2.5 py-1.5 text-[11px] sm:text-xs font-bold transition border",
+                        confessionToneFilter === "mint"
+                          ? "bg-emerald-600 text-white border-emerald-700 shadow-2xs"
+                          : "bg-emerald-50/80 text-emerald-900 border-emerald-200/80 hover:bg-emerald-100"
+                      )}
+                    >
+                      🍃 Xanh ({toneCounts.mint})
+                    </button>
+                  </div>
                 </div>
 
-                {/* Ô tìm kiếm */}
-                <div className="w-full sm:w-64">
-                  <input
-                    type="text"
-                    value={confessionSearch}
-                    onChange={(e) => setConfessionSearch(e.target.value)}
-                    placeholder="🔍 Tìm lời nhắn, tác giả..."
-                    className="w-full rounded-xl border border-cobalt-200 bg-white px-3.5 py-1.5 text-xs text-cobalt-950 outline-none placeholder:text-cobalt-400 focus:border-flame-400 focus:ring-2 focus:ring-flame-100"
-                  />
+                {/* Gợi ý từ khóa tìm kiếm nhanh (Search Suggestion Chips) */}
+                <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none py-0.5 text-[11px]">
+                  <span className="shrink-0 text-cobalt-500 font-medium flex items-center gap-1 text-[10.5px]">
+                    <span className="text-flame-500">✨</span> Gợi ý:
+                  </span>
+                  {CONFESSION_SEARCH_TAGS.map((tag) => {
+                    const isSelected = confessionSearch.toLowerCase() === tag.toLowerCase();
+                    return (
+                      <button
+                        key={tag}
+                        type="button"
+                        onClick={() => setConfessionSearch(isSelected ? "" : tag)}
+                        className={cn(
+                          "shrink-0 rounded-full px-2.5 py-0.5 font-medium transition border",
+                          isSelected
+                            ? "bg-flame-500 text-white border-flame-600 font-bold shadow-2xs"
+                            : "bg-cobalt-50/80 text-cobalt-700 border-cobalt-200/70 hover:bg-cobalt-100 hover:border-cobalt-300"
+                        )}
+                      >
+                        #{tag}
+                      </button>
+                    );
+                  })}
                 </div>
+
+                {/* Thanh trạng thái kết quả tìm kiếm khi có filter */}
+                {(confessionSearch || confessionToneFilter !== "all") && (
+                  <div className="flex items-center justify-between rounded-xl bg-cobalt-50/80 px-3 py-1.5 text-[11px] text-cobalt-700">
+                    <span>
+                      🔎 Tìm thấy <strong className="text-cobalt-950 font-bold">{filteredNotes.length}</strong> / {notes.length} mẩu giấy
+                      {confessionSearch && (
+                        <span> với từ khóa "<strong className="text-flame-600">{confessionSearch}</strong>"</span>
+                      )}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setConfessionSearch("");
+                        setConfessionToneFilter("all");
+                      }}
+                      className="font-bold text-flame-600 hover:underline ml-2 shrink-0"
+                    >
+                      Xóa bộ lọc ✕
+                    </button>
+                  </div>
+                )}
               </div>
 
-              {/* TƯỜNG LỜI NHẮN MASONRY WALL CĂN CHỈNH ĐẲNG CẤP */}
+              {/* TƯỜNG LỜI NHẮN: CHIA Ô CÂN ĐỐI 2 CỘT TRÊN MOBILE 9:16, 3-4 CỘT TRÊN MÀN HÌNH LỚN */}
               {filteredNotes.length === 0 ? (
                 <div className="rounded-2xl border border-dashed border-cobalt-200 p-8 text-center text-xs text-cobalt-500 space-y-2">
                   <p className="text-sm font-semibold text-cobalt-700">Không tìm thấy mẩu giấy nào phù hợp.</p>
@@ -722,14 +801,14 @@ export default function MemoriesVaultModal({
                   </button>
                 </div>
               ) : (
-                <div className="columns-1 sm:columns-2 lg:columns-3 gap-4.5 [column-fill:_balance]">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3.5">
                   {filteredNotes.map((c) => {
                     const style = TONES[c.tone] || TONES.paper;
                     return (
                       <article
                         key={c.id}
                         className={cn(
-                          "break-inside-avoid mb-4.5 group relative flex flex-col justify-between rounded-2xl border p-4.5 shadow-xs transition-all duration-200 hover:-translate-y-1 hover:shadow-soft",
+                          "group relative flex flex-col justify-between rounded-xl sm:rounded-2xl border p-2.5 sm:p-4 shadow-2xs transition-all duration-200 hover:-translate-y-0.5 hover:shadow-soft",
                           style.card,
                           style.border
                         )}
@@ -737,59 +816,62 @@ export default function MemoriesVaultModal({
                         {/* Washi tape mờ trang trí phía trên */}
                         <div
                           className={cn(
-                            "absolute -top-1.5 left-1/2 -translate-x-1/2 h-3.5 w-16 rounded-xs border backdrop-blur-xs shadow-2xs pointer-events-none",
+                            "absolute -top-1 sm:-top-1.5 left-1/2 -translate-x-1/2 h-2.5 sm:h-3.5 w-10 sm:w-16 rounded-xs border backdrop-blur-xs shadow-2xs pointer-events-none",
                             style.tape
                           )}
                         />
 
                         {/* Top bar của mẩu giấy */}
-                        <div className="flex items-center justify-between pb-2 mb-1 border-b border-black/5">
+                        <div className="flex items-center justify-between pb-1.5 mb-1 border-b border-black/5">
                           <span
                             className={cn(
-                              "inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-bold border",
+                              "inline-flex items-center gap-1 rounded-md px-1 sm:px-1.5 py-0.5 text-[9px] sm:text-[10px] font-bold border",
                               style.badge
                             )}
                           >
-                            <span>📌</span> Kỷ niệm 36
+                            <span>📌</span>
+                            <span className="hidden sm:inline">Kỷ niệm</span> 36
                           </span>
-                          <span className="text-[10px] text-cobalt-500/70 font-mono font-medium">#NC36</span>
+                          <span className="text-[8.5px] sm:text-[10px] text-cobalt-500/70 font-mono font-medium">#NC36</span>
                         </div>
 
                         {/* Nội dung lời nhắn với dấu ngoặc kép */}
-                        <div className="relative py-1">
+                        <div className="relative py-0.5 sm:py-1 flex-1">
                           <span
                             className={cn(
-                              "font-display text-2xl leading-none select-none block -mb-2",
+                              "font-display text-lg sm:text-2xl leading-none select-none block -mb-1 sm:-mb-2",
                               style.quoteColor
                             )}
                           >
                             “
                           </span>
-                          <p className="text-xs sm:text-[13.5px] leading-relaxed font-medium text-cobalt-950 whitespace-pre-line">
+                          <p className="text-[11px] sm:text-[13px] leading-snug sm:leading-relaxed font-medium text-cobalt-950 whitespace-pre-line break-words">
                             {c.text}
                           </p>
                         </div>
 
-                        {/* Footer mẩu giấy */}
-                        <footer className="flex items-center justify-between border-t border-black/5 pt-3 mt-3">
-                          <div className="flex items-center gap-2.5 min-w-0">
+                        {/* Footer mẩu giấy thu nhỏ tinh gọn cho 2 cột mobile 9:16 */}
+                        <footer className="flex items-center justify-between border-t border-black/5 pt-2 mt-2">
+                          <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
                             <span
                               className={cn(
-                                "flex h-8 w-8 shrink-0 items-center justify-center rounded-full font-display text-xs font-black shadow-xs border border-white/40",
+                                "flex h-5 w-5 sm:h-7 sm:w-7 shrink-0 items-center justify-center rounded-full font-display text-[9px] sm:text-xs font-black shadow-xs border border-white/40",
                                 style.initialBg
                               )}
                             >
                               {c.author.trim().slice(0, 1).toUpperCase() || "3"}
                             </span>
                             <div className="min-w-0">
-                              <p className="truncate text-xs font-bold text-cobalt-950">{c.author}</p>
-                              <p className="truncate text-[10.5px] font-medium text-cobalt-600/80">
-                                {c.role || "Thành viên Nhà Chung 36"}
+                              <p className="truncate text-[10px] sm:text-xs font-bold text-cobalt-950 max-w-[75px] sm:max-w-none">
+                                {c.author}
+                              </p>
+                              <p className="truncate text-[8.5px] sm:text-[10px] font-medium text-cobalt-600/80 max-w-[75px] sm:max-w-none">
+                                {c.role || "TNV 36"}
                               </p>
                             </div>
                           </div>
-                          <span className="text-[10.5px] font-bold text-flame-600 shrink-0 ml-1">
-                            💙 36 TMU
+                          <span className="text-[8.5px] sm:text-[10px] font-bold text-flame-600 shrink-0 ml-0.5">
+                            💙 36
                           </span>
                         </footer>
                       </article>
