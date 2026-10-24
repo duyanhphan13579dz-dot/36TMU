@@ -1,36 +1,57 @@
 import { useEffect, useMemo, useState } from "react";
 import { CONFESSIONS, MEMORIES, type Confession } from "@/data/content";
 import { Button, Icon, useEscape, useLockScroll } from "@/components/ui";
-import { getAllLeaders } from "@/data/adminStore";
+import { getAllLeaders, getStoredConfessions, saveStoredConfessions } from "@/data/adminStore";
 import { cn } from "@/utils/cn";
 import { LightboxModal } from "@/components/LightboxModal";
 import { ShimmerImage } from "@/components/ui/ShimmerImage";
 
-const TONES: Record<Confession["tone"], string> = {
-  blue: "bg-tmu-100 border-tmu-200 text-cobalt-900",
-  orange: "bg-flame-100 border-flame-200 text-cobalt-900",
-  paper: "bg-amber-50 border-amber-200 text-cobalt-900",
-  mint: "bg-emerald-50 border-emerald-200 text-cobalt-900",
+const TONES: Record<
+  Confession["tone"],
+  {
+    card: string;
+    border: string;
+    badge: string;
+    tape: string;
+    initialBg: string;
+    quoteColor: string;
+  }
+> = {
+  paper: {
+    card: "bg-[#fffdf5] text-amber-950",
+    border: "border-amber-200/90 hover:border-amber-400",
+    badge: "bg-amber-100 text-amber-800 border-amber-300/80",
+    tape: "bg-amber-200/60 border-amber-300/40",
+    initialBg: "bg-amber-500 text-white",
+    quoteColor: "text-amber-400/50",
+  },
+  orange: {
+    card: "bg-[#fffaf5] text-orange-950",
+    border: "border-orange-200/90 hover:border-orange-400",
+    badge: "bg-orange-100 text-orange-800 border-orange-300/80",
+    tape: "bg-orange-200/60 border-orange-300/40",
+    initialBg: "bg-flame-500 text-white",
+    quoteColor: "text-orange-400/50",
+  },
+  blue: {
+    card: "bg-[#f5faff] text-sky-950",
+    border: "border-sky-200/90 hover:border-sky-400",
+    badge: "bg-sky-100 text-sky-800 border-sky-300/80",
+    tape: "bg-sky-200/60 border-sky-300/40",
+    initialBg: "bg-tmu-600 text-white",
+    quoteColor: "text-sky-400/50",
+  },
+  mint: {
+    card: "bg-[#f5fbf7] text-emerald-950",
+    border: "border-emerald-200/90 hover:border-emerald-400",
+    badge: "bg-emerald-100 text-emerald-800 border-emerald-300/80",
+    tape: "bg-emerald-200/60 border-emerald-300/40",
+    initialBg: "bg-emerald-600 text-white",
+    quoteColor: "text-emerald-400/50",
+  },
 };
 
-const CONFESSIONS_STORAGE_KEY = "bllsv_confessions";
 
-function getStoredConfessions(): Confession[] {
-  try {
-    const raw = localStorage.getItem(CONFESSIONS_STORAGE_KEY);
-    if (!raw) return CONFESSIONS;
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) && parsed.length > 0 ? parsed : CONFESSIONS;
-  } catch {
-    return CONFESSIONS;
-  }
-}
-
-function saveStoredConfessions(notes: Confession[]) {
-  try {
-    localStorage.setItem(CONFESSIONS_STORAGE_KEY, JSON.stringify(notes));
-  } catch {}
-}
 
 const MEMORY_CATEGORIES = [
   { id: "all", label: "Tất cả khoảnh khắc" },
@@ -72,8 +93,11 @@ export default function MemoriesVaultModal({
   // Tab 3: Confessions state
   const [notes, setNotes] = useState<Confession[]>(() => getStoredConfessions());
   const [confessionSearch, setConfessionSearch] = useState("");
+  const [confessionToneFilter, setConfessionToneFilter] = useState<"all" | Confession["tone"]>("all");
+  const [isFormOpen, setIsFormOpen] = useState(false);
   const [draft, setDraft] = useState("");
   const [author, setAuthor] = useState("");
+  const [roleInput, setRoleInput] = useState("");
   const [selectedTone, setSelectedTone] = useState<Confession["tone"]>("paper");
 
   useLockScroll(open);
@@ -94,9 +118,12 @@ export default function MemoriesVaultModal({
     }
   }, [open, initialTab, initialMemoryIndex, initialLeaderSearch]);
 
-  // Đồng bộ BCH khi có cập nhật
+  // Đồng bộ BCH và Confessions khi có cập nhật
   useEffect(() => {
-    const handleUpdate = () => setLeadersDataVersion((v) => v + 1);
+    const handleUpdate = () => {
+      setLeadersDataVersion((v) => v + 1);
+      setNotes(getStoredConfessions());
+    };
     window.addEventListener("bllsv_data_updated", handleUpdate);
     return () => window.removeEventListener("bllsv_data_updated", handleUpdate);
   }, []);
@@ -138,31 +165,49 @@ export default function MemoriesVaultModal({
     });
   }, [memoryFilter, memorySearch]);
 
+  const toneCounts = useMemo(() => {
+    return {
+      all: notes.length,
+      paper: notes.filter((n) => n.tone === "paper").length,
+      orange: notes.filter((n) => n.tone === "orange").length,
+      blue: notes.filter((n) => n.tone === "blue").length,
+      mint: notes.filter((n) => n.tone === "mint").length,
+    };
+  }, [notes]);
+
   const filteredNotes = useMemo(() => {
     const q = confessionSearch.trim().toLowerCase();
-    if (!q) return notes;
-    return notes.filter((n) => n.text.toLowerCase().includes(q) || n.author.toLowerCase().includes(q));
-  }, [notes, confessionSearch]);
+    return notes.filter((n) => {
+      const matchTone = confessionToneFilter === "all" || n.tone === confessionToneFilter;
+      const matchSearch =
+        !q ||
+        n.text.toLowerCase().includes(q) ||
+        n.author.toLowerCase().includes(q) ||
+        (n.role && n.role.toLowerCase().includes(q));
+      return matchTone && matchSearch;
+    });
+  }, [notes, confessionSearch, confessionToneFilter]);
 
   const addNote = () => {
     if (draft.trim().length < 5) {
       onToast("Bạn viết thêm chút nữa để mọi người đọc nhé 🙂");
       return;
     }
-    const rotates = ["-1.5deg", "1.2deg", "-1deg", "1.8deg"];
     const newNote: Confession = {
       id: `me-${Date.now()}`,
       text: draft.trim(),
-      author: author.trim() || "Bạn ẩn danh",
-      role: "Thành viên BLLSV",
+      author: author.trim() || "Bạn ẩn danh (Sinh viên 36)",
+      role: roleInput.trim() || "Thành viên Nhà Chung 36",
       tone: selectedTone,
-      rotate: rotates[Math.floor(Math.random() * rotates.length)],
+      rotate: "0deg",
     };
     const next = [newNote, ...notes];
     setNotes(next);
     saveStoredConfessions(next);
     setDraft("");
     setAuthor("");
+    setRoleInput("");
+    setIsFormOpen(false);
     onToast("Lời nhắn của bạn đã được dán lên tường nhà chung 💙");
   };
 
@@ -476,125 +521,282 @@ export default function MemoriesVaultModal({
           {/* ================= TAB 3: HÒM THƯ CONFESSIONS ================= */}
           {activeTab === "confessions" && (
             <div className="space-y-6">
-              {/* Form dán giấy mới */}
-              <div className="rounded-3xl border border-cobalt-100 bg-white p-5 sm:p-7 shadow-sm">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-cobalt-100 pb-4">
+              {/* THANH HEADER TIÊU ĐỀ & NÚT GỬI LỜI NHẮN */}
+              <div className="rounded-3xl border border-cobalt-100 bg-gradient-to-br from-white via-cobalt-50/30 to-amber-50/20 p-5 sm:p-7 shadow-xs">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                   <div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xl">💌</span>
-                      <h3 className="font-display text-lg sm:text-xl font-black text-cobalt-950">
-                        Dán Một Mẩu Giấy Gửi Tới Nhà Chung 36
+                    <div className="flex items-center gap-2.5">
+                      <span className="flex h-9 w-9 items-center justify-center rounded-2xl bg-flame-100 text-lg shadow-2xs border border-flame-200">
+                        💌
+                      </span>
+                      <h3 className="font-display text-lg sm:text-2xl font-black text-cobalt-950">
+                        Hòm Thư Confession &amp; Kỷ Niệm 36
                       </h3>
                     </div>
-                    <p className="mt-1 text-xs sm:text-[13px] text-cobalt-600">
-                      Chia sẻ kỷ niệm, lời nhắn gửi tân sinh viên hoặc cảm xúc của bạn với quê hương Thanh Hóa.
+                    <p className="mt-1.5 text-xs sm:text-sm text-cobalt-600 max-w-2xl leading-relaxed">
+                      Mỗi mẩu giấy là một ký ức thanh xuân, lời nhắn gửi tân sinh viên hay tâm sự chân thành của các thế hệ người con xứ Thanh tại TMU.
                     </p>
                   </div>
 
-                  {/* Lựa chọn màu giấy */}
-                  <div className="flex items-center gap-1.5 self-start sm:self-auto">
-                    <span className="text-xs font-bold text-cobalt-500 mr-1">Màu giấy:</span>
-                    {[
-                      { id: "paper" as const, bg: "bg-amber-100 border-amber-300", label: "Vàng" },
-                      { id: "orange" as const, bg: "bg-flame-100 border-flame-300", label: "Cam" },
-                      { id: "blue" as const, bg: "bg-tmu-100 border-tmu-300", label: "Xanh" },
-                      { id: "mint" as const, bg: "bg-emerald-100 border-emerald-300", label: "Bạc hà" },
-                    ].map((c) => (
-                      <button
-                        key={c.id}
-                        type="button"
-                        onClick={() => setSelectedTone(c.id)}
-                        aria-label={`Chọn màu giấy ${c.label}`}
-                        className={cn(
-                          "h-6 w-6 rounded-full border-2 transition-transform",
-                          c.bg,
-                          selectedTone === c.id ? "scale-110 ring-2 ring-cobalt-800" : "opacity-80 hover:scale-105"
-                        )}
-                      />
-                    ))}
-                  </div>
-                </div>
-
-                <div className="mt-4 flex flex-col gap-3">
-                  <input
-                    value={author}
-                    onChange={(e) => setAuthor(e.target.value)}
-                    placeholder="Tên của bạn (VD: Minh Trí – K60, Bạn K61 ẩn danh...)"
-                    className="min-h-11 w-full rounded-2xl border border-cobalt-200 bg-white px-3.5 sm:px-4 text-xs sm:text-sm text-cobalt-900 outline-none transition placeholder:text-cobalt-400 focus:border-tmu-400 focus:ring-4 focus:ring-tmu-100"
-                  />
-                  <textarea
-                    value={draft}
-                    onChange={(e) => setDraft(e.target.value)}
-                    rows={3}
-                    placeholder="Lời nhắn nhủ, tâm sự hoặc kỷ niệm của bạn..."
-                    className="w-full resize-none rounded-2xl border border-cobalt-200 bg-white p-3.5 sm:p-4 text-xs sm:text-sm text-cobalt-900 outline-none transition placeholder:text-cobalt-400 focus:border-tmu-400 focus:ring-4 focus:ring-tmu-100"
-                  />
-                  <div className="flex justify-end pt-1">
-                    <Button variant="flame" onClick={addNote} className="w-full sm:w-auto">
-                      Dán lên tường ngay
-                      <Icon.heart className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Tường mẩu giấy note */}
-              <div>
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
-                  <h4 className="font-display text-base font-extrabold text-cobalt-950 flex items-center gap-2">
-                    <span>📌</span> Tường Lời Nhắn ({filteredNotes.length} mẩu giấy)
-                  </h4>
-                  <div className="w-full sm:w-64">
-                    <input
-                      type="text"
-                      value={confessionSearch}
-                      onChange={(e) => setConfessionSearch(e.target.value)}
-                      placeholder="Tìm lời nhắn hoặc tác giả..."
-                      className="w-full rounded-xl border border-cobalt-200 bg-white px-3 py-1.5 text-xs text-cobalt-900 outline-none placeholder:text-cobalt-400 focus:border-tmu-400 focus:ring-2 focus:ring-tmu-100"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  {filteredNotes.map((c) => (
-                    <article
-                      key={c.id}
-                      style={{ rotate: c.rotate }}
-                      className={cn(
-                        "group relative flex flex-col justify-between gap-3.5 rounded-3xl border-2 p-5 shadow-soft transition-all duration-300 hover:rotate-0 hover:shadow-lift",
-                        TONES[c.tone],
-                      )}
+                  <div className="flex shrink-0 items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setIsFormOpen((prev) => !prev)}
+                      className="inline-flex items-center gap-2 rounded-2xl bg-flame-500 px-4 py-2.5 text-xs sm:text-sm font-bold text-white shadow-soft hover:bg-flame-600 transition hover:scale-[1.02] active:scale-[0.98]"
                     >
-                      <div className="flex items-center justify-between">
-                        <span className="flex items-center gap-1 text-[11px] font-bold text-cobalt-700">
-                          <span>📌</span> Lời nhắn
+                      <span>{isFormOpen ? "✕ Thu gọn form" : "✍️ Viết lời nhắn mới"}</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* FORM GỬI LỜI NHẮN (COLLAPSIBLE / ANIMATED) */}
+                {isFormOpen && (
+                  <div className="mt-5 rounded-2xl border border-flame-200/90 bg-white p-4 sm:p-5 shadow-soft transition-all duration-300">
+                    <div className="flex items-center justify-between border-b border-cobalt-100 pb-3 mb-4">
+                      <span className="font-display text-xs sm:text-sm font-bold text-cobalt-900 flex items-center gap-1.5">
+                        <span>📝</span> Dán một mẩu giấy gửi tới Nhà Chung
+                      </span>
+                      {/* Chọn màu giấy */}
+                      <div className="flex items-center gap-2">
+                        <span className="text-[11px] font-bold text-cobalt-500">Màu giấy:</span>
+                        {[
+                          { id: "paper" as const, bg: "bg-[#fffdf5] border-amber-300", label: "Vàng ngà" },
+                          { id: "orange" as const, bg: "bg-[#fffaf5] border-orange-300", label: "Cam lửa" },
+                          { id: "blue" as const, bg: "bg-[#f5faff] border-sky-300", label: "Xanh hy vọng" },
+                          { id: "mint" as const, bg: "bg-[#f5fbf7] border-emerald-300", label: "Bạc hà" },
+                        ].map((c) => (
+                          <button
+                            key={c.id}
+                            type="button"
+                            onClick={() => setSelectedTone(c.id)}
+                            aria-label={`Chọn màu giấy ${c.label}`}
+                            className={cn(
+                              "h-6 w-6 rounded-full border-2 transition-transform shadow-2xs",
+                              c.bg,
+                              selectedTone === c.id ? "scale-115 ring-2 ring-cobalt-800" : "opacity-80 hover:scale-105"
+                            )}
+                          />
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <div className="grid gap-3 sm:grid-cols-2">
+                        <input
+                          value={author}
+                          onChange={(e) => setAuthor(e.target.value)}
+                          placeholder="Tên hoặc biệt danh (VD: Minh Trí – K60, Bạn K61 ẩn danh...)"
+                          className="min-h-10 w-full rounded-xl border border-cobalt-200 bg-white px-3.5 text-xs text-cobalt-900 outline-none transition placeholder:text-cobalt-400 focus:border-flame-400 focus:ring-2 focus:ring-flame-100 font-semibold"
+                        />
+                        <input
+                          value={roleInput}
+                          onChange={(e) => setRoleInput(e.target.value)}
+                          placeholder="Khóa / Chức danh (VD: Ban Truyền thông K61, TNV Mùa Hè Xanh...)"
+                          className="min-h-10 w-full rounded-xl border border-cobalt-200 bg-white px-3.5 text-xs text-cobalt-900 outline-none transition placeholder:text-cobalt-400 focus:border-flame-400 focus:ring-2 focus:ring-flame-100"
+                        />
+                      </div>
+
+                      <textarea
+                        value={draft}
+                        onChange={(e) => setDraft(e.target.value)}
+                        rows={3}
+                        placeholder="Hãy chia sẻ kỷ niệm, lời nhắn gửi hay những điều muốn nói cùng đồng đội nhà chung 36..."
+                        className="w-full resize-none rounded-xl border border-cobalt-200 bg-white p-3.5 text-xs sm:text-sm text-cobalt-900 outline-none transition placeholder:text-cobalt-400 focus:border-flame-400 focus:ring-2 focus:ring-flame-100"
+                      />
+
+                      <div className="flex items-center justify-between pt-1">
+                        <span className="text-[11px] text-cobalt-500">
+                          💡 Mẩu giấy sẽ hiển thị công khai trên bức tường kỷ niệm nhà chung.
                         </span>
-                        <span className="h-2 w-10 rounded-full bg-black/5" />
-                      </div>
-
-                      <div className="relative">
-                        <span className="font-display text-2xl leading-none text-flame-500/40">“</span>
-                        <p className="-mt-1 text-xs sm:text-[13.5px] leading-relaxed font-medium text-cobalt-950">
-                          {c.text}
-                        </p>
-                      </div>
-
-                      <footer className="flex items-center justify-between border-t border-black/10 pt-3">
-                        <div className="flex items-center gap-2 min-w-0">
-                          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/90 font-display text-xs font-black text-cobalt-900 shadow-xs border border-black/5">
-                            {c.author.slice(0, 1)}
-                          </span>
-                          <div className="min-w-0">
-                            <p className="truncate text-xs font-bold text-cobalt-950">{c.author}</p>
-                            <p className="truncate text-[10.5px] font-semibold text-cobalt-600/80">{c.role}</p>
-                          </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setIsFormOpen(false)}
+                            className="rounded-xl border border-cobalt-200 px-3 py-1.5 text-xs font-bold text-cobalt-600 hover:bg-cobalt-50"
+                          >
+                            Đóng
+                          </button>
+                          <Button variant="flame" onClick={addNote} className="h-9 px-4 text-xs font-bold">
+                            Dán lên tường ngay
+                            <Icon.heart className="h-3.5 w-3.5" />
+                          </Button>
                         </div>
-                        <span className="text-[11px] font-bold text-flame-600 shrink-0">💙 36 TMU</span>
-                      </footer>
-                    </article>
-                  ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* BỘ LỌC TONE MÀU & THANH TÌM KIẾM */}
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-cobalt-100 pb-3">
+                {/* Tone filter tabs */}
+                <div className="scrollbar-none -mx-2 flex snap-x gap-1.5 overflow-x-auto px-2 pb-1 sm:mx-0 sm:px-0">
+                  <button
+                    type="button"
+                    onClick={() => setConfessionToneFilter("all")}
+                    className={cn(
+                      "shrink-0 snap-start rounded-xl px-3 py-1.5 text-xs font-bold transition",
+                      confessionToneFilter === "all"
+                        ? "bg-cobalt-900 text-white shadow-2xs"
+                        : "bg-cobalt-50 text-cobalt-700 hover:bg-cobalt-100"
+                    )}
+                  >
+                    Tất cả ({toneCounts.all})
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setConfessionToneFilter("paper")}
+                    className={cn(
+                      "shrink-0 snap-start rounded-xl px-3 py-1.5 text-xs font-bold transition border",
+                      confessionToneFilter === "paper"
+                        ? "bg-amber-400 text-amber-950 border-amber-500 shadow-2xs"
+                        : "bg-amber-50/80 text-amber-900 border-amber-200/80 hover:bg-amber-100"
+                    )}
+                  >
+                    📜 Vintage ({toneCounts.paper})
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setConfessionToneFilter("orange")}
+                    className={cn(
+                      "shrink-0 snap-start rounded-xl px-3 py-1.5 text-xs font-bold transition border",
+                      confessionToneFilter === "orange"
+                        ? "bg-flame-500 text-white border-flame-600 shadow-2xs"
+                        : "bg-orange-50/80 text-orange-900 border-orange-200/80 hover:bg-orange-100"
+                    )}
+                  >
+                    🔥 Nhiệt huyết ({toneCounts.orange})
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setConfessionToneFilter("blue")}
+                    className={cn(
+                      "shrink-0 snap-start rounded-xl px-3 py-1.5 text-xs font-bold transition border",
+                      confessionToneFilter === "blue"
+                        ? "bg-tmu-600 text-white border-tmu-700 shadow-2xs"
+                        : "bg-sky-50/80 text-sky-900 border-sky-200/80 hover:bg-sky-100"
+                    )}
+                  >
+                    💙 Hy vọng ({toneCounts.blue})
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setConfessionToneFilter("mint")}
+                    className={cn(
+                      "shrink-0 snap-start rounded-xl px-3 py-1.5 text-xs font-bold transition border",
+                      confessionToneFilter === "mint"
+                        ? "bg-emerald-600 text-white border-emerald-700 shadow-2xs"
+                        : "bg-emerald-50/80 text-emerald-900 border-emerald-200/80 hover:bg-emerald-100"
+                    )}
+                  >
+                    🍃 Thanh xuân ({toneCounts.mint})
+                  </button>
+                </div>
+
+                {/* Ô tìm kiếm */}
+                <div className="w-full sm:w-64">
+                  <input
+                    type="text"
+                    value={confessionSearch}
+                    onChange={(e) => setConfessionSearch(e.target.value)}
+                    placeholder="🔍 Tìm lời nhắn, tác giả..."
+                    className="w-full rounded-xl border border-cobalt-200 bg-white px-3.5 py-1.5 text-xs text-cobalt-950 outline-none placeholder:text-cobalt-400 focus:border-flame-400 focus:ring-2 focus:ring-flame-100"
+                  />
                 </div>
               </div>
+
+              {/* TƯỜNG LỜI NHẮN MASONRY WALL CĂN CHỈNH ĐẲNG CẤP */}
+              {filteredNotes.length === 0 ? (
+                <div className="rounded-2xl border border-dashed border-cobalt-200 p-8 text-center text-xs text-cobalt-500 space-y-2">
+                  <p className="text-sm font-semibold text-cobalt-700">Không tìm thấy mẩu giấy nào phù hợp.</p>
+                  <p>Hãy thử tìm kiếm với từ khóa khác hoặc nhấn "Viết lời nhắn mới" để gửi lời nhắn đầu tiên!</p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setConfessionSearch("");
+                      setConfessionToneFilter("all");
+                    }}
+                    className="inline-flex rounded-xl bg-cobalt-100 px-3 py-1.5 text-xs font-bold text-cobalt-800 hover:bg-cobalt-200 transition"
+                  >
+                    Đặt lại bộ lọc
+                  </button>
+                </div>
+              ) : (
+                <div className="columns-1 sm:columns-2 lg:columns-3 gap-4.5 [column-fill:_balance]">
+                  {filteredNotes.map((c) => {
+                    const style = TONES[c.tone] || TONES.paper;
+                    return (
+                      <article
+                        key={c.id}
+                        className={cn(
+                          "break-inside-avoid mb-4.5 group relative flex flex-col justify-between rounded-2xl border p-4.5 shadow-xs transition-all duration-200 hover:-translate-y-1 hover:shadow-soft",
+                          style.card,
+                          style.border
+                        )}
+                      >
+                        {/* Washi tape mờ trang trí phía trên */}
+                        <div
+                          className={cn(
+                            "absolute -top-1.5 left-1/2 -translate-x-1/2 h-3.5 w-16 rounded-xs border backdrop-blur-xs shadow-2xs pointer-events-none",
+                            style.tape
+                          )}
+                        />
+
+                        {/* Top bar của mẩu giấy */}
+                        <div className="flex items-center justify-between pb-2 mb-1 border-b border-black/5">
+                          <span
+                            className={cn(
+                              "inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-bold border",
+                              style.badge
+                            )}
+                          >
+                            <span>📌</span> Kỷ niệm 36
+                          </span>
+                          <span className="text-[10px] text-cobalt-500/70 font-mono font-medium">#NC36</span>
+                        </div>
+
+                        {/* Nội dung lời nhắn với dấu ngoặc kép */}
+                        <div className="relative py-1">
+                          <span
+                            className={cn(
+                              "font-display text-2xl leading-none select-none block -mb-2",
+                              style.quoteColor
+                            )}
+                          >
+                            “
+                          </span>
+                          <p className="text-xs sm:text-[13.5px] leading-relaxed font-medium text-cobalt-950 whitespace-pre-line">
+                            {c.text}
+                          </p>
+                        </div>
+
+                        {/* Footer mẩu giấy */}
+                        <footer className="flex items-center justify-between border-t border-black/5 pt-3 mt-3">
+                          <div className="flex items-center gap-2.5 min-w-0">
+                            <span
+                              className={cn(
+                                "flex h-8 w-8 shrink-0 items-center justify-center rounded-full font-display text-xs font-black shadow-xs border border-white/40",
+                                style.initialBg
+                              )}
+                            >
+                              {c.author.trim().slice(0, 1).toUpperCase() || "3"}
+                            </span>
+                            <div className="min-w-0">
+                              <p className="truncate text-xs font-bold text-cobalt-950">{c.author}</p>
+                              <p className="truncate text-[10.5px] font-medium text-cobalt-600/80">
+                                {c.role || "Thành viên Nhà Chung 36"}
+                              </p>
+                            </div>
+                          </div>
+                          <span className="text-[10.5px] font-bold text-flame-600 shrink-0 ml-1">
+                            💙 36 TMU
+                          </span>
+                        </footer>
+                      </article>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           )}
         </div>
