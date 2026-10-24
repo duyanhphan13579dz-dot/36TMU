@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { CONFESSIONS, MEMORIES, type Confession } from "@/data/content";
+import { MEMORIES, type Confession } from "@/data/content";
 import { Button, Icon, useEscape, useLockScroll } from "@/components/ui";
 import { getAllLeaders, getStoredConfessions, saveStoredConfessions } from "@/data/adminStore";
 import { cn } from "@/utils/cn";
