@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import { MEMORIES, type Confession } from "@/data/content";
 import { Button, Icon, useEscape, useLockScroll } from "@/components/ui";
 import { getAllLeaders, getStoredConfessions, saveStoredConfessions } from "@/data/adminStore";
@@ -227,14 +228,14 @@ export default function MemoriesVaultModal({
 
   if (!open) return null;
 
-  return (
+  return createPortal(
     <div
-      className="fixed inset-0 z-[200] flex flex-col bg-cobalt-950/80 backdrop-blur-md animate-[fadeIn_.2s_ease-out]"
+      className="fixed inset-0 z-[300] flex flex-col bg-cobalt-950/90 backdrop-blur-md animate-[fadeIn_.2s_ease-out]"
       role="dialog"
       aria-modal="true"
     >
-      {/* Header Modal Kho */}
-      <header className="sticky top-0 z-30 flex shrink-0 items-center justify-between border-b border-white/10 bg-cobalt-950/95 px-4 py-3 sm:px-6">
+      {/* Header Modal Kho: hiển thị nổi bật trên cùng, độc lập, không bị Header web đè */}
+      <header className="sticky top-0 z-40 flex shrink-0 items-center justify-between border-b border-white/10 bg-cobalt-950/98 px-3.5 py-3 sm:px-6 pt-[max(0.75rem,env(safe-area-inset-top))]">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-tmu-500 to-cobalt-700 text-lg shadow-soft text-white">
             🏛️
@@ -801,7 +802,7 @@ export default function MemoriesVaultModal({
                   </button>
                 </div>
               ) : (
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3.5">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3.5 pt-2 sm:pt-3 pb-16 sm:pb-10">
                   {filteredNotes.map((c) => {
                     const style = TONES[c.tone] || TONES.paper;
                     return (
@@ -894,6 +895,7 @@ export default function MemoriesVaultModal({
           onNavigate={(idx) => setLightbox(idx)}
         />
       )}
-    </div>
+    </div>,
+    document.body
   );
 }
