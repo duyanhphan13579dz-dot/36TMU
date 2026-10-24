@@ -30,7 +30,6 @@ import {
   importAllDefaultLeadersToAdmin,
   resetAdminLeadersToDefault,
   getStoredConfessions,
-  saveStoredConfessions,
   addAdminConfession,
   updateStoredConfession,
   deleteStoredConfession,

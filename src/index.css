@@ -96,8 +96,6 @@
     scroll-behavior: smooth;
     scroll-padding-top: 5.5rem;
     -webkit-tap-highlight-color: transparent;
-    -webkit-text-size-adjust: 100%;
-    text-size-adjust: 100%;
   }
 
   body {
