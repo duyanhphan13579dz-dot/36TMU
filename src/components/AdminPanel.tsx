@@ -27,6 +27,13 @@ import {
   importAllAdminData,
   resetAllAdminDataToDefaults,
   importDefaultProgramsToAdmin,
+  importAllDefaultLeadersToAdmin,
+  resetAdminLeadersToDefault,
+  getStoredConfessions,
+  saveStoredConfessions,
+  addAdminConfession,
+  updateStoredConfession,
+  deleteStoredConfession,
   DEFAULT_MOTTO,
   DEFAULT_RULES,
   DEFAULT_CONTACT,
@@ -42,6 +49,7 @@ import {
   type FundCampaign,
   type FundDonation,
 } from "@/data/adminStore";
+import { type Confession } from "@/data/content";
 import {
   authenticateAdmin,
   createDbAdmin,
@@ -164,6 +172,7 @@ export default function AdminPanel({
   const [leadDob, setLeadDob] = useState("");
   const [leadHometown, setLeadHometown] = useState("Thanh Hóa");
   const [leadRole, setLeadRole] = useState("Ủy viên BCH BLLSV TMU");
+  const [leadAvatarUrl, setLeadAvatarUrl] = useState("");
 
   // --- 4. MOTTO STATE ---
   const [motto, setMotto] = useState<AdminMotto>(DEFAULT_MOTTO);
@@ -174,8 +183,9 @@ export default function AdminPanel({
   const [editingRuleIndex, setEditingRuleIndex] = useState<number | null>(null);
   const [editingRuleText, setEditingRuleText] = useState("");
 
-  // --- 6. NOTES STATE ---
+  // --- 6. NOTES & CONFESSIONS STATE ---
   const [notes, setNotes] = useState<TnvNote[]>([]);
+  const [confessions, setConfessions] = useState<Confession[]>([]);
 
   // --- 7. CONTACT STATE ---
   const [contactData, setContactData] = useState<AdminContact>(DEFAULT_CONTACT);
@@ -195,6 +205,7 @@ export default function AdminPanel({
     setMotto(getStoredAdminMotto());
     setRulesData(getStoredAdminRules());
     setNotes(getStoredNotes());
+    setConfessions(getStoredConfessions());
     setContactData(getStoredAdminContact());
     setBroadcast(getStoredAdminBroadcast());
     setRecruitment(getStoredRecruitment());
@@ -466,6 +477,26 @@ export default function AdminPanel({
     onPostCreated?.();
   };
 
+  const handleQuickUpdateDrive = (id: string, newDrive: string) => {
+    const next = programs.map((p) =>
+      p.id === id ? { ...p, driveLink: newDrive.trim() || undefined } : p
+    );
+    setPrograms(next);
+    saveStoredAdminPrograms(next);
+    onToast("Đã cập nhật link Google Drive ảnh cho chương trình! 📂");
+    onPostCreated?.();
+  };
+
+  const handleQuickUpdateCover = (id: string, newCover: string) => {
+    const next = programs.map((p) =>
+      p.id === id ? { ...p, cover: newCover.trim() } : p
+    );
+    setPrograms(next);
+    saveStoredAdminPrograms(next);
+    onToast("Đã cập nhật ảnh Teaser mới cho chương trình! 🖼️");
+    onPostCreated?.();
+  };
+
   const handleDeleteProgram = (id: string) => {
     if (editingProgId === id) handleCancelEditProgram();
     const next = programs.filter((p) => p.id !== id);
@@ -484,12 +515,14 @@ export default function AdminPanel({
     setLeadDob(l.dob || "");
     setLeadHometown(l.hometown);
     setLeadRole(l.role);
+    setLeadAvatarUrl(l.avatarUrl || "");
   };
 
   const handleCancelEditLeader = () => {
     setEditingLeadId(null);
     setLeadName("");
     setLeadDob("");
+    setLeadAvatarUrl("");
   };
 
   const handleSaveLeader = (e: React.FormEvent) => {
@@ -507,6 +540,7 @@ export default function AdminPanel({
               dob: leadDob.trim(),
               hometown: leadHometown.trim(),
               role: leadRole.trim(),
+              avatarUrl: leadAvatarUrl.trim() || undefined,
             }
           : l
       );
@@ -523,6 +557,7 @@ export default function AdminPanel({
         dob: leadDob.trim(),
         hometown: leadHometown.trim(),
         role: leadRole.trim(),
+        avatarUrl: leadAvatarUrl.trim() || undefined,
         createdAt: new Date().toLocaleDateString("vi-VN"),
       };
       const next = [newLeader, ...leaders];
@@ -530,8 +565,23 @@ export default function AdminPanel({
       saveStoredAdminLeaders(next);
       setLeadName("");
       setLeadDob("");
+      setLeadAvatarUrl("");
       onToast(`Đã thêm đồng chí ${newLeader.name} vào đội ngũ BCH! 🤝`);
     }
+    onPostCreated?.();
+  };
+
+  const handleImportAllLeaders = () => {
+    const full = importAllDefaultLeadersToAdmin();
+    setLeaders(full);
+    onToast(`Đã nạp toàn bộ 16 khóa BCH (${full.length} anh chị) vào hệ thống quản lý! 🏛️`);
+    onPostCreated?.();
+  };
+
+  const handleResetLeadersToDefault = () => {
+    resetAdminLeadersToDefault();
+    setLeaders(getStoredAdminLeaders());
+    onToast("Đã khôi phục danh sách 16 khóa BCH về mặc định! 🔄");
     onPostCreated?.();
   };
 
@@ -540,7 +590,7 @@ export default function AdminPanel({
     const next = leaders.filter((l) => l.id !== id);
     setLeaders(next);
     saveStoredAdminLeaders(next);
-    onToast("Đã xóa thành viên khỏi danh sách BCH mới 🗑️");
+    onToast("Đã xóa thành viên khỏi danh sách BCH 🗑️");
     onPostCreated?.();
   };
 
@@ -604,7 +654,28 @@ export default function AdminPanel({
     onPostCreated?.();
   };
 
-  // --- NOTES HANDLERS ---
+  // --- NOTES & CONFESSIONS HANDLERS ---
+  const handleAddNote = (newNoteData: Omit<TnvNote, "id" | "createdAt">) => {
+    const newNote: TnvNote = {
+      ...newNoteData,
+      id: "note-" + Date.now(),
+      createdAt: "Vừa xong",
+    };
+    const next = [newNote, ...notes];
+    setNotes(next);
+    saveStoredNotes(next);
+    onToast("Đã dán ghi chú lên bảng nhà chung thành công! 📌");
+    onPostCreated?.();
+  };
+
+  const handleEditNote = (id: string, updated: Partial<TnvNote>) => {
+    const next = notes.map((n) => (n.id === id ? { ...n, ...updated } : n));
+    setNotes(next);
+    saveStoredNotes(next);
+    onToast("Đã cập nhật nội dung ghi chú! ✏️");
+    onPostCreated?.();
+  };
+
   const handleDeleteNote = (id: string) => {
     const next = notes.filter((n) => n.id !== id);
     setNotes(next);
@@ -618,6 +689,27 @@ export default function AdminPanel({
     setNotes(next);
     saveStoredNotes(next);
     onToast("Đã cập nhật trạng thái ghim ghi chú 📌");
+    onPostCreated?.();
+  };
+
+  const handleAddConfession = (c: Omit<Confession, "id" | "rotate">) => {
+    addAdminConfession(c);
+    setConfessions(getStoredConfessions());
+    onToast("Đã thêm confession vào hòm thư thành công! 💌");
+    onPostCreated?.();
+  };
+
+  const handleEditConfession = (id: string, updated: Partial<Confession>) => {
+    updateStoredConfession(id, updated);
+    setConfessions(getStoredConfessions());
+    onToast("Đã cập nhật confession thành công! ✨");
+    onPostCreated?.();
+  };
+
+  const handleDeleteConfession = (id: string) => {
+    deleteStoredConfession(id);
+    setConfessions(getStoredConfessions());
+    onToast("Đã xóa confession khỏi hòm thư 🗑️");
     onPostCreated?.();
   };
 
@@ -1180,6 +1272,8 @@ export default function AdminPanel({
                       onDeleteProgram={handleDeleteProgram}
                       onQuickChangeStatus={handleQuickChangeProgramStatus}
                       onLoadDefaultPrograms={handleLoadDefaultPrograms}
+                      onQuickUpdateDrive={handleQuickUpdateDrive}
+                      onQuickUpdateCover={handleQuickUpdateCover}
                     />
                   )}
 
@@ -1202,10 +1296,14 @@ export default function AdminPanel({
                       onHometownChange={setLeadHometown}
                       leadRole={leadRole}
                       onRoleChange={setLeadRole}
+                      leadAvatarUrl={leadAvatarUrl}
+                      onAvatarUrlChange={setLeadAvatarUrl}
                       onSaveLeader={handleSaveLeader}
                       onStartEditLeader={handleStartEditLeader}
                       onCancelEditLeader={handleCancelEditLeader}
                       onDeleteLeader={handleDeleteLeader}
+                      onImportAllLeaders={handleImportAllLeaders}
+                      onResetLeadersToDefault={handleResetLeadersToDefault}
                     />
                   )}
 
@@ -1240,8 +1338,14 @@ export default function AdminPanel({
                   {activeTab === "notes" && (
                     <AdminNotesTab
                       notes={notes}
+                      confessions={confessions}
+                      onAddNote={handleAddNote}
+                      onEditNote={handleEditNote}
                       onTogglePinNote={handleTogglePinNote}
                       onDeleteNote={handleDeleteNote}
+                      onAddConfession={handleAddConfession}
+                      onEditConfession={handleEditConfession}
+                      onDeleteConfession={handleDeleteConfession}
                     />
                   )}
 

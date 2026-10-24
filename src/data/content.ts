@@ -207,6 +207,7 @@ export type LeaderRecord = {
   dob: string;
   hometown: string;
   role: string;
+  avatarUrl?: string;
 };
 
 export const LEADERSHIP_HISTORY: LeaderRecord[] = [

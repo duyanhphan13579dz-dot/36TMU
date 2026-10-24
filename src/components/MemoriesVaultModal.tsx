@@ -438,19 +438,31 @@ export default function MemoriesVaultModal({
                     key={idx}
                     className="flex items-start justify-between gap-3 rounded-2xl border border-cobalt-100 bg-white p-4 shadow-xs transition hover:border-tmu-300 hover:shadow-soft"
                   >
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-display text-sm sm:text-base font-black text-cobalt-950">
-                          {lead.name}
-                        </span>
-                        <span className="rounded-md bg-flame-100 px-1.5 py-0.5 text-[10px] font-bold text-flame-700">
-                          {lead.khoa}
-                        </span>
+                    <div className="flex items-start gap-3 min-w-0">
+                      {lead.avatarUrl ? (
+                        <div className="h-11 w-11 shrink-0 overflow-hidden rounded-full border border-cobalt-200 shadow-xs">
+                          <img src={lead.avatarUrl} alt={lead.name} className="h-full w-full object-cover" />
+                        </div>
+                      ) : (
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-tr from-cobalt-800 to-tmu-600 text-xs font-bold text-white shadow-xs">
+                          {lead.name.split(" ").pop()?.charAt(0) || "BCH"}
+                        </div>
+                      )}
+
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className="font-display text-sm sm:text-base font-black text-cobalt-950">
+                            {lead.name}
+                          </span>
+                          <span className="rounded-md bg-flame-100 px-1.5 py-0.5 text-[10px] font-bold text-flame-700">
+                            {lead.khoa}
+                          </span>
+                        </div>
+                        <p className="mt-1 text-xs sm:text-[13px] font-semibold text-tmu-700">{lead.role}</p>
+                        <p className="mt-1 text-xs text-cobalt-600">
+                          📍 {lead.hometown} {lead.dob ? `· Sinh: ${lead.dob}` : ""}
+                        </p>
                       </div>
-                      <p className="mt-1 text-xs sm:text-[13px] font-semibold text-tmu-700">{lead.role}</p>
-                      <p className="mt-1 text-xs text-cobalt-600">
-                        📍 {lead.hometown} {lead.dob ? `· Sinh: ${lead.dob}` : ""}
-                      </p>
                     </div>
                     <span className="shrink-0 rounded-lg bg-cobalt-50 px-2.5 py-1 text-[10.5px] font-bold text-cobalt-700 border border-cobalt-100 shadow-2xs">
                       {lead.term}

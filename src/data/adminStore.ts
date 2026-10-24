@@ -1,4 +1,4 @@
-import { ORG, PROGRAMS, LEADERSHIP_HISTORY, type Program, type EventCategory, type ProgramStatus, type LeaderRecord } from "@/data/content";
+import { ORG, PROGRAMS, LEADERSHIP_HISTORY, CONFESSIONS, type Program, type EventCategory, type ProgramStatus, type LeaderRecord, type Confession } from "@/data/content";
 import { safeLocalStorageSet } from "@/utils/storage";
 import { syncAllDataToCloud, fetchAllDataFromCloud } from "@/lib/db";
 
@@ -42,6 +42,39 @@ export type AdminProgram = {
   fact: { label: string; value: string }[];
   createdAt: string;
 };
+
+export const PROGRAM_TEASER_PRESETS = [
+  {
+    label: "Mùa Hè Xanh – Áo Xanh Bản Mường",
+    category: "Chiến dịch Mùa Hè Xanh",
+    url: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=1200&q=80",
+  },
+  {
+    label: "Đông Ấm – Sưởi Ấm Học Sinh Vùng Cao",
+    category: "Chiến dịch Đông Ấm",
+    url: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1200&q=80",
+  },
+  {
+    label: "Âm Vang Xứ Thanh – Sân Khấu Rực Rỡ",
+    category: "Âm Vang Xứ Thanh",
+    url: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1200&q=80",
+  },
+  {
+    label: "Chào Tân Sinh Viên – Hội Đồng Hương 36",
+    category: "Chào tân sinh viên",
+    url: "https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=1200&q=80",
+  },
+  {
+    label: "Tiếp Sức Mùa Thi – Cổng Trường TMU",
+    category: "Tình nguyện",
+    url: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&q=80",
+  },
+  {
+    label: "Giải Bóng Đá Đồng Hương – Tranh Cup 36",
+    category: "Đào tạo & Gắn kết",
+    url: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1200&q=80",
+  },
+];
 
 export type AdminLeader = LeaderRecord & {
   id: string;
@@ -385,7 +418,17 @@ export function importDefaultProgramsToAdmin(): AdminProgram[] {
 }
 
 
+const LEADERS_MODE_KEY = "bllsv_admin_leaders_full_mode";
+
 // --- LEADERS / BAN CHẤP HÀNH ---
+export function isLeadersFullMode(): boolean {
+  try {
+    return localStorage.getItem(LEADERS_MODE_KEY) === "true";
+  } catch {
+    return false;
+  }
+}
+
 export function getStoredAdminLeaders(): AdminLeader[] {
   try {
     const raw = localStorage.getItem(LEADERS_KEY);
@@ -404,21 +447,18 @@ export function saveStoredAdminLeaders(leaders: AdminLeader[]) {
 }
 
 // Helpers to sort leaders chronologically (newest to oldest)
-function parseKhoa(k: string): number {
+export function parseKhoa(k: string): number {
   const match = k.match(/\d+/);
   return match ? parseInt(match[0], 10) : 0;
 }
 
-function parseTermYear(term: string): number {
+export function parseTermYear(term: string): number {
   const match = term.match(/\d{4}/);
   return match ? parseInt(match[0], 10) : 0;
 }
 
-// Merge leaders with defaults and sort chronologically from newest to oldest (K60 down to K44)
-export function getAllLeaders(): LeaderRecord[] {
-  const custom = getStoredAdminLeaders();
-  const all = [...custom, ...LEADERSHIP_HISTORY];
-  return all.slice().sort((a, b) => {
+export function sortLeadersChronological<T extends LeaderRecord>(list: T[]): T[] {
+  return list.slice().sort((a, b) => {
     const kA = parseKhoa(a.khoa);
     const kB = parseKhoa(b.khoa);
     if (kA !== kB) {
@@ -431,6 +471,46 @@ export function getAllLeaders(): LeaderRecord[] {
     }
     return 0; // Giữ nguyên thứ tự chức vụ (Trưởng ban, Phó ban...)
   });
+}
+
+// Merge leaders with defaults or return custom list if in full management mode
+export function getAllLeaders(): LeaderRecord[] {
+  const custom = getStoredAdminLeaders();
+  const inFullMode = isLeadersFullMode();
+
+  if (inFullMode && custom.length > 0) {
+    return sortLeadersChronological(custom);
+  }
+
+  // Chế độ mở rộng: Gộp danh sách tùy biến với 16 khóa mặc định (ghi đè theo id nếu trùng)
+  const customIds = new Set(custom.map((l) => l.id));
+  const defaultsWithIds: LeaderRecord[] = LEADERSHIP_HISTORY.map((l, idx) => ({
+    ...l,
+    id: l.id || `lead-k${parseKhoa(l.khoa)}-${idx}`,
+  }));
+  const unoverriddenDefaults = defaultsWithIds.filter((l) => !l.id || !customIds.has(l.id));
+  return sortLeadersChronological([...custom, ...unoverriddenDefaults]);
+}
+
+// Nạp toàn bộ danh sách 16 khóa mặc định vào bảng quản lý của BCH để toàn quyền sửa/xóa
+export function importAllDefaultLeadersToAdmin(): AdminLeader[] {
+  const fullList: AdminLeader[] = LEADERSHIP_HISTORY.map((l, idx) => ({
+    ...l,
+    id: l.id || `lead-k${parseKhoa(l.khoa)}-${idx}-${Date.now()}`,
+    createdAt: "Chính thức (16 Khóa)",
+  }));
+  localStorage.setItem(LEADERS_MODE_KEY, "true");
+  saveStoredAdminLeaders(fullList);
+  return fullList;
+}
+
+// Khôi phục danh sách 16 khóa về chuẩn hệ thống
+export function resetAdminLeadersToDefault(): void {
+  try {
+    localStorage.removeItem(LEADERS_KEY);
+    localStorage.removeItem(LEADERS_MODE_KEY);
+    window.dispatchEvent(new CustomEvent("bllsv_data_updated", { detail: { type: "leaders" } }));
+  } catch {}
 }
 
 // --- MOTTO / CHÂM NGÔN HOẠT ĐỘNG ---
@@ -670,6 +750,48 @@ export function deleteFundDonation(id: string): void {
 
 const NOTES_KEY = "bllsv_tnv_notes";
 const CONFESSIONS_KEY = "bllsv_confessions";
+
+// --- CONFESSIONS / HÒM THƯ TÂM SỰ & KỶ NIỆM ---
+export function getStoredConfessions(): Confession[] {
+  try {
+    const raw = localStorage.getItem(CONFESSIONS_KEY);
+    if (!raw) return CONFESSIONS;
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed : CONFESSIONS;
+  } catch {
+    return CONFESSIONS;
+  }
+}
+
+export function saveStoredConfessions(confessions: Confession[]): void {
+  if (safeLocalStorageSet(CONFESSIONS_KEY, JSON.stringify(confessions), notifyQuotaError)) {
+    window.dispatchEvent(new CustomEvent("bllsv_data_updated", { detail: { type: "confessions" } }));
+  }
+}
+
+export function addAdminConfession(confession: Omit<Confession, "id" | "rotate">): Confession {
+  const current = getStoredConfessions();
+  const newConfession: Confession = {
+    ...confession,
+    id: "confession-" + Date.now(),
+    rotate: (Math.random() * 4 - 2).toFixed(1) + "deg",
+  };
+  const updated = [newConfession, ...current];
+  saveStoredConfessions(updated);
+  return newConfession;
+}
+
+export function updateStoredConfession(id: string, updated: Partial<Confession>): void {
+  const current = getStoredConfessions();
+  const next = current.map((c) => (c.id === id ? { ...c, ...updated } : c));
+  saveStoredConfessions(next);
+}
+
+export function deleteStoredConfession(id: string): void {
+  const current = getStoredConfessions();
+  const next = current.filter((c) => c.id !== id);
+  saveStoredConfessions(next);
+}
 
 // --- BACKUP & RESTORE DỮ LIỆU ---
 export function exportAllAdminData(): string {
